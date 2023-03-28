@@ -1,4 +1,30 @@
+import React, {useEffect, useState} from 'react';
+
 function SingleProduct() {
+
+    const [quantity, setQuantity] = useState(1);
+    const [cursor, setCursor] = useState("");
+
+    function handleDecreaseQuantity() {
+        setQuantity(quantity - 1);
+        if (quantity === 2) {
+            console.log(quantity + "abc")
+            setCursor("not-allowed")
+        }
+    }
+
+    function handleIncreaseQuantity() {
+        setQuantity(quantity + 1);
+    }
+
+    function handleCursorOver() {
+        if (quantity > 1) {
+            setCursor("pointer")
+        } else {
+            setCursor("not-allowed")
+        }
+    }
+
     return (
         <div className="single-product-container">
             <section class="page-header">
@@ -69,13 +95,14 @@ function SingleProduct() {
                         <p class="product-description my-4 ">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum ipsum dicta quod, quia doloremque aut deserunt commodi quis. Totam a consequatur beatae nostrum, earum consequuntur? Eveniet consequatur ipsum dicta recusandae.
                         </p>
-            
-                        <form class="cart" action="#" method="post">
                         <div class="quantity d-flex align-items-center">
-                            <input type="number" id="#" class="input-text qty text form-control w-25 mr-3" step="1" min="1" max="9" name="quantity" value="1" title="Qty" size="4" />
-                            <a href="#" class="btn btn-main btn-small">Add to cart</a>
+                            <div className='mr-3'>
+                                <button style={{color:"black", cursor: cursor}} className="btn btn-light mr-3" onClick={quantity > 1 ? handleDecreaseQuantity : undefined} onMouseOver={handleCursorOver}> - </button>
+                                {quantity}
+                                <button style={{color:"black"}} className="btn btn-light ml-3" onClick={handleIncreaseQuantity}> + </button>
+                            </div>
+                            <button class="btn btn-main rounded-pill btn-small" type='submit'>Add to cart</button>
                         </div>
-                        </form>
             
                         
                         <div class="color-swatches mt-4 d-flex align-items-center">
