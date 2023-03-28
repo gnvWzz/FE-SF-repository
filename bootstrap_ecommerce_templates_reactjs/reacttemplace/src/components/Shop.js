@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 function Shop() {
   return (
     <div className="shop-container">
@@ -115,10 +117,19 @@ function Shop() {
                     <h2 className="d-block text-left-sm">Shop</h2>
 
                     <div className="heading d-flex justify-content-between mb-5">
-                      <p className="result-count mb-0">
-                        {" "}
-                        Showing 1–6 of 17 results
-                      </p>
+                      <span>
+                        <input
+                          id="searchBox"
+                          className="rounded-left"
+                          placeholder="Search"
+                        ></input>
+                        <button id="searchIcon" className="rounded-right">
+                          <i
+                            class="tf-ion-android-search"
+                            style={{ color: "white" }}
+                          ></i>
+                        </button>
+                      </span>
                       <form className="ordering " method="get">
                         <select
                           name="orderby"
@@ -159,6 +170,471 @@ function Shop() {
               </div>
 
               <div className="row">
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product">
+                    <div className="product-wrap">
+                      <a href="/product-single">
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="assets/images/322.jpg"
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a href="/product-single">Floral Kirby</a>
+                      </h2>
+                      <span className="price">$329.10</span>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
                   <div className="product">
                     <div className="product-wrap">

@@ -2218,3 +2218,15 @@ table.shop_table_responsive {
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+#searchBox {
+  width: 350px;
+  height: 45px;
+  border: 2px solid #fb5c42;
+}
+
+#searchIcon {
+  height: 45px;
+  border: 2px solid #fb5c42;
+  background-color: #fb5c42;
+}
