@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-
 function Shop() {
+
   return (
     <div className="shop-container">
       <section className="products-shop section">
@@ -120,13 +119,13 @@ function Shop() {
                       <span>
                         <input
                           id="searchBox"
-                          className="rounded-left"
+                          className="rounded-left pl-3"
                           placeholder="Search"
                         ></input>
-                        <button id="searchIcon" className="rounded-right">
+                        <button id="searchIconBackground" className="rounded-right">
                           <i
+                            id="searchIcon"
                             class="tf-ion-android-search"
-                            style={{ color: "white" }}
                           ></i>
                         </button>
                       </span>
