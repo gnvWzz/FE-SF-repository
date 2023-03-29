@@ -9,7 +9,7 @@ export default function Watchs() {
   }
 
   function handleSubmit() {
-    if (formSeacrh.length >= 3 || formSeacrh <= 30) {
+    if (formSeacrh.length > 0 && formSeacrh.length <= 30) {
       alert("finish");
     }
   }
@@ -105,10 +105,13 @@ export default function Watchs() {
                         placeholder="Search"
                         onChange={handleOnChangeSearch}
                       ></input>
-                      <button id="searchIcon" className="rounded-right">
+                      <button
+                        id="searchIconBackGround"
+                        className="rounded-right"
+                      >
                         <i
                           class="tf-ion-android-search"
-                          style={{ color: "white" }}
+                          id="searchIcon"
                           onClick={handleSubmit}
                         ></i>
                       </button>

@@ -11,9 +11,10 @@ function Shop() {
   }
 
   function handleSubmit() {
-    if (formSeacrh.length >= 3 || formSeacrh <= 30) {
+    if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
       alert("finish");
     }
+    console.log(formSeacrh.length);
     setFormSearch("");
   }
 
@@ -107,14 +108,17 @@ function Shop() {
                         id="searchBox"
                         name="search"
                         value={formSeacrh || ""}
-                        className="rounded-left"
+                        className="rounded-left pl-3"
                         placeholder="Search"
                         onChange={handleOnChangeSearch}
                       ></input>
-                      <button id="searchIcon" className="rounded-right">
+                      <button
+                        id="searchIconBackGround"
+                        className="rounded-right"
+                      >
                         <i
+                          id="searchIcon"
                           class="tf-ion-android-search"
-                          style={{ color: "white" }}
                           onClick={handleSubmit}
                         ></i>
                       </button>

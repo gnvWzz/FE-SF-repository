@@ -2,7 +2,8 @@ import "jquery/dist/jquery.slim.min.js";
 import "popper.js/dist/umd/popper.min.js";
 import "bootstrap/dist/js/bootstrap.min.js";
 import { Link } from "react-router-dom";
-function Header() {
+import { useState } from "react";
+function Header({ categories }) {
   return (
     <nav
       class="navbar navbar-expand-lg navbar-light bg-white w-100 navigation"
@@ -114,33 +115,15 @@ function Header() {
               >
                 Categories
               </a>
+
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
-                <li>
-                  <Link to={{ pathname: "/shop" }}>Máy tính</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/toy" }}>Đồ chơi</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/watch" }}>Đồng hồ</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/cloth" }}>Quần áo</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/shoes" }}>Giày dép</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/handbag" }}>Túi xách</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/accessory" }}>Trang sức</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/electronics" }}>
-                    Thiết bị điện tử
-                  </Link>
-                </li>
+                {categories.map((category, index) => (
+                  <li>
+                    <Link to={{ pathname: `/shop/${category.name}` }}>
+                      {category.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </li>
             <li class="nav-item dropdown dropdown-slide">
