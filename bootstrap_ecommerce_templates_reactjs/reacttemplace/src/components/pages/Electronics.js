@@ -1,6 +1,19 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 export default function Electronics() {
+  const [formSeacrh, setFormSearch] = useState();
+
+  function handleOnChangeSearch(e) {
+    setFormSearch(e.target.value);
+  }
+
+  function handleSubmit() {
+    if (formSeacrh.length >= 3 || formSeacrh <= 30) {
+      alert("finish");
+    }
+  }
+
   return (
     <section className="products-shop section">
       <div className="container">
@@ -87,13 +100,21 @@ export default function Electronics() {
                     <span>
                       <input
                         id="searchBox"
+
+                        name="search"
+                        value={formSeacrh || ""}
                         className="rounded-left"
                         placeholder="Search"
+                        onChange={handleOnChangeSearch}
+
                       ></input>
                       <button id="searchIcon" className="rounded-right">
                         <i
                           class="tf-ion-android-search"
                           style={{ color: "white" }}
+
+                          onClick={handleSubmit}
+
                         ></i>
                       </button>
                     </span>
