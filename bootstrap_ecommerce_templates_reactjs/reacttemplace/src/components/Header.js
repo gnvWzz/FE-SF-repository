@@ -105,6 +105,48 @@ function Header() {
               <a
                 class="nav-link dropdown-toggle"
                 href="#"
+                id="navbarDropdown3"
+                role="button"
+                data-delay="350"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Categories
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
+                <li>
+                  <Link to={{ pathname: "/shop" }}>Máy tính</Link>
+                </li>
+                <li>
+                  <Link to={{ pathname: "/toy" }}>Đồ chơi</Link>
+                </li>
+                <li>
+                  <Link to={{ pathname: "/watch" }}>Đồng hồ</Link>
+                </li>
+                <li>
+                  <Link to={{ pathname: "/cloth" }}>Quần áo</Link>
+                </li>
+                <li>
+                  <Link to={{ pathname: "/shoes" }}>Giày dép</Link>
+                </li>
+                <li>
+                  <Link to={{ pathname: "/handbag" }}>Túi xách</Link>
+                </li>
+                <li>
+                  <Link to={{ pathname: "/accessory" }}>Trang sức</Link>
+                </li>
+                <li>
+                  <Link to={{ pathname: "/electronics" }}>
+                    Thiết bị điện tử
+                  </Link>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown dropdown-slide">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
                 id="navbarDropdown5"
                 role="button"
                 data-delay="350"
