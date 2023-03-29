@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Shop() {
+export default function Shop() {
   const [formSeacrh, setFormSearch] = useState();
 
   function handleOnChangeSearch(e) {
@@ -106,10 +106,10 @@ function Shop() {
                         placeholder="Search"
                         onChange={handleOnChangeSearch}
                       ></input>
-                      <button id="searchIcon" className="rounded-right">
+                      <button id="searchIconBackground" className="rounded-right">
                         <i
                           class="tf-ion-android-search"
-                          style={{ color: "white" }}
+                          id="searchIcon"
                           onClick={handleSubmit}
                         ></i>
                       </button>
@@ -153,6 +153,57 @@ function Shop() {
               </div>
             </div>
 
+
+                    <div className="heading d-flex justify-content-between mb-5">
+                      <span>
+                        <input
+                          id="searchBox"
+                          className="rounded-left pl-3"
+                          placeholder="Search"
+                        ></input>
+                        <button id="searchIconBackground" className="rounded-right">
+                          <i
+                            id="searchIcon"
+                            class="tf-ion-android-search"
+                          ></i>
+                        </button>
+                      </span>
+                      <form className="ordering " method="get">
+                        <select
+                          name="orderby"
+                          className="orderby form-control"
+                          aria-label="Shop order"
+                        >
+                          <option value="" selected="selected">
+                            Sort by size
+                          </option>
+                          <option value="">L Large</option>
+                          <option value="">XL Extra Large</option>
+                          <option value="">M Medium</option>
+                          <option value="">S Small</option>
+                          <option value="">XS Extra Small</option>
+                        </select>
+                        <input type="hidden" name="paged" value="1" />
+                      </form>
+                      <form className="ordering " method="get">
+                        <select
+                          name="orderby"
+                          className="orderby form-control"
+                          aria-label="Shop order"
+                        >
+                          <option value="" selected="selected">
+                            Sort by price
+                          </option>
+                          <option value="">Sort by popularity</option>
+                          <option value="">Sort by average rating</option>
+                          <option value="">Sort by latest</option>
+                          <option value="">Sort by price: low to high</option>
+                          <option value="">Sort by price: high to low</option>
+                        </select>
+                        <input type="hidden" name="paged" value="1" />
+                      </form>
+                    </div>
+
             <div className="row">
               <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
                 <div className="product">
@@ -181,6 +232,7 @@ function Shop() {
                       <a href="/product-single">Floral Kirby</a>
                     </h2>
                     <span className="price">$329.10</span>
+
                   </div>
                 </div>
               </div>
@@ -688,4 +740,3 @@ function Shop() {
     </section>
   );
 }
-export default Shop;

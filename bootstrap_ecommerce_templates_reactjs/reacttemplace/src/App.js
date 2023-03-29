@@ -22,15 +22,6 @@ function App() {
       <BrowserRouter>
         <Header></Header>
         <Routes>
-          {/* <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/single-product" element={<SingleProduct />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} /> */}
-
           <Route path="/shop" element={<Shop />} />
           <Route path="/toy" element={<Toy />} />
           <Route path="/watch" element={<Watchs />} />
