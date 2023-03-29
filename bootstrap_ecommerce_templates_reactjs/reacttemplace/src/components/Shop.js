@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function Shop() {
   const [formSeacrh, setFormSearch] = useState();
+  const [products, setProducts] = useState();
+  const [loading, setLoading] = useState();
 
   function handleOnChangeSearch(e) {
     setFormSearch(e.target.value);
@@ -12,7 +14,10 @@ function Shop() {
     if (formSeacrh.length >= 3 || formSeacrh <= 30) {
       alert("finish");
     }
+    setFormSearch("");
   }
+
+  useEffect(() => {});
 
   return (
     <section className="products-shop section">
@@ -654,29 +659,23 @@ function Shop() {
                 <nav aria-label="Page navigation">
                   <ul className="pagination">
                     <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
+                      <button disabled style={{ cursor: "not-allowed" }}>
+                        <span aria-hidden="true">&laquo; Previous</span>
+                      </button>
                     </li>
                     <li className="page-item active">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
+                      <button>1</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>2</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>3</button>
                     </li>
                     <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
+                      <button>
+                        <span aria-hidden="true">&raquo; Next</span>
+                      </button>
                     </li>
                   </ul>
                 </nav>
