@@ -42,6 +42,7 @@ function App() {
       <BrowserRouter>
         <Header categories={categories}></Header>
         <Routes>
+<<<<<<< HEAD
           {/* <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/single-product" element={<SingleProduct />} />
@@ -55,6 +56,9 @@ function App() {
           {/*  */}
           <Route path="/shop/Máy tính" element={<Shop />} />
           {/*  */}
+=======
+          <Route path="/shop" element={<Shop />} />
+>>>>>>> 9b15ebfba98102857153a467dd2acb66ec21457a
           <Route path="/toy" element={<Toy />} />
           <Route path="/watch" element={<Watchs />} />
           <Route path="/handbag" element={<HandBag />} />
