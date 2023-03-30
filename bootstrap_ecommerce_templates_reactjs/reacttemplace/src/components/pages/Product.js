@@ -1,18 +1,26 @@
-import React, { useState } from "react";
-
-import { Link } from "react-router-dom";
-export default function Cloth() {
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
+  const [products, setProducts] = useState();
+  const [loading, setLoading] = useState();
+
+  let { name } = useParams();
 
   function handleOnChangeSearch(e) {
     setFormSearch(e.target.value);
   }
 
   function handleSubmit() {
-    if (formSeacrh.length > 0 && formSeacrh.length <= 30) {
+    if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
       alert("finish");
     }
+    console.log(formSeacrh.length);
+    setFormSearch("");
   }
+
+  useEffect(() => {});
+
   return (
     <section className="products-shop section">
       <div className="container">
@@ -24,19 +32,11 @@ export default function Cloth() {
                   <h4>Categories</h4>{" "}
                 </div>
                 <div class="list-group list-group-flush" id="logsContainer">
-                  <Link to={{ pathname: "/shop" }}>Máy tính</Link>
-                  <Link to={{ pathname: "/toy" }}>Đồ chơi</Link>
-                  <Link to={{ pathname: "/watch" }}>Đồng hồ</Link>
-                  <Link to={{ pathname: "/cloth" }}>Quần Áo</Link>
-                  <Link to={{ pathname: "/shoes" }}>Giày dép</Link>
-
-                  <Link to={{ pathname: "/handbag" }}>Túi xách</Link>
-
-                  <Link to={{ pathname: "/accessory" }}>Trang sức</Link>
-
-                  <Link to={{ pathname: "/electronics" }}>
-                    Thiết bị điện tử
-                  </Link>
+                  {categories.map((category, index) => (
+                    <Link to={{ pathname: `/shop/${category.name}` }}>
+                      {category.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
               <section class="widget widget-popular mb-5 mt-2">
@@ -93,7 +93,7 @@ export default function Cloth() {
               <div className="col-lg-12 mb-4 mb-lg-0">
                 <div className="section-title">
                   {/*  */}
-                  <h2 className="d-block text-left-sm">Quần áo</h2>
+                  <h2 className="d-block text-left-sm">{name}</h2>
                   {/*  */}
                   <div className="heading d-flex justify-content-between mb-5">
                     <span>
@@ -105,13 +105,14 @@ export default function Cloth() {
                         placeholder="Search"
                         onChange={handleOnChangeSearch}
                       ></input>
+
                       <button
                         id="searchIconBackGround"
                         className="rounded-right"
                       >
                         <i
-                          class="tf-ion-android-search"
                           id="searchIcon"
+                          class="tf-ion-android-search"
                           onClick={handleSubmit}
                         ></i>
                       </button>
@@ -656,29 +657,23 @@ export default function Cloth() {
                 <nav aria-label="Page navigation">
                   <ul className="pagination">
                     <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
+                      <button disabled style={{ cursor: "not-allowed" }}>
+                        <span aria-hidden="true">&laquo; Previous</span>
+                      </button>
                     </li>
                     <li className="page-item active">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
+                      <button>1</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>2</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>3</button>
                     </li>
                     <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
+                      <button>
+                        <span aria-hidden="true">&raquo; Next</span>
+                      </button>
                     </li>
                   </ul>
                 </nav>
