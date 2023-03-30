@@ -62,6 +62,36 @@ function SingleProduct() {
                                         <div class="carousel-item ">
                                             <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
                                         </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="carousel-item ">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </div>
                                     </div>
 
                                     <ol class="carousel-indicators">
@@ -72,16 +102,46 @@ function SingleProduct() {
                                             <img src="assets/images/product-2.jpg" alt="" class="img-fluid" />
                                         </li>
                                         <li data-target="#single-product-slider" data-slide-to="2">
+                                            <img src="assets/images/product-2.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
+                                            <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
+                                        </li>
+                                        <li data-target="#single-product-slider" data-slide-to="3">
                                             <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
                                         </li>
                                     </ol>
 
                                     <a class="carousel-control-prev" href="#single-product-slider" role="button" data-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span aria-hidden="true"></span>
                                         <span class="sr-only">Previous</span>
                                     </a>
                                     <a class="carousel-control-next" href="#single-product-slider" role="button" data-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span aria-hidden="true"></span>
                                         <span class="sr-only">Next</span>
                                     </a>
                                 </div>
