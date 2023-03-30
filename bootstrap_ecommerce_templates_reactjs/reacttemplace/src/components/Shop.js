@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Shop() {
   const [formSeacrh, setFormSearch] = useState();
+  const [products, setProducts] = useState();
+  const [loading, setLoading] = useState();
 
   function handleOnChangeSearch(e) {
     setFormSearch(e.target.value);
   }
 
   function handleSubmit() {
-    if (formSeacrh.length >= 3 || formSeacrh <= 30) {
+    if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
       alert("finish");
     }
+    console.log(formSeacrh.length);
+    setFormSearch("");
   }
+
+  useEffect(() => {});
 
   return (
     <section className="products-shop section">
@@ -102,14 +108,18 @@ export default function Shop() {
                         id="searchBox"
                         name="search"
                         value={formSeacrh || ""}
-                        className="rounded-left"
+                        className="rounded-left pl-3"
                         placeholder="Search"
                         onChange={handleOnChangeSearch}
                       ></input>
-                      <button id="searchIconBackground" className="rounded-right">
+
+                      <button
+                        id="searchIconBackground"
+                        className="rounded-right"
+                      >
                         <i
-                          class="tf-ion-android-search"
                           id="searchIcon"
+                          class="tf-ion-android-search"
                           onClick={handleSubmit}
                         ></i>
                       </button>
@@ -153,56 +163,52 @@ export default function Shop() {
               </div>
             </div>
 
-
-                    <div className="heading d-flex justify-content-between mb-5">
-                      <span>
-                        <input
-                          id="searchBox"
-                          className="rounded-left pl-3"
-                          placeholder="Search"
-                        ></input>
-                        <button id="searchIconBackground" className="rounded-right">
-                          <i
-                            id="searchIcon"
-                            class="tf-ion-android-search"
-                          ></i>
-                        </button>
-                      </span>
-                      <form className="ordering " method="get">
-                        <select
-                          name="orderby"
-                          className="orderby form-control"
-                          aria-label="Shop order"
-                        >
-                          <option value="" selected="selected">
-                            Sort by size
-                          </option>
-                          <option value="">L Large</option>
-                          <option value="">XL Extra Large</option>
-                          <option value="">M Medium</option>
-                          <option value="">S Small</option>
-                          <option value="">XS Extra Small</option>
-                        </select>
-                        <input type="hidden" name="paged" value="1" />
-                      </form>
-                      <form className="ordering " method="get">
-                        <select
-                          name="orderby"
-                          className="orderby form-control"
-                          aria-label="Shop order"
-                        >
-                          <option value="" selected="selected">
-                            Sort by price
-                          </option>
-                          <option value="">Sort by popularity</option>
-                          <option value="">Sort by average rating</option>
-                          <option value="">Sort by latest</option>
-                          <option value="">Sort by price: low to high</option>
-                          <option value="">Sort by price: high to low</option>
-                        </select>
-                        <input type="hidden" name="paged" value="1" />
-                      </form>
-                    </div>
+            <div className="heading d-flex justify-content-between mb-5">
+              <span>
+                <input
+                  id="searchBox"
+                  className="rounded-left pl-3"
+                  placeholder="Search"
+                ></input>
+                <button id="searchIconBackground" className="rounded-right">
+                  <i id="searchIcon" class="tf-ion-android-search"></i>
+                </button>
+              </span>
+              <form className="ordering " method="get">
+                <select
+                  name="orderby"
+                  className="orderby form-control"
+                  aria-label="Shop order"
+                >
+                  <option value="" selected="selected">
+                    Sort by size
+                  </option>
+                  <option value="">L Large</option>
+                  <option value="">XL Extra Large</option>
+                  <option value="">M Medium</option>
+                  <option value="">S Small</option>
+                  <option value="">XS Extra Small</option>
+                </select>
+                <input type="hidden" name="paged" value="1" />
+              </form>
+              <form className="ordering " method="get">
+                <select
+                  name="orderby"
+                  className="orderby form-control"
+                  aria-label="Shop order"
+                >
+                  <option value="" selected="selected">
+                    Sort by price
+                  </option>
+                  <option value="">Sort by popularity</option>
+                  <option value="">Sort by average rating</option>
+                  <option value="">Sort by latest</option>
+                  <option value="">Sort by price: low to high</option>
+                  <option value="">Sort by price: high to low</option>
+                </select>
+                <input type="hidden" name="paged" value="1" />
+              </form>
+            </div>
 
             <div className="row">
               <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
@@ -232,7 +238,6 @@ export default function Shop() {
                       <a href="/product-single">Floral Kirby</a>
                     </h2>
                     <span className="price">$329.10</span>
-
                   </div>
                 </div>
               </div>
@@ -706,29 +711,23 @@ export default function Shop() {
                 <nav aria-label="Page navigation">
                   <ul className="pagination">
                     <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
+                      <button disabled style={{ cursor: "not-allowed" }}>
+                        <span aria-hidden="true">&laquo; Previous</span>
+                      </button>
                     </li>
                     <li className="page-item active">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
+                      <button>1</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>2</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>3</button>
                     </li>
                     <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
+                      <button>
+                        <span aria-hidden="true">&raquo; Next</span>
+                      </button>
                     </li>
                   </ul>
                 </nav>

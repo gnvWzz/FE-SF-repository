@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
@@ -16,13 +17,36 @@ import Watchs from "./components/pages/Watchs";
 import Shop from "./components/Shop";
 import SignUp from "./components/Signup";
 import SingleProduct from "./components/SingleProduct";
+import axios from "axios";
 function App() {
+  const [categories, setCategorise] = useState([]);
+  let isStop = false;
+  useEffect(() => {
+    if (!isStop) {
+      axios
+        .get("http://localhost:8080/api/categories/find-all")
+        .then((res) => {
+          setCategorise(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    return () => {
+      isStop = true;
+    };
+  }, []);
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Header></Header>
+        <Header categories={categories}></Header>
         <Routes>
-          <Route path="/shop" element={<Shop />} />
+          <Route path="/shop/" element={<Shop />} />
+          {/*  */}
+          <Route path="/shop/Máy tính" element={<Shop />} />
+          {/*  */}
+
           <Route path="/toy" element={<Toy />} />
           <Route path="/watch" element={<Watchs />} />
           <Route path="/handbag" element={<HandBag />} />
