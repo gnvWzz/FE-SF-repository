@@ -100,7 +100,7 @@ export default function Shoes() {
                         id="searchBox"
                         name="search"
                         value={formSeacrh || ""}
-                        className="rounded-left"
+                        className="rounded-left pl-3"
                         placeholder="Search"
                         onChange={handleOnChangeSearch}
                       ></input>
