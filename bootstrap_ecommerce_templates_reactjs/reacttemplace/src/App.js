@@ -17,6 +17,7 @@ import Watchs from "./components/pages/Watchs";
 import Shop from "./components/Shop";
 import SignUp from "./components/Signup";
 import SingleProduct from "./components/SingleProduct";
+import Product from "./components/pages/Product";
 import axios from "axios";
 function App() {
   const [categories, setCategorise] = useState([]);
@@ -43,17 +44,7 @@ function App() {
         <Header categories={categories}></Header>
         <Routes>
           <Route path="/shop/" element={<Shop />} />
-          {/*  */}
-          <Route path="/shop/Máy tính" element={<Shop />} />
-          {/*  */}
-
-          <Route path="/toy" element={<Toy />} />
-          <Route path="/watch" element={<Watchs />} />
-          <Route path="/handbag" element={<HandBag />} />
-          <Route path="/accessory" element={<Accessory />} />
-          <Route path="/electronics" element={<Electronics />} />
-          <Route path="/shoes" element={<Shoes />} />
-          <Route path="/cloth" element={<Cloth />} />
+          <Route path="/shop/:name" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/single-product" element={<SingleProduct />} />

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-export default function Shop() {
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+export default function Product() {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState();
   const [loading, setLoading] = useState();
+
+  let { name } = useParams();
 
   function handleOnChangeSearch(e) {
     setFormSearch(e.target.value);
@@ -100,7 +101,7 @@ export default function Shop() {
               <div className="col-lg-12 mb-4 mb-lg-0">
                 <div className="section-title">
                   {/*  */}
-                  <h2 className="d-block text-left-sm">Máy tính</h2>
+                  <h2 className="d-block text-left-sm">{name}</h2>
                   {/*  */}
                   <div className="heading d-flex justify-content-between mb-5">
                     <span>
@@ -114,7 +115,7 @@ export default function Shop() {
                       ></input>
 
                       <button
-                        id="searchIconBackground"
+                        id="searchIconBackGround"
                         className="rounded-right"
                       >
                         <i
@@ -161,53 +162,6 @@ export default function Shop() {
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div className="heading d-flex justify-content-between mb-5">
-              <span>
-                <input
-                  id="searchBox"
-                  className="rounded-left pl-3"
-                  placeholder="Search"
-                ></input>
-                <button id="searchIconBackground" className="rounded-right">
-                  <i id="searchIcon" class="tf-ion-android-search"></i>
-                </button>
-              </span>
-              <form className="ordering " method="get">
-                <select
-                  name="orderby"
-                  className="orderby form-control"
-                  aria-label="Shop order"
-                >
-                  <option value="" selected="selected">
-                    Sort by size
-                  </option>
-                  <option value="">L Large</option>
-                  <option value="">XL Extra Large</option>
-                  <option value="">M Medium</option>
-                  <option value="">S Small</option>
-                  <option value="">XS Extra Small</option>
-                </select>
-                <input type="hidden" name="paged" value="1" />
-              </form>
-              <form className="ordering " method="get">
-                <select
-                  name="orderby"
-                  className="orderby form-control"
-                  aria-label="Shop order"
-                >
-                  <option value="" selected="selected">
-                    Sort by price
-                  </option>
-                  <option value="">Sort by popularity</option>
-                  <option value="">Sort by average rating</option>
-                  <option value="">Sort by latest</option>
-                  <option value="">Sort by price: low to high</option>
-                  <option value="">Sort by price: high to low</option>
-                </select>
-                <input type="hidden" name="paged" value="1" />
-              </form>
             </div>
 
             <div className="row">
