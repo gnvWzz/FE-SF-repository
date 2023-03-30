@@ -1,40 +1,40 @@
 function Login() {
   return (
     <div className="login-container">
-      <div class="account section">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-6">
-              <div class="login-form border p-5">
-                <div class="text-center heading">
-                  <h2 class="mb-2">Login</h2>
-                  <p class="lead">
+      <div className="account section">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-6">
+              <div className="login-form border p-5">
+                <div className="text-center heading">
+                  <h2 className="mb-2">Login</h2>
+                  <p className="lead">
                     Don’t have an account? <a href="#">Create a free account</a>
                   </p>
                 </div>
 
                 <form action="#">
-                  <div class="form-group mb-4">
+                  <div className="form-group mb-4">
                     <label for="#">Enter username</label>
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Enter Username"
                     />
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <label for="#">Enter Password</label>
-                    <a class="float-right" href="">
+                    <a className="float-right" href="">
                       Forget password?
                     </a>
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Enter Password"
                     />
                   </div>
 
-                  <a href="#" class="btn btn-main mt-3 btn-block">
+                  <a href="#" className="btn btn-main mt-3 btn-block">
                     Login
                   </a>
                 </form>

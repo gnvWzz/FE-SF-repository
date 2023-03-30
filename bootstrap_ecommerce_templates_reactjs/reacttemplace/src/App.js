@@ -21,6 +21,7 @@ function App() {
         .get("http://localhost:8080/api/categories/find-all")
         .then((res) => {
           setCategorise(res.data);
+          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -30,8 +31,6 @@ function App() {
       isStop = true;
     };
   }, []);
-
-  console.log(categories);
 
   return (
     <div className="App">

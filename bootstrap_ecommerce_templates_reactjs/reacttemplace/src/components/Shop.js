@@ -26,61 +26,76 @@ export default function Shop({ categories }) {
         <div className="row">
           <div className="col-md-2">
             <div>
-              <div class="bg-light border-right min-vh-50" id="sidebar-wrapper">
-                <div class="sidebar-heading">
+              <div
+                className="bg-light border-right min-vh-50"
+                id="sidebar-wrapper"
+              >
+                <div className="sidebar-heading">
                   <h4>Categories</h4>{" "}
                 </div>
-                <div class="list-group list-group-flush" id="logsContainer">
+                <div className="list-group list-group-flush" id="logsContainer">
                   {categories.map((category, index) => (
-                    <Link to={{ pathname: `/shop/${category.name}` }}>
+                    <Link
+                      key={index}
+                      to={{ pathname: `/shop/${category.name}` }}
+                    >
                       {category.name}
                     </Link>
                   ))}
                 </div>
               </div>
-              <section class="widget widget-popular mb-5 mt-2">
-                <h3 class="widget-title mb-4 h4">Popular Products</h3>
-                <a class="popular-products-item media" href="/product-single">
+              <section className="widget widget-popular mb-5 mt-2">
+                <h3 className="widget-title mb-4 h4">Popular Products</h3>
+                <a
+                  className="popular-products-item media"
+                  href="/product-single"
+                >
                   <img
                     src="assets/images/p-1.jpg"
                     alt=""
-                    class="img-fluid mr-4"
+                    className="img-fluid mr-4"
                   />
-                  <div class="media-body">
+                  <div className="media-body">
                     <h6>
                       Contrast <br />
                       Backpack
                     </h6>
-                    <span class="price">$45</span>
+                    <span className="price">$45</span>
                   </div>
                 </a>
-                <a class="popular-products-item media" href="/product-single">
+                <a
+                  className="popular-products-item media"
+                  href="/product-single"
+                >
                   <img
                     src="assets/images/p-2.jpg"
                     alt=""
-                    class="img-fluid mr-4"
+                    className="img-fluid mr-4"
                   />
-                  <div class="media-body">
+                  <div className="media-body">
                     <h6>
                       Hoodie with <br />
                       Logo
                     </h6>
-                    <span class="price">$45</span>
+                    <span className="price">$45</span>
                   </div>
                 </a>
-                <a class="popular-products-item media" href="/product-single">
+                <a
+                  className="popular-products-item media"
+                  href="/product-single"
+                >
                   <img
                     src="assets/images/p-3.jpg"
                     alt=""
-                    class="img-fluid mr-4"
+                    className="img-fluid mr-4"
                   />
-                  <div class="media-body">
+                  <div className="media-body">
                     <h6>
                       Traveller
                       <br />
                       Backpack
                     </h6>
-                    <span class="price">$45</span>
+                    <span className="price">$45</span>
                   </div>
                 </a>
               </section>
@@ -111,7 +126,7 @@ export default function Shop({ categories }) {
                       >
                         <i
                           id="searchIcon"
-                          class="tf-ion-android-search"
+                          className="tf-ion-android-search"
                           onClick={handleSubmit}
                         ></i>
                       </button>
