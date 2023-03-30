@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-export default function Product() {
+export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState();
   const [loading, setLoading] = useState();
@@ -32,19 +32,11 @@ export default function Product() {
                   <h4>Categories</h4>{" "}
                 </div>
                 <div class="list-group list-group-flush" id="logsContainer">
-                  <Link to={{ pathname: "/shop/computer" }}>Máy tính</Link>
-                  <Link to={{ pathname: "/shop/toy" }}>Đồ chơi</Link>
-                  <Link to={{ pathname: "/shop/watch" }}>Đồng hồ</Link>
-                  <Link to={{ pathname: "/shop/cloth" }}>Quần Áo</Link>
-                  <Link to={{ pathname: "/shop/shoes" }}>Giày dép</Link>
-
-                  <Link to={{ pathname: "/shop/handbag" }}>Túi xách</Link>
-
-                  <Link to={{ pathname: "/shop/accessory" }}>Trang sức</Link>
-
-                  <Link to={{ pathname: "/shop/electronics" }}>
-                    Thiết bị điện tử
-                  </Link>
+                  {categories.map((category, index) => (
+                    <Link to={{ pathname: `/shop/${category.name}` }}>
+                      {category.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
               <section class="widget widget-popular mb-5 mt-2">

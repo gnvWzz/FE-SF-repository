@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Shop() {
+export default function Shop({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState();
   const [loading, setLoading] = useState();
@@ -31,19 +31,11 @@ export default function Shop() {
                   <h4>Categories</h4>{" "}
                 </div>
                 <div class="list-group list-group-flush" id="logsContainer">
-                  <Link to={{ pathname: "/shop/computer" }}>Máy tính</Link>
-                  <Link to={{ pathname: "/shop/toy" }}>Đồ chơi</Link>
-                  <Link to={{ pathname: "/shop/watch" }}>Đồng hồ</Link>
-                  <Link to={{ pathname: "/shop/cloth" }}>Quần Áo</Link>
-                  <Link to={{ pathname: "/shop/shoes" }}>Giày dép</Link>
-
-                  <Link to={{ pathname: "/shop/handbag" }}>Túi xách</Link>
-
-                  <Link to={{ pathname: "/shop/accessory" }}>Trang sức</Link>
-
-                  <Link to={{ pathname: "/shop/electronics" }}>
-                    Thiết bị điện tử
-                  </Link>
+                  {categories.map((category, index) => (
+                    <Link to={{ pathname: `/shop/${category.name}` }}>
+                      {category.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
               <section class="widget widget-popular mb-5 mt-2">
@@ -100,7 +92,7 @@ export default function Shop() {
               <div className="col-lg-12 mb-4 mb-lg-0">
                 <div className="section-title">
                   {/*  */}
-                  <h2 className="d-block text-left-sm">Máy tính</h2>
+                  <h2 className="d-block text-left-sm">Shop</h2>
                   {/*  */}
                   <div className="heading d-flex justify-content-between mb-5">
                     <span>

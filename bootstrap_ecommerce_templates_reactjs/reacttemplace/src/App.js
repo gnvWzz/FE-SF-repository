@@ -7,13 +7,6 @@ import ForgotPassword from "./components/ForgotPassword";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import Accessory from "./components/pages/Accessory";
-import Cloth from "./components/pages/Cloth";
-import Electronics from "./components/pages/Electronics";
-import HandBag from "./components/pages/HandBag";
-import Shoes from "./components/pages/Shoes";
-import Toy from "./components/pages/Toy";
-import Watchs from "./components/pages/Watchs";
 import Shop from "./components/Shop";
 import SignUp from "./components/Signup";
 import SingleProduct from "./components/SingleProduct";
@@ -38,13 +31,18 @@ function App() {
     };
   }, []);
 
+  console.log(categories);
+
   return (
     <div className="App">
       <BrowserRouter>
         <Header categories={categories}></Header>
         <Routes>
-          <Route path="/shop/" element={<Shop />} />
-          <Route path="/shop/:name" element={<Product />} />
+          <Route path="/shop/" element={<Shop categories={categories} />} />
+          <Route
+            path="/shop/:name"
+            element={<Product categories={categories} />}
+          />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/single-product" element={<SingleProduct />} />
