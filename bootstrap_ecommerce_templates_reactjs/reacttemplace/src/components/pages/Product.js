@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+
 export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState();
+  const [cursorProductCard, setCursorProductCard] = useState("");
   let isStop = false;
-
   let { name } = useParams();
-
-  function handleOnChangeSearch(e) {
-    setFormSearch(e.target.value);
-  }
+  let navigate = useNavigate();
 
   useEffect(() => {
     if (!isStop) {
@@ -20,9 +17,7 @@ export default function Product({ categories }) {
         .get(`http://localhost:8080/api/product/find-all/${name}`)
         .then((res) => {
           setProducts(res.data);
-          console.log(res.data);
-          console.log(res.data[0]);
-          console.log("fdgfdgf" + products);
+
         })
         .catch((err) => {
           throw err;
@@ -33,6 +28,10 @@ export default function Product({ categories }) {
     };
   }, []);
 
+  function handleOnChangeSearch(e) {
+    setFormSearch(e.target.value);
+  }
+
   function handleSubmit() {
     if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
       alert("finish");
@@ -41,11 +40,14 @@ export default function Product({ categories }) {
     setFormSearch("");
   }
 
-  // function renderProducts() {
-  //   return products.map((product, index) => (
+  function handleNavigateToProductDetails(e) {
+    let serial_number = e.currentTarget.getAttribute("value");
+    navigate(`/single-product/${serial_number}`)
+  }
 
-  //   ));
-  // }
+  function handleCursorProductCard() {
+    setCursorProductCard("pointer")
+  }
 
   return (
     <section className="products-shop section">
@@ -75,7 +77,7 @@ export default function Product({ categories }) {
                 <h3 className="widget-title mb-4 h4">Popular Products</h3>
                 <a
                   className="popular-products-item media"
-                  href="/product-single"
+
                 >
                   <img
                     src="assets/images/p-1.jpg"
@@ -92,7 +94,7 @@ export default function Product({ categories }) {
                 </a>
                 <a
                   className="popular-products-item media"
-                  href="/product-single"
+
                 >
                   <img
                     src="assets/images/p-2.jpg"
@@ -198,8 +200,36 @@ export default function Product({ categories }) {
             </div>
 
             <div className="row">
-              {products.map((product) =>
-                product.imageList.map((img) => <p>{img.url}</p>)
+              {products.map((product) => (
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div className="product" onClick={handleNavigateToProductDetails} value={product.serial_number} onMouseOver={handleCursorProductCard} style={{ cursor: cursorProductCard }}>
+                    <div className="product-wrap">
+                      <a>
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src={product.list[0]}
+                          alt="product-img"
+                        />
+                      </a>
+                    </div>
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <a href="#">
+                        <i className="tf-ion-android-cart"></i>
+                      </a>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+                    <div className="product-info">
+                      <h2 className="product-title h5 mb-0">
+                        <a>{product.name}</a>
+                      </h2>
+                      <span className="price">{product.price} đ</span>
+                    </div>
+                  </div>
+                </div>
+              )
               )}
               <nav aria-label="Page navigation">
                 <ul className="pagination">

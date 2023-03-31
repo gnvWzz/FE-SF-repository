@@ -3,6 +3,7 @@ import "popper.js/dist/umd/popper.min.js";
 import "bootstrap/dist/js/bootstrap.min.js";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+
 function Header({ categories }) {
   return (
     <nav
@@ -48,7 +49,7 @@ function Header({ categories }) {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                Pages.
+                Pages
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown4">
                 <li>
@@ -82,16 +83,11 @@ function Header({ categories }) {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                Shop.
+                Shop
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown3">
                 <li>
                   <Link to={{ pathname: "/shop" }}>Shop</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/single-product" }}>
-                    Product Details
-                  </Link>
                 </li>
                 <li>
                   <Link to={{ pathname: "/checkout" }}>Checkout</Link>
@@ -144,7 +140,7 @@ function Header({ categories }) {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                Account.
+                Account
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown5">
                 <li>

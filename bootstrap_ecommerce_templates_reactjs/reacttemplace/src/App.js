@@ -44,7 +44,8 @@ function App() {
           />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/single-product" element={<SingleProduct />} />
+
+          <Route path="/single-product/:serial_number" element={<SingleProduct />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

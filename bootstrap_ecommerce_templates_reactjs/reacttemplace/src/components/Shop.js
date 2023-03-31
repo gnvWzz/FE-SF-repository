@@ -18,7 +18,9 @@ export default function Shop({ categories }) {
     setFormSearch("");
   }
 
-  useEffect(() => {});
+  useEffect(() => { });
+
+  console.log(categories)
 
   return (
     <section className="products-shop section">
