@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Formik, Form,Field } from "formik";
 import {useNavigate} from "react-router-dom";
-
+import axios from "axios";
 
 function SignUp() {
 
@@ -58,6 +58,8 @@ function SignUp() {
       msgError.confirmPassword);
 
       if(isFilled && !isError){
+        axios
+        .get(`http://localhost:8080/`)
         alert("Đăng kí thành công! " )
           navigate(`/login`);
       }else {
