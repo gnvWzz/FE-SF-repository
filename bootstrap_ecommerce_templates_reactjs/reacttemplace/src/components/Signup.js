@@ -7,7 +7,7 @@ function SignUp() {
 
   const REGEX = {
     //username có ít nhất 8 kí tự dài nhất 20 kí tự, không có các dấu chấm . _ ở đầu tên giữa và cuối tên
-    usernameRegex: /^(?=.{2,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+    usernameRegex: /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
     //email tuân theo RFC 2822
     emailRegex:
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
@@ -59,13 +59,19 @@ function SignUp() {
 
       if(isFilled && !isError){
         axios
-        .get(`http://localhost:8080/`)
+        .post(`http://localhost:8080/api/account/signup` ,form)
+        .then((res) =>{
+          console.log(res.data)
+        })
+        .catch((err)=>{
+          throw err
+        })
+
         alert("Đăng kí thành công! " )
           navigate(`/login`);
       }else {
         alert("Vui lòng điền đầy đủ thông tin!")
-      }
-      
+      } 
          
 }
 
@@ -86,7 +92,7 @@ function SignUp() {
     if (!form.username) {
         errors.username = "Bắt buộc";
       } else if (!REGEX.usernameRegex.test(form.username)) {
-        errors.username = "Tên phải có ít nhất 2 chữ cái";
+        errors.username = "Tài khoản chưa đúng,ít nhất 8 kí tự";
       
       }
     if (!form.password) {
