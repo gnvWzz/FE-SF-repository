@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function Shop() {
+export default function Shop({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
+  const [products, setProducts] = useState();
+  const [loading, setLoading] = useState();
 
   function handleOnChangeSearch(e) {
     setFormSearch(e.target.value);
   }
 
   function handleSubmit() {
-    if (formSeacrh.length >= 3 || formSeacrh <= 30) {
+    if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
       alert("finish");
     }
+    console.log(formSeacrh.length);
+    setFormSearch("");
   }
+
+  useEffect(() => { });
+
+  console.log(categories)
 
   return (
     <section className="products-shop section">
@@ -20,69 +28,76 @@ function Shop() {
         <div className="row">
           <div className="col-md-2">
             <div>
-              <div class="bg-light border-right min-vh-50" id="sidebar-wrapper">
-                <div class="sidebar-heading">
+              <div
+                className="bg-light border-right min-vh-50"
+                id="sidebar-wrapper"
+              >
+                <div className="sidebar-heading">
                   <h4>Categories</h4>{" "}
                 </div>
-                <div class="list-group list-group-flush" id="logsContainer">
-                  <Link to={{ pathname: "/shop" }}>Máy tính</Link>
-                  <Link to={{ pathname: "/toy" }}>Đồ chơi</Link>
-                  <Link to={{ pathname: "/watch" }}>Đồng hồ</Link>
-                  <Link to={{ pathname: "/cloth" }}>Quần Áo</Link>
-                  <Link to={{ pathname: "/shoes" }}>Giày dép</Link>
-
-                  <Link to={{ pathname: "/handbag" }}>Túi xách</Link>
-
-                  <Link to={{ pathname: "/accessory" }}>Trang sức</Link>
-
-                  <Link to={{ pathname: "/electronics" }}>
-                    Thiết bị điện tử
-                  </Link>
+                <div className="list-group list-group-flush" id="logsContainer">
+                  {categories.map((category, index) => (
+                    <Link
+                      key={index}
+                      to={{ pathname: `/shop/${category.name}` }}
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
-              <section class="widget widget-popular mb-5 mt-2">
-                <h3 class="widget-title mb-4 h4">Popular Products</h3>
-                <a class="popular-products-item media" href="/product-single">
+              <section className="widget widget-popular mb-5 mt-2">
+                <h3 className="widget-title mb-4 h4">Popular Products</h3>
+                <a
+                  className="popular-products-item media"
+                  href="/product-single"
+                >
                   <img
                     src="assets/images/p-1.jpg"
                     alt=""
-                    class="img-fluid mr-4"
+                    className="img-fluid mr-4"
                   />
-                  <div class="media-body">
+                  <div className="media-body">
                     <h6>
                       Contrast <br />
                       Backpack
                     </h6>
-                    <span class="price">$45</span>
+                    <span className="price">$45</span>
                   </div>
                 </a>
-                <a class="popular-products-item media" href="/product-single">
+                <a
+                  className="popular-products-item media"
+                  href="/product-single"
+                >
                   <img
                     src="assets/images/p-2.jpg"
                     alt=""
-                    class="img-fluid mr-4"
+                    className="img-fluid mr-4"
                   />
-                  <div class="media-body">
+                  <div className="media-body">
                     <h6>
                       Hoodie with <br />
                       Logo
                     </h6>
-                    <span class="price">$45</span>
+                    <span className="price">$45</span>
                   </div>
                 </a>
-                <a class="popular-products-item media" href="/product-single">
+                <a
+                  className="popular-products-item media"
+                  href="/product-single"
+                >
                   <img
                     src="assets/images/p-3.jpg"
                     alt=""
-                    class="img-fluid mr-4"
+                    className="img-fluid mr-4"
                   />
-                  <div class="media-body">
+                  <div className="media-body">
                     <h6>
                       Traveller
                       <br />
                       Backpack
                     </h6>
-                    <span class="price">$45</span>
+                    <span className="price">$45</span>
                   </div>
                 </a>
               </section>
@@ -94,7 +109,7 @@ function Shop() {
               <div className="col-lg-12 mb-4 mb-lg-0">
                 <div className="section-title">
                   {/*  */}
-                  <h2 className="d-block text-left-sm">Máy tính</h2>
+                  <h2 className="d-block text-left-sm">Shop</h2>
                   {/*  */}
                   <div className="heading d-flex justify-content-between mb-5">
                     <span>
@@ -102,14 +117,18 @@ function Shop() {
                         id="searchBox"
                         name="search"
                         value={formSeacrh || ""}
-                        className="rounded-left"
+                        className="rounded-left pl-3"
                         placeholder="Search"
                         onChange={handleOnChangeSearch}
                       ></input>
-                      <button id="searchIcon" className="rounded-right">
+
+                      <button
+                        id="searchIconBackGround"
+                        className="rounded-right"
+                      >
                         <i
-                          class="tf-ion-android-search"
-                          style={{ color: "white" }}
+                          id="searchIcon"
+                          className="tf-ion-android-search"
                           onClick={handleSubmit}
                         ></i>
                       </button>
@@ -654,29 +673,23 @@ function Shop() {
                 <nav aria-label="Page navigation">
                   <ul className="pagination">
                     <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
+                      <button disabled style={{ cursor: "not-allowed" }}>
+                        <span aria-hidden="true">&laquo; Previous</span>
+                      </button>
                     </li>
                     <li className="page-item active">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
+                      <button>1</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>2</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>3</button>
                     </li>
                     <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
+                      <button>
+                        <span aria-hidden="true">&raquo; Next</span>
+                      </button>
                     </li>
                   </ul>
                 </nav>
@@ -688,4 +701,3 @@ function Shop() {
     </section>
   );
 }
-export default Shop;
