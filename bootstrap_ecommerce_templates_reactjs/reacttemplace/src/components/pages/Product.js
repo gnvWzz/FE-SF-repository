@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState();
   const [loading, setLoading] = useState();
-
-  let { name } = useParams();
 
   function handleOnChangeSearch(e) {
     setFormSearch(e.target.value);
@@ -19,7 +18,9 @@ export default function Product({ categories }) {
     setFormSearch("");
   }
 
-  useEffect(() => {});
+  console.log(categories.length);
+
+  useEffect(() => { });
 
   return (
     <section className="products-shop section">
@@ -93,7 +94,7 @@ export default function Product({ categories }) {
               <div className="col-lg-12 mb-4 mb-lg-0">
                 <div className="section-title">
                   {/*  */}
-                  <h2 className="d-block text-left-sm">{name}</h2>
+                  <h2 className="d-block text-left-sm">Shop</h2>
                   {/*  */}
                   <div className="heading d-flex justify-content-between mb-5">
                     <span>

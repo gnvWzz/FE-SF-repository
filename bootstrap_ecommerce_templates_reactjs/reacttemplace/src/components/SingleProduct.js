@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
 function SingleProduct() {
 
     const [quantity, setQuantity] = useState(1);
     const [cursor, setCursor] = useState("");
+    const productId = useParams();
 
     function handleDecreaseQuantity() {
         setQuantity(quantity - 1);
