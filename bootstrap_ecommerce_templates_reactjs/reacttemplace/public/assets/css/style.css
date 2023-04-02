@@ -2298,3 +2298,8 @@ table.shop_table_responsive {
   font-size: 55px;
   color: black;
 } */
+
+#product-color-option {
+  width: 50px;
+  height: 30px
+}

@@ -7,26 +7,25 @@ export default function Product({ categories }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState();
   const [cursorProductCard, setCursorProductCard] = useState("");
-  let isStop = false;
+  const [category, setCategory] = useState([]);
   let { name } = useParams();
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (!isStop) {
-      axios
-        .get(`http://localhost:8080/api/product/find-all/${name}`)
-        .then((res) => {
-          setProducts(res.data);
+    axios
+      .get(`http://localhost:8080/api/product/find-all/${name}`)
+      .then((res) => {
+        setProducts(res.data);
+        setCategory(res.data);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }, [name]);
 
-        })
-        .catch((err) => {
-          throw err;
-        });
-    }
-    return () => {
-      isStop = true;
-    };
-  }, []);
+  function getCategories() {
+
+  }
 
   function handleOnChangeSearch(e) {
     setFormSearch(e.target.value);
