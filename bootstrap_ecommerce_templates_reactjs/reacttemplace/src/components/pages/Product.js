@@ -1,30 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-
+import { useQuery } from "react-query";
+import Pagination from "../pagination";
+import queryString from "query-string";
 export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState();
   const [cursorProductCard, setCursorProductCard] = useState("");
-  const [category, setCategory] = useState([]);
+  const [pagination, setPagination] = useState({
+    offset: 0,
+    pageSize: 10,
+    totalPages: 11,
+  });
+  let isStop = false;
   let { name } = useParams();
   let navigate = useNavigate();
 
+  // const [filter, setFilter] = useState({
+  //   offset: 0,
+  //   pageSize: 2,
+  // });
+
+  const [offset, setOffset] = useState(0);
+
+  const [pageSize, setPageSize] = useState(4);
+
+  const [totalPages, setTotalPages] = useState(0);
+
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/product/find-all/${name}`)
+      .get(
+        `http://localhost:8080/api/product/find/${name}?offset=${offset}&pageSize=${pageSize}`
+      )
       .then((res) => {
-        setProducts(res.data);
-        setCategory(res.data);
+        setProducts(res.data.content);
+        setTotalPages(res.data.totalPages);
       })
-      .catch((err) => {
+      .then((err) => {
         throw err;
       });
-  }, [name]);
+    console.log(offset);
+    console.log(totalPages);
+  }, [offset, name]);
 
-  function getCategories() {
-
+  if (!products.length) {
+    return <h1 style={{ textAlign: "center" }}>Loading</h1>;
   }
 
   function handleOnChangeSearch(e) {
@@ -41,11 +63,15 @@ export default function Product({ categories }) {
 
   function handleNavigateToProductDetails(e) {
     let serial_number = e.currentTarget.getAttribute("value");
-    navigate(`/single-product/${serial_number}`)
+    navigate(`/single-product/${serial_number}`);
   }
 
   function handleCursorProductCard() {
-    setCursorProductCard("pointer")
+    setCursorProductCard("pointer");
+  }
+
+  function handlePageChange(newPage) {
+    setOffset(newPage);
   }
 
   return (
@@ -74,10 +100,7 @@ export default function Product({ categories }) {
               </div>
               <section className="widget widget-popular mb-5 mt-2">
                 <h3 className="widget-title mb-4 h4">Popular Products</h3>
-                <a
-                  className="popular-products-item media"
-
-                >
+                <a className="popular-products-item media">
                   <img
                     src="assets/images/p-1.jpg"
                     alt=""
@@ -91,10 +114,7 @@ export default function Product({ categories }) {
                     <span className="price">$45</span>
                   </div>
                 </a>
-                <a
-                  className="popular-products-item media"
-
-                >
+                <a className="popular-products-item media">
                   <img
                     src="assets/images/p-2.jpg"
                     alt=""
@@ -201,13 +221,20 @@ export default function Product({ categories }) {
             <div className="row">
               {products.map((product) => (
                 <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
-                  <div className="product" onClick={handleNavigateToProductDetails} value={product.serial_number} onMouseOver={handleCursorProductCard} style={{ cursor: cursorProductCard }}>
+                  <div
+                    className="product"
+                    onClick={handleNavigateToProductDetails}
+                    value={product.serial_number}
+                    onMouseOver={handleCursorProductCard}
+                    style={{ cursor: cursorProductCard }}
+                  >
                     <div className="product-wrap">
                       <a>
                         <img
                           className="img-fluid w-100 mb-3 img-first"
-                          src={product.list[0]}
+                          src={product.imageList[0].url}
                           alt="product-img"
+                          style={{ height: 150 }}
                         />
                       </a>
                     </div>
@@ -228,31 +255,47 @@ export default function Product({ categories }) {
                     </div>
                   </div>
                 </div>
-              )
-              )}
-              <nav aria-label="Page navigation">
-                <ul className="pagination">
-                  <li className="page-item">
-                    <button disabled style={{ cursor: "not-allowed" }}>
-                      <span aria-hidden="true">&laquo; Previous</span>
-                    </button>
-                  </li>
-                  <li className="page-item active">
-                    <button>1</button>
-                  </li>
-                  <li className="page-item active">
-                    <button>2</button>
-                  </li>
-                  <li className="page-item active">
-                    <button>3</button>
-                  </li>
-                  <li className="page-item">
-                    <button>
-                      <span aria-hidden="true">&raquo; Next</span>
-                    </button>
-                  </li>
-                </ul>
-              </nav>
+              ))}
+              <div className="col-12">
+                {/* <nav aria-label="Page navigation">
+                  <ul className="pagination">
+                    <li className="page-item">
+                      <button disabled style={{ cursor: "not-allowed" }}>
+                        <span aria-hidden="true">&laquo; Previous</span>
+                      </button>
+                    </li>
+                    <li className="page-item active">
+                      <button>1</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>2</button>
+                    </li>
+                    <li className="page-item active">
+                      <button>3</button>
+                    </li>
+                    <li className="page-item">
+                      <button>
+                        <span aria-hidden="true">&raquo; Next</span>
+                      </button>
+                    </li>
+                  </ul>
+                </nav> */}
+                <div style={{ textAlign: "center" }}>
+                  <button
+                    disabled={offset + 1 <= 1}
+                    onClick={() => handlePageChange(offset - 1)}
+                  >
+                    Prev
+                  </button>
+                  <span>{offset + 1}</span> / <span>{totalPages}</span>
+                  <button
+                    disabled={offset + 1 >= totalPages}
+                    onClick={() => handlePageChange(offset + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

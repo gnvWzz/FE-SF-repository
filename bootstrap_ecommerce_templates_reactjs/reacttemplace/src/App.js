@@ -12,7 +12,9 @@ import SignUp from "./components/Signup";
 import SingleProduct from "./components/SingleProduct";
 import Product from "./components/pages/Product";
 import axios from "axios";
+import { QueryClient, QueryClientProvider } from "react-query";
 function App() {
+  const client = new QueryClient();
   const [categories, setCategorise] = useState([]);
   let isStop = false;
   useEffect(() => {
@@ -34,25 +36,30 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <Header categories={categories}></Header>
-        <Routes>
-          <Route path="/shop/" element={<Shop categories={categories} />} />
-          <Route
-            path="/shop/:name"
-            element={<Product categories={categories} />}
-          />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
+      <QueryClientProvider client={client}>
+        <BrowserRouter>
+          <Header categories={categories}></Header>
+          <Routes>
+            <Route path="/shop/" element={<Shop categories={categories} />} />
+            <Route
+              path="/shop/:name"
+              element={<Product categories={categories} />}
+            />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
 
-          <Route path="/single-product/:serial_number" element={<SingleProduct />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/" element={<Home />} />
-        </Routes>
-        <Footer></Footer>
-      </BrowserRouter>
+            <Route
+              path="/single-product/:serial_number"
+              element={<SingleProduct />}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+          <Footer></Footer>
+        </BrowserRouter>
+      </QueryClientProvider>
     </div>
   );
 }
