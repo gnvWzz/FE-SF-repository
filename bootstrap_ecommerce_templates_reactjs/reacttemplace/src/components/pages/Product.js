@@ -25,7 +25,7 @@ export default function Product({ categories }) {
 
   const [offset, setOffset] = useState(0);
 
-  const [pageSize, setPageSize] = useState(4);
+  const [pageSize, setPageSize] = useState(5);
 
   const [totalPages, setTotalPages] = useState(0);
 
@@ -280,7 +280,7 @@ export default function Product({ categories }) {
                     </li>
                   </ul>
                 </nav> */}
-                <div>
+                <div style={{ textAlign: "center" }}>
                   <button
                     disabled={offset + 1 <= 1}
                     onClick={() => handlePageChange(offset - 1)}
