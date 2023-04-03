@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form,Field } from "formik";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import { readyException } from "jquery";
 
 function SignUp() {
 
@@ -25,12 +26,20 @@ function SignUp() {
 
   const navigate = useNavigate();
 
+  // const[listEmailAccount,setListEmailAccount] = useState([]);
+  // const[listUsernameAccount, setListUsernameAccount] = useState([]);
+
   const [msgError, setmsgError] = useState({
     email:"",
     username:"",
     password:"",
     confirmPassword:""
   });
+
+  // useEffect(()=>{
+  //   axios
+  //   .get
+  // },[])
 
   function handleChange(e) {
     setForm({
@@ -86,6 +95,20 @@ function SignUp() {
     if (!form.email) {
         errors.email = "Bắt buộc";
       } else if (!REGEX.emailRegex.test(form.email)) {
+        if(form.email.length >= 8){
+          const data = form.email;
+          axios
+          .get(`http://localhost:8080/api/account/duplicate-email/${data}`)
+          .then((res) => {
+            if(res.data === "Exist"){
+              errors.email = "Email đã tồn tại";
+            }
+          })
+          .catch((err) => {
+            throw err;
+          });
+        
+        }
         errors.email = "Email không hợp lệ";
       }
      

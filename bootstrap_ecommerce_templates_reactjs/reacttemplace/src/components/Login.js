@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field } from "formik";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { error } from "jquery";
 
 function Login() {
   const REGEX = {
@@ -18,12 +19,18 @@ function Login() {
   });
 
   const navigate = useNavigate();
+
   const [msgError, setmsgError] = useState({
     username: "",
     password: "",
+    confirm: "Tài khoản hoặc mật khẩu không đúng. Vui lòng nhập lại!"
   });
+  const [isLogin,setIsLogin] = useState(false);
+  
+
 
   function handleSubmit() {
+  
     const isFilled =
       form.username && form.password ;
 
@@ -36,20 +43,30 @@ function Login() {
 
     if (isFilled && !isError) {
       axios
-        .post(`http://localhost:8080/api/signup/account`, form)
+        .post(`http://localhost:8080/api/account/login`, form)
         .then((res) => {
-          console.log(res.data);
+          if(res.data === "Login successfully"){
+            setIsLogin(true);
+          }else{
+            throw error;
+          }
         })
         .catch((err) => {
+          alert("Tài Khoản hoặc Mật Khẩu chưa đúng!")
+          navigate(`/login`)
           throw err;
         });
-
-      alert("Đăng kí thành công! ");
-      navigate(`/login`);
+     
     } else {
       alert("Vui lòng điền đầy đủ thông tin!");
     }
+    if(isLogin === true){
+      navigate(`/`);
+    }
+    setIsLogin(false);
   }
+
+  
 
   function handleChange(e) {
     setForm({
@@ -114,7 +131,7 @@ function Login() {
                         onChange={handleChange}
                       />
                       {errors.username && touched.username ? (
-                        <p className="error">{errors.username}</p>
+                        <p className="error">{msgError.username}</p>
                       ) : null}
                     </div>
                     <div
@@ -128,7 +145,7 @@ function Login() {
                         Forget password?
                       </a>
                       <Field
-                        type="text"
+                        type="password"
                         className="form-control"
                         placeholder="Enter Password"
                         name="password"
@@ -136,10 +153,15 @@ function Login() {
                         onChange={handleChange}
                       />
                       {errors.password && touched.password ? (
-                        <p className="error">{errors.password}</p>
+                        <p className="error">{msgError.password}</p>
                       ) : null}
                     </div>
-
+                    <div>
+                        {msgError.confirm !== ""
+                        ?<p className="error">{msgError.confirm}</p>
+                        :null
+                      }
+                    </div>
                     <button
                       type="submit"
                       className="btn btn-main mt-3 btn-block"
