@@ -2274,6 +2274,29 @@ table.shop_table_responsive {
   background-color: #fb5c42;
 }
 
+<<<<<<< HEAD
+label {
+  display: block;
+}
+
+.custom-input {
+  padding-bottom: 2%;
+}
+
+.custom-input-error label {
+  color: red;
+}
+
+.custom-input-error input {
+  border: 2px solid red;
+  border-radius: 4px;
+}
+
+.error {
+  color: red;
+  margin: 0;
+}
+=======
 #searchIcon {
   color: white;
 }
@@ -2298,3 +2321,4 @@ table.shop_table_responsive {
   font-size: 55px;
   color: black;
 } */
+>>>>>>> 99b0ee2273bc7d722bf5c8114af5411cbcbf5b83
