@@ -2274,7 +2274,6 @@ table.shop_table_responsive {
   background-color: #fb5c42;
 }
 
-<<<<<<< HEAD
 label {
   display: block;
 }
@@ -2296,7 +2295,7 @@ label {
   color: red;
   margin: 0;
 }
-=======
+
 #searchIcon {
   color: white;
 }
@@ -2321,4 +2320,8 @@ label {
   font-size: 55px;
   color: black;
 } */
->>>>>>> 99b0ee2273bc7d722bf5c8114af5411cbcbf5b83
+
+#product-color-option {
+  width: 50px;
+  height: 30px
+}
