@@ -25,7 +25,7 @@ export default function Product({ categories }) {
 
   const [offset, setOffset] = useState(0);
 
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(4);
 
   const [totalPages, setTotalPages] = useState(0);
 
@@ -43,10 +43,10 @@ export default function Product({ categories }) {
       });
     console.log(offset);
     console.log(totalPages);
-  }, [offset]);
+  }, [offset, name]);
 
   if (!products.length) {
-    return <h1>Loading</h1>;
+    return <h1 style={{ textAlign: "center" }}>Loading</h1>;
   }
 
   function handleOnChangeSearch(e) {

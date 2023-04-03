@@ -7,17 +7,49 @@ function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
   const [cursor, setCursor] = useState("");
   const { serial_number } = useParams();
-  const [product, setProduct] = useState({})
+  const [productColor, setProductColor] = useState([]);
+  const [productSize, setProductSize] = useState([]);
+  const [product, setProduct] = useState({
+    name: "",
+    category: "",
+    serial_number: "",
+    list: [],
+    price: 0,
+    brief_description: "",
+    full_description: "",
+    manufacturer: "",
+    weight: "",
+    material: "",
+    colors: "",
+    cpu: "",
+    gpu: "",
+    storageDrive: "",
+    display: "",
+    size: ""
+  })
+  let isStop = false;
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/api/product/find-by-serial-number/${serial_number}`)
-      .then((res) => {
-        setProduct(res.data);
-      })
-      .catch((err) => {
-        throw err;
-      })
+    if (!isStop) {
+      axios
+        .get(`http://localhost:8080/api/product/find-by-serial-number/${serial_number}`)
+        .then((res) => {
+          setProduct(res.data);
+          console.log(res.data);
+          if (res.data.colors.length != 0) {
+            setProductColor(res.data.colors.split(","));
+          }
+          if (res.data.size !== null) {
+            setProductSize(res.data.size.split(","))
+          }
+        })
+        .catch((err) => {
+          throw err;
+        })
+    }
+    return () => {
+      isStop = true;
+    };
   }, [])
 
   function handleDecreaseQuantity() {
@@ -70,86 +102,24 @@ function SingleProduct() {
                 <div class="carousel slide" data-ride="carousel" id="single-product-slider">
                   <div class="carousel-inner" style={{ textAlign: 'center' }}>
                     <div class="carousel-item active">
-                      <img src="assets/images/product-3.jpg" alt="" class="img-fluid" />
+                      <img src={product.list[0]} alt="" class="img-fluid" />
                     </div>
-                    <div class="carousel-item">
-                      <img src="assets/images/product-2.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
-                    <div class="carousel-item ">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </div>
+                    {product.list.map((img) => (
+                      <div class="carousel-item">
+                        <img src={img} alt="" class="img-fluid" />
+                      </div>
+                    ))}
                   </div>
 
                   <ol class="carousel-indicators">
                     <li data-target="#single-product-slider" data-slide-to="0" class="active">
                       <img src="assets/images/product-3.jpg" alt="" class="img-fluid" />
                     </li>
-                    <li data-target="#single-product-slider" data-slide-to="1">
-                      <img src="assets/images/product-2.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="2">
-                      <img src="assets/images/product-2.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
-                    <li data-target="#single-product-slider" data-slide-to="3">
-                      <img src="assets/images/product-1.jpg" alt="" class="img-fluid" />
-                    </li>
+                    {product.list.map((img, index) => (
+                      <li data-target="#single-product-slider" data-slide-to={index + 1}>
+                        <img src={img} alt="" class="img-fluid" />
+                      </li>
+                    ))}
                   </ol>
 
                   <a class="carousel-control-prev" href="#single-product-slider" role="button" data-slide="prev">
@@ -167,16 +137,17 @@ function SingleProduct() {
             <div class="col-md-7">
               <div class="single-product-details mt-5 mt-lg-0">
                 <h2>{product.name}</h2>
+                <h2>{productColor}</h2>
                 <div class="sku_wrapper mb-4">
-                  SKU: <span class="text-muted">AB1563456789 </span>
+                  SKU: <span class="text-muted">{product.serial_number} </span>
                 </div>
 
                 <hr />
 
-                <h3 class="product-price">{product.price} <del>$119.90</del></h3>
+                <h3 class="product-price">{product.price} đ<del></del></h3>
 
                 <p class="product-description my-4 ">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum ipsum dicta quod, quia doloremque aut deserunt commodi quis. Totam a consequatur beatae nostrum, earum consequuntur? Eveniet consequatur ipsum dicta recusandae.
+                  {product.brief_description}
                 </p>
                 <div class="quantity d-flex align-items-center">
                   <div className='mr-3'>
@@ -186,45 +157,46 @@ function SingleProduct() {
                   </div>
                   <button class="btn btn-main rounded-pill btn-small" type='submit'>Add to cart</button>
                 </div>
-                <div class="color-swatches mt-4 d-flex align-items-center">
-                  <span class="font-weight-bold text-capitalize product-meta-title">color:</span>
-                  <ul class="list-inline mb-0">
-                    <li class="list-inline-item">
-                      <a routerLink="/product-single" class="bg-info"></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a routerLink="/product-single" class="bg-dark"></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a routerLink="/product-single" class="bg-danger"></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a routerLink="/product-single" class="bg-success"></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a routerLink="/product-single" class="bg-primary"></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a routerLink="/product-single" class="bg-warning"></a>
-                    </li>
-                  </ul>
-                </div>
 
-                <div class="product-size d-flex align-items-center mt-4">
-                  <span class="font-weight-bold text-capitalize product-meta-title">Size:</span>
-                  <select class="form-control">
-                    <option>S</option>
-                    <option>M</option>
-                    <option>L</option>
-                    <option>XL</option>
-                  </select>
-                </div>
+                {/* Phần chọn color sản phẩm */}
+                {
+                  productColor.length !== 0
+                    ?
+                    <div class="color-swatches mt-4 d-flex align-items-center">
+                      <span class="font-weight-bold text-capitalize product-meta-title">Color:</span>
+                      <ul class="list-inline mb-0">
+                        {productColor.map((color) => (
+                          <li class="list-inline-item">
+                            <button id='product-color-option' className='rounded-pill' style={{ backgroundColor: color }}></button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    :
+                    undefined
+                }
+                {/* Hết phần chọn color sản phẩm */}
+
+                {/* Phần chọn size sản phẩm */}
+                {productSize.length !== 0
+                  ?
+                  <div class="product-size d-flex align-items-center mt-4">
+                    <span class="font-weight-bold text-capitalize product-meta-title">Size:</span>
+                    <select class="form-control">
+                      {productSize.map((size) => (
+                        <option>{size}</option>
+                      ))}
+                    </select>
+                  </div>
+                  :
+                  undefined
+                }
+                {/* Hết phần chọn size sản phẩm */}
 
                 <div class="products-meta mt-4">
                   <div class="product-category d-flex align-items-center">
                     <span class="font-weight-bold text-capitalize product-meta-title">Categories :</span>
-                    <a href="#">Products , </a>
-                    <a href="#">Soap</a>
+                    <a href="#">{product.category}</a>
                   </div>
 
                   <div class="product-share mt-5">
@@ -261,41 +233,84 @@ function SingleProduct() {
 
               <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                  <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-                  <h4>Product Features</h4>
-
-                  <ul class="">
-                    <li>Mapped with 3M™ Thinsulate™ Insulation [40G Body / Sleeves / Hood]</li>
-                    <li>Embossed Taffeta Lining</li>
-                    <li>DRYRIDE Durashell™ 2-Layer Oxford Fabric [10,000MM, 5,000G]</li>
-                  </ul>
-
+                  <p>{product.full_description}</p>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                  <table>
+                    {product.manufacturer
+                      ?
+                      <tr class="list-unstyled info-desc">
+                        <th className='d-flex'><strong>Manufacturer</strong></th>
+                        <td><span>{product.manufacturer}</span></td>
+                      </tr>
+                      :
+                      undefined
+                    }
+                    {product.weight
+                      ?
+                      <tr class="list-unstyled info-desc">
+                        <th className='d-flex'><strong>Weight</strong></th>
+                        <td><span>{product.weight} kg</span></td>
+                      </tr>
+                      :
+                      undefined
+                    }
+                    {product.material
+                      ?
+                      <tr class="list-unstyled info-desc">
+                        <th className='d-flex'><strong>Material</strong></th>
+                        <td><span>{product.material}</span></td>
+                      </tr>
+                      :
+                      undefined
+                    }
+                    {product.cpu
+                      ?
+                      <tr class="list-unstyled info-desc">
+                        <th className='d-flex'><strong>CPU</strong></th>
+                        <td><span>{product.cpu}</span></td>
+                      </tr>
+                      :
+                      undefined
+                    }
+                    {product.gpu
+                      ?
+                      <tr class="list-unstyled info-desc">
+                        <th className='d-flex'><strong>GPU</strong></th>
+                        <td><span>{product.gpu}</span></td>
+                      </tr>
+                      :
+                      undefined
+                    }
+                    {product.ram
+                      ?
+                      <tr class="list-unstyled info-desc">
+                        <th className='d-flex'><strong>RAM</strong></th>
+                        <td><span>{product.ram}</span></td>
+                      </tr>
+                      :
+                      undefined
+                    }
+                    {product.storageDrive
+                      ?
+                      <tr class="list-unstyled info-desc">
+                        <th className='d-flex'><strong>Storage Drive</strong></th>
+                        <td><span>{product.storageDrive}</span></td>
+                      </tr>
+                      :
+                      undefined
+                    }
+                    {product.display
+                      ?
+                      <tr class="list-unstyled info-desc">
+                        <th className='d-flex'><strong>Display</strong></th>
+                        <td><span>{product.display}</span></td>
+                      </tr>
+                      :
+                      undefined
+                    }
+                  </table>
 
-                  <ul class="list-unstyled info-desc">
-                    <li class="d-flex">
-                      <strong>Weight </strong>
-                      <span>400 g</span>
-                    </li>
-                    <li class="d-flex">
-                      <strong>Dimensions </strong>
-                      <span>10 x 10 x 15 cm</span>
-                    </li>
-                    <li class="d-flex">
-                      <strong>Materials</strong>
-                      <span >60% cotton, 40% polyester</span>
-                    </li>
-                    <li class="d-flex">
-                      <strong>Color </strong>
-                      <span>Blue, Gray, Green, Red, Yellow</span>
-                    </li>
-                    <li class="d-flex">
-                      <strong>Size</strong>
-                      <span>L, M, S, XL, XXL</span>
-                    </li>
-                  </ul>
                 </div>
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                   <div class="row">
