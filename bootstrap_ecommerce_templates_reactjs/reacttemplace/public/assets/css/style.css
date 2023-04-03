@@ -2355,3 +2355,16 @@ label {
     transform: rotate(360deg);
   }
 }
+
+#information-value {
+  padding-left: 30px;
+}
+
+/* #table-information th,
+td {
+  border: 1px solid black;
+} */
+
+/* #table-information table {
+  border-collapse: collapse;
+} */
