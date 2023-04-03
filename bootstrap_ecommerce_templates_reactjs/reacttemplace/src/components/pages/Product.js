@@ -286,6 +286,26 @@ export default function Product({ categories }) {
     setOffset(newPage);
   }
 
+  function pagingButton(e) {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <button
+          disabled={offset + 1 <= 1}
+          onClick={() => handlePageChange(offset - 1)}
+        >
+          Prev
+        </button>
+        <span>{offset + 1}</span> / <span>{totalPages}</span>
+        <button
+          disabled={offset + 1 >= totalPages}
+          onClick={() => handlePageChange(offset + 1)}
+        >
+          Next
+        </button>
+      </div>
+    );
+  }
+
   return (
     <section className="products-shop section">
       <div className="container">
@@ -438,7 +458,10 @@ export default function Product({ categories }) {
                     onClick={handleNavigateToProductDetails}
                     value={product.serial_number}
                     onMouseOver={handleCursorProductCard}
-                    style={{ cursor: cursorProductCard }}
+                    style={{
+                      cursor: cursorProductCard,
+                      border: "1px solid lightgrey",
+                    }}
                   >
                     <div className="product-wrap">
                       <a>
@@ -460,31 +483,26 @@ export default function Product({ categories }) {
                       </a>
                     </div>
                     <div className="product-info">
-                      <h2 className="product-title h5 mb-0">
+                      <h2
+                        className="product-title h5 mb-0"
+                        style={{
+                          height: 80,
+                          textAlign: "left",
+                          fontSize: "15px",
+                        }}
+                      >
                         <a>{product.name}</a>
                       </h2>
-                      <span className="price">{product.price} đ</span>
+                      <span className="price">
+                        <h4 style={{ color: "red", textAlign: "left" }}>
+                          {product.price} đ
+                        </h4>
+                      </span>
                     </div>
                   </div>
                 </div>
               ))}
-              <div className="col-12">
-                <div style={{ textAlign: "center" }}>
-                  <button
-                    disabled={offset + 1 <= 1}
-                    onClick={() => handlePageChange(offset - 1)}
-                  >
-                    Prev
-                  </button>
-                  <span>{offset + 1}</span> / <span>{totalPages}</span>
-                  <button
-                    disabled={offset + 1 >= totalPages}
-                    onClick={() => handlePageChange(offset + 1)}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
+              <div className="col-12">{pagingButton}</div>
             </div>
           </div>
         </div>
