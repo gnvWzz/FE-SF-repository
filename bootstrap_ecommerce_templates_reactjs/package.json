@@ -3,6 +3,8 @@
     "bootstrap": "^4.3.1",
     "jquery": "^3.6.4",
     "popper.js": "^1.16.1",
-    "react-router-dom": "^6.10.0"
+    "query": "^0.2.0",
+    "react-router-dom": "^6.10.0",
+    "string": "^3.3.3"
   }
 }
