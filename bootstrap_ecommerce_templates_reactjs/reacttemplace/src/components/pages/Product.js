@@ -15,8 +15,6 @@ export default function Product({ categories }) {
 
   const [offset, setOffset] = useState(0);
 
-  const [pageSize, setPageSize] = useState(4);
-
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
