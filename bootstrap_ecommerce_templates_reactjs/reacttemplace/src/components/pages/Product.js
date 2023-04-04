@@ -8,6 +8,7 @@ export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
   const [cursorProductCard, setCursorProductCard] = useState("");
+  const [sort_price, setSortPrice] = useState("");
   let isStop = false;
   let { name } = useParams();
   let navigate = useNavigate();
@@ -19,21 +20,75 @@ export default function Product({ categories }) {
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
+    setOffset(0);
     if (!isStop) {
-      axios
-        .get(`http://localhost:8080/api/product/find/${name}?offset=${offset}`)
-        .then((res) => {
-          setProducts(res.data.content);
-          setTotalPages(res.data.totalPages);
-        })
-        .catch((err) => {
-          throw err;
-        });
+      if (sort_price === null) {
+        axios
+          .get(
+            `http://localhost:8080/api/product/find/${name}?offset=${offset}`
+          )
+          .then((res) => {
+            setProducts(res.data.content);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
+      if (sort_price !== null) {
+        axios
+          .get(
+            `http://localhost:8080/api/product/find/${name}?offset=${offset}&sort=${sort_price}`
+          )
+          .then((res) => {
+            setProducts(res.data.content);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
     }
+
     return () => {
       isStop = true;
     };
-  }, [offset, name]);
+  }, [name]);
+
+  useEffect(() => {
+    if (!isStop) {
+      if (sort_price === null) {
+        axios
+          .get(
+            `http://localhost:8080/api/product/find/${name}?offset=${offset}`
+          )
+          .then((res) => {
+            setProducts(res.data.content);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
+      if (sort_price !== null) {
+        axios
+          .get(
+            `http://localhost:8080/api/product/find/${name}?offset=${offset}&sort=${sort_price}`
+          )
+          .then((res) => {
+            setProducts(res.data.content);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
+    }
+
+    return () => {
+      isStop = true;
+    };
+  }, [offset]);
 
   if (!products.length) {
     return (
@@ -275,6 +330,34 @@ export default function Product({ categories }) {
     setOffset(newPage);
   };
 
+  const handleChangeSortByPrice = async (e) => {
+    if (e.target.value === "none") {
+      setOffset(0);
+      axios
+        .get(`http://localhost:8080/api/product/find/${name}?offset=${offset}`)
+        .then((res) => {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    } else {
+      setSortPrice(e.target.value);
+      await axios
+        .get(
+          `http://localhost:8080/api/product/find/${name}?offset=${offset}&sort=${e.target.value}`
+        )
+        .then((res) => {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    }
+  };
+
   return (
     <section className="products-shop section">
       <div className="container">
@@ -340,11 +423,11 @@ export default function Product({ categories }) {
                         <option value="" selected="selected">
                           Sort by size
                         </option>
-                        <option value="">L Large</option>
-                        <option value="">XL Extra Large</option>
-                        <option value="">M Medium</option>
-                        <option value="">S Small</option>
-                        <option value="">XS Extra Small</option>
+                        <option value="L">L Large</option>
+                        <option value="XL">XL Extra Large</option>
+                        <option value="M">M Medium</option>
+                        <option value="S">S Small</option>
+                        <option value="XS">XS Extra Small</option>
                       </select>
                       <input type="hidden" name="paged" value="1" />
                     </form>
@@ -353,15 +436,16 @@ export default function Product({ categories }) {
                         name="orderby"
                         className="orderby form-control"
                         aria-label="Shop order"
+                        onChange={handleChangeSortByPrice}
                       >
-                        <option value="" selected="selected">
+                        <option value="none" selected="selected">
                           Sort by price
                         </option>
                         <option value="">Sort by popularity</option>
                         <option value="">Sort by average rating</option>
                         <option value="">Sort by latest</option>
-                        <option value="">Sort by price: low to high</option>
-                        <option value="">Sort by price: high to low</option>
+                        <option value="asc">Sort by price: low to high</option>
+                        <option value="desc">Sort by price: high to low</option>
                       </select>
                       <input type="hidden" name="paged" value="1" />
                     </form>
