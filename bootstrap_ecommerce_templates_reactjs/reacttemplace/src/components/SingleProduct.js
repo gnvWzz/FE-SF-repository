@@ -19,31 +19,74 @@ function SingleProduct() {
     manufacturer: "",
     weight: "",
     material: "",
-    colors: "",
+    color: "",
     cpu: "",
     gpu: "",
     storageDrive: "",
     display: "",
     size: "",
   });
+  const [products, setProducts] = useState([]);
+  const [colorOption, setColorOption] = useState("");
+  const [sizeOption, setSizeOption] = useState("");
+  const [productName, setProductName] = useState("");
   let isStop = false;
-  const parser = new DOMParser();
+
+  // useEffect(() => {
+  //   if (!isStop) {
+  //     axios
+  //       .get(
+  //         `http://localhost:8080/api/product/find-by-serial-number/${serial_number}`
+  //       )
+  //       .then((res) => {
+  //         setProduct(res.data);
+  //         console.log(res.data);
+  //         if (res.data.colors.length != 0) {
+  //           setProductColor(res.data.colors.split(","));
+  //         }
+  //         if (res.data.size !== null) {
+  //           setProductSize(res.data.size.split(","));
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         throw err;
+  //       });
+  //   }
+  //   return () => {
+  //     isStop = true;
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (!isStop) {
       axios
-        .get(
-          `http://localhost:8080/api/product/find-by-serial-number/${serial_number}`
-        )
+        .get(`http://localhost:8080/api/product/find-by-serial-number/${serial_number}`)
         .then((res) => {
           setProduct(res.data);
+          setProductName(res.data.name);
+          console.log(productName);
+          console.log(product.manufacturer);
+        })
+        .catch((err) => {
+          throw err;
+        })
+
+      axios
+        .get(
+          `http://localhost:8080/api/product/find-by-name-manufacturer/${productName}&manufacturer=${product.manufacturer}`
+        )
+        .then((res) => {
+          setProducts(res.data);
           console.log(res.data);
-          if (res.data.colors.length != 0) {
-            setProductColor(res.data.colors.split(","));
-          }
-          if (res.data.size !== null) {
-            setProductSize(res.data.size.split(","));
-          }
+          products.map((product) => {
+            setProductColor(productColor => [...productColor, product.color])
+          })
+          products.map((product) => {
+            setProductSize(productSize => [...productSize, product.size])
+          })
+          setProduct(products[0]);
+          setColorOption(product.color);
+          setSizeOption(product.size);
         })
         .catch((err) => {
           throw err;
@@ -71,6 +114,36 @@ function SingleProduct() {
     } else {
       setCursor("not-allowed");
     }
+  }
+
+  function handleClickColor(e) {
+    setColorOption(e.currenttarget.attr("value"));
+
+    axios
+      .get(`http://localhost:8080/api/product/find-product-by-name-manufacturer-color-size/${productName}?manufacturer=${product.manufacturer}&color=${colorOption}&size=${sizeOption}`)
+      .then((res) => {
+        setProduct(res);
+        setColorOption("");
+        setSizeOption("");
+      })
+      .catch((err) => {
+        throw err;
+      })
+  }
+
+  function handleClickSize(e) {
+    setSizeOption(e.currenttarget.attr("value"));
+
+    axios
+      .get(`http://localhost:8080/api/product/find-product-by-name-manufacturer-color-size/${productName}?manufacturer=${product.manufacturer}&color=${colorOption}&size=${sizeOption}`)
+      .then((res) => {
+        setProduct(res);
+        setColorOption("");
+        setSizeOption("");
+      })
+      .catch((err) => {
+        throw err;
+      })
   }
 
   return (
@@ -108,7 +181,7 @@ function SingleProduct() {
         <div class="container">
           <div class="row">
             <div class="col-md-5">
-              <div class="single-product-slider">
+              {/* <div class="single-product-slider">
                 <div
                   class="carousel slide"
                   data-ride="carousel"
@@ -166,7 +239,7 @@ function SingleProduct() {
                     <span class="sr-only">Next</span>
                   </a>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div class="col-md-7">
@@ -229,6 +302,8 @@ function SingleProduct() {
                             id="product-color-option"
                             className="rounded-pill"
                             style={{ backgroundColor: color }}
+                            onClick={handleClickColor}
+                            value={color}
                           ></button>
                         </li>
                       ))}
@@ -245,7 +320,7 @@ function SingleProduct() {
                     </span>
                     <select class="form-control">
                       {productSize.map((size) => (
-                        <option>{size}</option>
+                        <option onClick={handleClickSize}>{size}</option>
                       ))}
                     </select>
                   </div>
