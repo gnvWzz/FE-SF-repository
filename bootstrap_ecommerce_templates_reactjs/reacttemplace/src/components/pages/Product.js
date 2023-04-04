@@ -7,21 +7,10 @@ import queryString from "query-string";
 export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState();
   const [cursorProductCard, setCursorProductCard] = useState("");
-  const [pagination, setPagination] = useState({
-    offset: 0,
-    pageSize: 10,
-    totalPages: 11,
-  });
   let isStop = false;
   let { name } = useParams();
   let navigate = useNavigate();
-
-  // const [filter, setFilter] = useState({
-  //   offset: 0,
-  //   pageSize: 2,
-  // });
 
   const [offset, setOffset] = useState(0);
 
@@ -30,19 +19,20 @@ export default function Product({ categories }) {
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    axios
-      .get(
-        `http://localhost:8080/api/product/find/${name}?offset=${offset}&pageSize=${pageSize}`
-      )
-      .then((res) => {
-        setProducts(res.data.content);
-        setTotalPages(res.data.totalPages);
-      })
-      .then((err) => {
-        throw err;
-      });
-    console.log(offset);
-    console.log(totalPages);
+    if (!isStop) {
+      axios
+        .get(`http://localhost:8080/api/product/find/${name}?offset=${offset}`)
+        .then((res) => {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    }
+    return () => {
+      isStop = true;
+    };
   }, [offset, name]);
 
   if (!products.length) {
@@ -144,7 +134,6 @@ export default function Product({ categories }) {
                             value={formSeacrh || ""}
                             className="rounded-left pl-3"
                             placeholder="Search"
-                            onChange={handleOnChangeSearch}
                           ></input>
 
                           <button
@@ -154,7 +143,6 @@ export default function Product({ categories }) {
                             <i
                               id="searchIcon"
                               className="tf-ion-android-search"
-                              onClick={handleSubmit}
                             ></i>
                           </button>
                         </span>
@@ -261,50 +249,31 @@ export default function Product({ categories }) {
     );
   }
 
-  function handleOnChangeSearch(e) {
+  const handleOnChangeSearch = function (e) {
     setFormSearch(e.target.value);
-  }
+  };
 
-  function handleSubmit() {
+  const handleSubmit = function () {
     if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
-      alert("finish");
+      alert("OK");
     }
-    console.log(formSeacrh.length);
     setFormSearch("");
-  }
+  };
 
-  function handleNavigateToProductDetails(e) {
+  const getProductByName = function (e) {};
+
+  const handleNavigateToProductDetails = function (e) {
     let serial_number = e.currentTarget.getAttribute("value");
     navigate(`/single-product/${serial_number}`);
-  }
+  };
 
-  function handleCursorProductCard() {
+  const handleCursorProductCard = function () {
     setCursorProductCard("pointer");
-  }
+  };
 
-  function handlePageChange(newPage) {
+  const handlePageChange = function (newPage) {
     setOffset(newPage);
-  }
-
-  function pagingButton(e) {
-    return (
-      <div style={{ textAlign: "center" }}>
-        <button
-          disabled={offset + 1 <= 1}
-          onClick={() => handlePageChange(offset - 1)}
-        >
-          Prev
-        </button>
-        <span>{offset + 1}</span> / <span>{totalPages}</span>
-        <button
-          disabled={offset + 1 >= totalPages}
-          onClick={() => handlePageChange(offset + 1)}
-        >
-          Next
-        </button>
-      </div>
-    );
-  }
+  };
 
   return (
     <section className="products-shop section">
@@ -330,55 +299,6 @@ export default function Product({ categories }) {
                   ))}
                 </div>
               </div>
-              <section className="widget widget-popular mb-5 mt-2">
-                <h3 className="widget-title mb-4 h4">Popular Products</h3>
-                <a className="popular-products-item media">
-                  <img
-                    src="assets/images/p-1.jpg"
-                    alt=""
-                    className="img-fluid mr-4"
-                  />
-                  <div className="media-body">
-                    <h6>
-                      Contrast <br />
-                      Backpack
-                    </h6>
-                    <span className="price">$45</span>
-                  </div>
-                </a>
-                <a className="popular-products-item media">
-                  <img
-                    src="assets/images/p-2.jpg"
-                    alt=""
-                    className="img-fluid mr-4"
-                  />
-                  <div className="media-body">
-                    <h6>
-                      Hoodie with <br />
-                      Logo
-                    </h6>
-                    <span className="price">$45</span>
-                  </div>
-                </a>
-                <a
-                  className="popular-products-item media"
-                  href="/product-single"
-                >
-                  <img
-                    src="assets/images/p-3.jpg"
-                    alt=""
-                    className="img-fluid mr-4"
-                  />
-                  <div className="media-body">
-                    <h6>
-                      Traveller
-                      <br />
-                      Backpack
-                    </h6>
-                    <span className="price">$45</span>
-                  </div>
-                </a>
-              </section>
             </div>
           </div>
           {/* Đây là phần product listing */}
@@ -502,7 +422,24 @@ export default function Product({ categories }) {
                   </div>
                 </div>
               ))}
-              <div className="col-12">{pagingButton}</div>
+              <div className="col-12">
+                {" "}
+                <div style={{ textAlign: "center" }}>
+                  <button
+                    disabled={offset + 1 <= 1}
+                    onClick={() => handlePageChange(offset - 1)}
+                  >
+                    Prev
+                  </button>
+                  <span>{offset + 1}</span> / <span>{totalPages}</span>
+                  <button
+                    disabled={offset + 1 >= totalPages}
+                    onClick={() => handlePageChange(offset + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
