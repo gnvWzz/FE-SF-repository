@@ -38,11 +38,9 @@ export default function Product({ categories }) {
         setProducts(res.data.content);
         setTotalPages(res.data.totalPages);
       })
-      .then((err) => {
+      .catch((err) => {
         throw err;
       });
-    console.log(offset);
-    console.log(totalPages);
   }, [offset, name]);
 
   if (!products.length) {
@@ -269,7 +267,6 @@ export default function Product({ categories }) {
     if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
       alert("finish");
     }
-    console.log(formSeacrh.length);
     setFormSearch("");
   }
 
@@ -330,7 +327,7 @@ export default function Product({ categories }) {
                   ))}
                 </div>
               </div>
-              <section className="widget widget-popular mb-5 mt-2">
+              {/* <section className="widget widget-popular mb-5 mt-2">
                 <h3 className="widget-title mb-4 h4">Popular Products</h3>
                 <a className="popular-products-item media">
                   <img
@@ -378,7 +375,7 @@ export default function Product({ categories }) {
                     <span className="price">$45</span>
                   </div>
                 </a>
-              </section>
+              </section> */}
             </div>
           </div>
           {/* Đây là phần product listing */}

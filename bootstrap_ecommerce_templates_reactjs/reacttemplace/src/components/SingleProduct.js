@@ -75,7 +75,7 @@ function SingleProduct() {
 
   return (
     <div className="single-product-container">
-      <section class="page-header">
+      {/* <section class="page-header">
         <div class="overly"></div>
         <div class="container">
           <div class="row justify-content-center">
@@ -102,7 +102,7 @@ function SingleProduct() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section class="single-product">
         <div class="container">
