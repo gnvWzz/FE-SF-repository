@@ -27,6 +27,7 @@ export default function Product({ categories }) {
           )
           .then((res) => {
             setProducts(res.data.content);
+            console.log(products);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -40,6 +41,7 @@ export default function Product({ categories }) {
           )
           .then((res) => {
             setProducts(res.data.content);
+            console.log(products);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -62,6 +64,7 @@ export default function Product({ categories }) {
           )
           .then((res) => {
             setProducts(res.data.content);
+            console.log(products);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -75,6 +78,7 @@ export default function Product({ categories }) {
           )
           .then((res) => {
             setProducts(res.data.content);
+            console.log(products);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -306,9 +310,21 @@ export default function Product({ categories }) {
     setFormSearch(e.target.value);
   };
 
-  const handleSubmit = function () {
+  const handleSubmit = async (e) => {
     if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
-      alert("OK");
+      setFormSearch(e.target.value);
+      await axios
+        .get(
+          `http://localhost:8080/api/product/findByName/${name}?offset=${offset}&product_name=${formSeacrh}`
+        )
+        .then((res) => {
+          setProducts(res.data.content);
+          console.log(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
     }
     setFormSearch("");
   };
@@ -404,11 +420,11 @@ export default function Product({ categories }) {
                       <button
                         id="searchIconBackGround"
                         className="rounded-right"
+                        onClick={handleSubmit}
                       >
                         <i
                           id="searchIcon"
                           className="tf-ion-android-search"
-                          onClick={handleSubmit}
                         ></i>
                       </button>
                     </span>
