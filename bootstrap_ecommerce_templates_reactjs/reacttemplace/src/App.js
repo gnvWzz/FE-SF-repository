@@ -49,7 +49,7 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
 
             <Route
-              path="/single-product/:serial_number"
+              path="/single-product/:name"
               element={<SingleProduct />}
             />
             <Route path="/login" element={<Login />} />
