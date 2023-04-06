@@ -326,9 +326,11 @@ export default function Product({ categories }) {
   };
 
   const handleNavigateToProductDetails = function (e) {
-    const name = e.currentTarget.getAttribute("value");
+    const name = e.currentTarget.getAttribute("value").name;
+    const manufacturer = e.currentTarget.getAttribute("value").manufacturer;
+    console.log(JSON.stringify(e.currentTarget.getAttribute("value").name));
     // const manufacturer = e.currentTarget.getAttribute("value").manufacturer;
-    navigate(`/single-product/${name}`);
+    // navigate(`/single-product/${name}/${manufacturer}`);
   };
 
   const handleCursorProductCard = function () {
@@ -469,7 +471,7 @@ export default function Product({ categories }) {
                   <div
                     className="product"
                     onClick={handleNavigateToProductDetails}
-                    value={product.productDetailDtos[0].serialNumber}
+                    value={"abc"}
                     onMouseOver={handleCursorProductCard}
                     style={{
                       cursor: cursorProductCard,
