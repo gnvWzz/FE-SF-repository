@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Formik, Form, Field } from "formik";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { error } from "jquery";
+import { fakeLogin } from "../redux/action";
 
 function Login() {
   const REGEX = {
@@ -12,88 +14,78 @@ function Login() {
     passwordRegex:
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
   };
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector(state => state.user);
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
-
-  const navigate = useNavigate();
-
   const [msgError, setmsgError] = useState({
     username: "",
     password: "",
-    confirm: "Tài khoản hoặc mật khẩu không đúng. Vui lòng nhập lại!"
+    confirm: ""
   });
-  const [isLogin,setIsLogin] = useState(false);
-  
+  // const[isLogin,setIsLogin] = useState(false);
 
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     setIsLogin(false);
+  //     navigate("/");
+  //   }
+  // }, [isLogin]);
 
-  function handleSubmit() {
-  
-    const isFilled =
-      form.username && form.password ;
-
-    const isError =
-      isFilled &&
-      (
-        msgError.username ||
-        msgError.password
-      );
-
-    if (isFilled && !isError) {
-      axios
-        .post(`http://localhost:8080/api/account/login`, form)
-        .then((res) => {
-          if(res.data === "Login successfully"){
-            setIsLogin(true);
-          }else{
-            throw error;
-          }
-        })
-        .catch((err) => {
-          alert("Tài Khoản hoặc Mật Khẩu chưa đúng!")
-          navigate(`/login`)
-          throw err;
-        });
-     
-    } else {
-      alert("Vui lòng điền đầy đủ thông tin!");
-    }
-    if(isLogin === true){
+  useEffect(() =>{
+    if(user.username){
       navigate(`/`);
     }
-    setIsLogin(false);
-  }
+  },[user,navigate])
 
-  
+  const login = () => {
+    dispatch(fakeLogin(form));
+  };
 
-  function handleChange(e) {
+
+  // const handleSubmit =   ()=> {
+    
+  //      axios
+  //       .post(`http://localhost:8080/api/account/login`, form,{headers:{Authorization:`Bearer` + token}})
+  //       .then((res) => {
+  //         if(res.data === "Login successfully"){
+  //           setIsLogin(true);
+  //         }else{
+  //           setmsgError("Tài Khoản hoặc Mật Khẩu chưa đúng!");
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         throw err;
+  //       });
+     
+  //    ;
+  //   }
+  // }
+
+  const handleChange =(e)=> {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   }
 
-  function handleValidate() {
-    const errors = {
-      username: "",
-      password: "",
-    };
-
-    if (!form.username) {
-      errors.username = "Bắt buộc";
-    } 
-    
-
-    if (!form.password) {
-      errors.password = "Bắt buộc";
-    } 
-    
-
-    setmsgError(errors);
-    return errors;
-  }
+  // const handleValidate = ()=> {
+  //   const errors = {
+  //     username: "",
+  //     password: "",
+  //   };
+  //   if (!form.username) {
+  //     errors.username = "Bắt buộc";
+  //   } 
+  //   if (!form.password) {
+  //     errors.password = "Bắt buộc";
+  //   } 
+  //   setmsgError(errors);
+  //   return errors;
+  // }
 
   return (
     <div className="login-container">
@@ -110,11 +102,11 @@ function Login() {
                 </div>
                 <Formik
                   initialValues={form}
-                  validate={handleValidate}
-                  onSubmit={handleSubmit}
+                  // validate={handleValidate}
+                  onSubmit={login}
                 >
                   {({errors, touched}) =>(
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={login}>
                     <div
                       class="form-group mb-4"
                       className={`custom-input ${
