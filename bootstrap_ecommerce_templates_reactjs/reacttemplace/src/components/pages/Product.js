@@ -13,6 +13,11 @@ export default function Product({ categories }) {
   let { name } = useParams();
   let navigate = useNavigate();
 
+  const [request, setRequest] = useState({
+    name: "",
+    manufacturer: "",
+  });
+
   const [offset, setOffset] = useState(0);
 
   const [totalPages, setTotalPages] = useState(0);
@@ -22,9 +27,7 @@ export default function Product({ categories }) {
     if (!isStop) {
       if (sort_price === null) {
         axios
-          .get(
-            `http://localhost:8080/api/product/find/${name}?offset=${offset}`
-          )
+          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
           .then((res) => {
             setProducts(res.data.content);
             setTotalPages(res.data.totalPages);
@@ -36,7 +39,7 @@ export default function Product({ categories }) {
       if (sort_price !== null) {
         axios
           .get(
-            `http://localhost:8080/api/product/find/${name}?offset=${offset}&sort=${sort_price}`
+            `http://localhost:8080/api/product/${name}?offset=${offset}&sort=${sort_price}`
           )
           .then((res) => {
             setProducts(res.data.content);
@@ -57,9 +60,7 @@ export default function Product({ categories }) {
     if (!isStop) {
       if (sort_price === null) {
         axios
-          .get(
-            `http://localhost:8080/api/product/find/${name}?offset=${offset}`
-          )
+          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
           .then((res) => {
             setProducts(res.data.content);
             setTotalPages(res.data.totalPages);
@@ -71,7 +72,7 @@ export default function Product({ categories }) {
       if (sort_price !== null) {
         axios
           .get(
-            `http://localhost:8080/api/product/find/${name}?offset=${offset}&sort=${sort_price}`
+            `http://localhost:8080/api/product/${name}?offset=${offset}&sort=${sort_price}`
           )
           .then((res) => {
             setProducts(res.data.content);
@@ -244,7 +245,7 @@ export default function Product({ categories }) {
                       <div
                         className="product"
                         onClick={handleNavigateToProductDetails}
-                        value={product.serial_number}
+                        value={product.name}
                         onMouseOver={handleCursorProductCard}
                         style={{ cursor: cursorProductCard }}
                       >
@@ -306,18 +307,30 @@ export default function Product({ categories }) {
     setFormSearch(e.target.value);
   };
 
-  const handleSubmit = function () {
+  const handleSubmit = async (e) => {
     if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
-      alert("OK");
+      setFormSearch(e.target.value);
+      await axios
+        .get(
+          `http://localhost:8080/api/product/${name}?offset=${offset}&product_name=${formSeacrh}`
+        )
+        .then((res) => {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
     }
     setFormSearch("");
   };
 
-  const getProductByName = function (e) {};
-
   const handleNavigateToProductDetails = function (e) {
-    let serial_number = e.currentTarget.getAttribute("value");
-    navigate(`/single-product/${serial_number}`);
+    const name = e.currentTarget.getAttribute("value").name;
+    const manufacturer = e.currentTarget.getAttribute("value").manufacturer;
+    console.log(JSON.stringify(e.currentTarget.getAttribute("value").name));
+    // const manufacturer = e.currentTarget.getAttribute("value").manufacturer;
+    // navigate(`/single-product/${name}/${manufacturer}`);
   };
 
   const handleCursorProductCard = function () {
@@ -332,7 +345,7 @@ export default function Product({ categories }) {
     if (e.target.value === "none") {
       setOffset(0);
       axios
-        .get(`http://localhost:8080/api/product/find/${name}?offset=${offset}`)
+        .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
@@ -344,7 +357,7 @@ export default function Product({ categories }) {
       setSortPrice(e.target.value);
       await axios
         .get(
-          `http://localhost:8080/api/product/find/${name}?offset=${offset}&sort=${e.target.value}`
+          `http://localhost:8080/api/product/${name}?offset=${offset}&sort=${e.target.value}`
         )
         .then((res) => {
           setProducts(res.data.content);
@@ -404,11 +417,11 @@ export default function Product({ categories }) {
                       <button
                         id="searchIconBackGround"
                         className="rounded-right"
+                        onClick={handleSubmit}
                       >
                         <i
                           id="searchIcon"
                           className="tf-ion-android-search"
-                          onClick={handleSubmit}
                         ></i>
                       </button>
                     </span>
@@ -453,12 +466,12 @@ export default function Product({ categories }) {
             </div>
 
             <div className="row">
-              {products.map((product) => (
+              {products.map((product, index) => (
                 <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
                   <div
                     className="product"
                     onClick={handleNavigateToProductDetails}
-                    value={product.serial_number}
+                    value={"abc"}
                     onMouseOver={handleCursorProductCard}
                     style={{
                       cursor: cursorProductCard,
@@ -469,7 +482,7 @@ export default function Product({ categories }) {
                       <a>
                         <img
                           className="img-fluid w-100 mb-3 img-first"
-                          src={product.imageList[0].url}
+                          src={product.productDetailDtos[0].imageList[0].url}
                           alt="product-img"
                           style={{ height: 200 }}
                         />
@@ -497,7 +510,7 @@ export default function Product({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.price} đ
+                          {product.productDetailDtos[0].price} đ
                         </h4>
                       </span>
                     </div>
