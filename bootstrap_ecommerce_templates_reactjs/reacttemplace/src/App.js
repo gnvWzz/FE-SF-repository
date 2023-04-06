@@ -13,6 +13,8 @@ import SingleProduct from "./components/SingleProduct";
 import Product from "./components/pages/Product";
 import axios from "axios";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 function App() {
   const client = new QueryClient();
   const [categories, setCategorise] = useState([]);
@@ -23,10 +25,9 @@ function App() {
         .get("http://localhost:8080/api/categories/find-all")
         .then((res) => {
           setCategorise(res.data);
-          console.log(res.data);
         })
         .catch((err) => {
-          console.log(err);
+          throw err;
         });
     }
     return () => {
@@ -36,7 +37,7 @@ function App() {
 
   return (
     <div className="App">
-      <QueryClientProvider client={client}>
+      <Provider store={store}>
         <BrowserRouter>
           <Header categories={categories}></Header>
           <Routes>
@@ -59,7 +60,7 @@ function App() {
           </Routes>
           <Footer></Footer>
         </BrowserRouter>
-      </QueryClientProvider>
+      </Provider>
     </div>
   );
 }
