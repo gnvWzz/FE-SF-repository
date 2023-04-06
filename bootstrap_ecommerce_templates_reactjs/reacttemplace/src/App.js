@@ -13,6 +13,8 @@ import SingleProduct from "./components/SingleProduct";
 import Product from "./components/pages/Product";
 import axios from "axios";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 function App() {
   const client = new QueryClient();
   const [categories, setCategorise] = useState([]);
@@ -36,7 +38,7 @@ function App() {
 
   return (
     <div className="App">
-      <QueryClientProvider client={client}>
+      <Provider store={store}>
         <BrowserRouter>
           <Header categories={categories}></Header>
           <Routes>
@@ -59,7 +61,7 @@ function App() {
           </Routes>
           <Footer></Footer>
         </BrowserRouter>
-      </QueryClientProvider>
+      </Provider>
     </div>
   );
 }

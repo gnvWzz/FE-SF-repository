@@ -26,9 +26,6 @@ function SignUp() {
 
   const navigate = useNavigate();
 
-  // const[listEmailAccount,setListEmailAccount] = useState([]);
-  // const[listUsernameAccount, setListUsernameAccount] = useState([]);
-
   const [msgError, setmsgError] = useState({
     email:"",
     username:"",
@@ -36,19 +33,14 @@ function SignUp() {
     confirmPassword:""
   });
 
-  // useEffect(()=>{
-  //   axios
-  //   .get
-  // },[])
-
-  function handleChange(e) {
+  const handleChange =(e)=> {
     setForm({
       ...form,
       [e.target.name]:e.target.value 
     });
   }
 
-  function handleSubmit() { 
+  const handleSubmit =  ()=> { 
    
     const isFilled =
     form.username &&
@@ -70,57 +62,71 @@ function SignUp() {
         axios
         .post(`http://localhost:8080/api/account/signup` ,form)
         .then((res) =>{
-          console.log(res.data)
+
         })
         .catch((err)=>{
           throw err
         })
-
         alert("Đăng kí thành công! " )
           navigate(`/login`);
+        
       }else {
         alert("Vui lòng điền đầy đủ thông tin!")
-      } 
-         
+      }     
 }
 
-  function handleValidate(){
+  const handleValidate = async() =>{
     const errors = {
         email:"",
         username:"",
         password:"",
         confirmPassword:""
-    };
-    
+    }; 
+    const isValidEmail = REGEX.emailRegex.test(form.email);
+    const isValidUsername = REGEX.usernameRegex.test(form.username);
     if (!form.email) {
         errors.email = "Bắt buộc";
-      } else if (!REGEX.emailRegex.test(form.email)) {
-        if(form.email.length >= 8){
-          const data = form.email;
-          axios
-          .get(`http://localhost:8080/api/account/duplicate-email/${data}`)
-          .then((res) => {
-            if(res.data === "Exist"){
-              errors.email = "Email đã tồn tại";
-            }
-          })
-          .catch((err) => {
-            throw err;
-          });
-        
-        }
-        errors.email = "Email không hợp lệ";
-      }
-     
+    } else if (!isValidEmail) {
+      errors.email = "Email không hợp lệ";
+    }else if(isValidEmail){
+      const data = form.email;
+       await   axios
+        .get(`http://localhost:8080/api/account/duplicate-email/${data}`)
+        .then((res) => {
+          if(res.data === "Exist"){
+            errors.email = "Email đã tồn tại";  
+          }else{
+            errors.email = "";
+          }
+        })
+        .catch((err) => {
+          throw err;
+        });
+    }
+    
     if (!form.username) {
         errors.username = "Bắt buộc";
-      } else if (!REGEX.usernameRegex.test(form.username)) {
+    } else if (!isValidUsername) {
         errors.username = "Tài khoản chưa đúng,ít nhất 8 kí tự";
-      
-      }
+    }else if(isValidUsername){
+      const data = form.username;
+      await  axios
+       .get(`http://localhost:8080/api/account/duplicate-username/${data}`)
+       .then((res) => {
+         if(res.data === "Exist"){
+           errors.username = "Username đã tồn tại";  
+         }else{
+           errors.username = "";
+         }
+       })
+       .catch((err) => {
+         throw err;
+       });
+    }
+
     if (!form.password) {
         errors.password = "Bắt buộc";
-      } else if (!REGEX.passwordRegex.test(form.password)) {
+      } else if (!REGEX.passwordRegex.test(form.password)) {  
         errors.password = "Mật khẩu có ít nhất 8 kí tự,1 chữ cái In hoa, số và kí tự đặt biệt ";
       }
 
@@ -155,7 +161,7 @@ function SignUp() {
                 }
                 >
                     {({errors, touched}) =>(
-                         <form onSubmit={handleSubmit}>
+                         <form  onSubmit={handleSubmit}>
                          <div
                            class="form-group mb-4"
                            className={`custom-input ${
