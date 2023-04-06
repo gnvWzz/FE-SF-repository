@@ -469,7 +469,7 @@ export default function Product({ categories }) {
                   <div
                     className="product"
                     onClick={handleNavigateToProductDetails}
-                    value={product.productDetail[0].serialNumber}
+                    value={product.productDetailDtos[0].serialNumber}
                     onMouseOver={handleCursorProductCard}
                     style={{
                       cursor: cursorProductCard,
@@ -480,7 +480,7 @@ export default function Product({ categories }) {
                       <a>
                         <img
                           className="img-fluid w-100 mb-3 img-first"
-                          src={product.productDetail[0].imageList[0].url}
+                          src={product.productDetailDtos[0].imageList[0].url}
                           alt="product-img"
                           style={{ height: 200 }}
                         />
@@ -508,7 +508,7 @@ export default function Product({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.productDetail[0].price} đ
+                          {product.productDetailDtos[0].price} đ
                         </h4>
                       </span>
                     </div>
