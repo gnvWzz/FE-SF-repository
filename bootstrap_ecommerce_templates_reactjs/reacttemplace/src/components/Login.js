@@ -88,7 +88,7 @@ function Login() {
         console.log(err.response);
       });
 
-      if(localStorage.getItem("token") !=""){
+      if(localStorage.getItem("token") !==""){
         navigate(`/`);
       }
   };
