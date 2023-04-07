@@ -9,14 +9,12 @@ export default function Product({ categories }) {
   const [products, setProducts] = useState([]);
   const [cursorProductCard, setCursorProductCard] = useState("");
   const [sort_price, setSortPrice] = useState("");
+  const [change, setChange] = useState(false);
   let isStop = false;
   let { name } = useParams();
   let navigate = useNavigate();
 
-  const [request, setRequest] = useState({
-    name: "",
-    manufacturer: "",
-  });
+
 
   const [offset, setOffset] = useState(0);
 
@@ -39,7 +37,7 @@ export default function Product({ categories }) {
       if (sort_price !== null) {
         axios
           .get(
-            `http://localhost:8080/api/product/${name}?offset=${offset}&sort=${sort_price}`
+            `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
           )
           .then((res) => {
             setProducts(res.data.content);
@@ -72,7 +70,7 @@ export default function Product({ categories }) {
       if (sort_price !== null) {
         axios
           .get(
-            `http://localhost:8080/api/product/${name}?offset=${offset}&sort=${sort_price}`
+            `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
           )
           .then((res) => {
             setProducts(res.data.content);
@@ -253,7 +251,9 @@ export default function Product({ categories }) {
                           <a>
                             <img
                               className="img-fluid w-100 mb-3 img-first"
-                              src={product.imageList[0].url}
+                              src={
+                                product.productSFDetailDtos[0].imageList[0].url
+                              }
                               alt="product-img"
                               style={{ height: 150 }}
                             />
@@ -312,7 +312,7 @@ export default function Product({ categories }) {
       setFormSearch(e.target.value);
       await axios
         .get(
-          `http://localhost:8080/api/product/${name}?offset=${offset}&product_name=${formSeacrh}`
+          `http://localhost:8080/api/product/${name}?offset=${offset}&sort_name=${formSeacrh}`
         )
         .then((res) => {
           setProducts(res.data.content);
@@ -322,15 +322,12 @@ export default function Product({ categories }) {
           throw err;
         });
     }
-    setFormSearch("");
   };
 
   const handleNavigateToProductDetails = function (e) {
-    const name = e.currentTarget.getAttribute("value").name;
-    const manufacturer = e.currentTarget.getAttribute("value").manufacturer;
-    console.log(JSON.stringify(e.currentTarget.getAttribute("value").name));
-    // const manufacturer = e.currentTarget.getAttribute("value").manufacturer;
-    // navigate(`/single-product/${name}/${manufacturer}`);
+    const manufacturer = e.currentTarget.getAttribute("value");
+
+    navigate(`/single-product/${manufacturer}`);
   };
 
   const handleCursorProductCard = function () {
@@ -344,7 +341,7 @@ export default function Product({ categories }) {
   const handleChangeSortByPrice = async (e) => {
     if (e.target.value === "none") {
       setOffset(0);
-      axios
+      await axios
         .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
         .then((res) => {
           setProducts(res.data.content);
@@ -357,7 +354,7 @@ export default function Product({ categories }) {
       setSortPrice(e.target.value);
       await axios
         .get(
-          `http://localhost:8080/api/product/${name}?offset=${offset}&sort=${e.target.value}`
+          `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${e.target.value}`
         )
         .then((res) => {
           setProducts(res.data.content);
@@ -471,7 +468,7 @@ export default function Product({ categories }) {
                   <div
                     className="product"
                     onClick={handleNavigateToProductDetails}
-                    value={"abc"}
+                    value={product.productSFDetailDtos[0].serialNumber}
                     onMouseOver={handleCursorProductCard}
                     style={{
                       cursor: cursorProductCard,
@@ -479,20 +476,20 @@ export default function Product({ categories }) {
                     }}
                   >
                     <div className="product-wrap">
-                      <a>
-                        <img
-                          className="img-fluid w-100 mb-3 img-first"
-                          src={product.productDetailDtos[0].imageList[0].url}
-                          alt="product-img"
-                          style={{ height: 200 }}
-                        />
-                      </a>
+                      <img
+                        className="img-fluid w-100 mb-3 img-first"
+                        src={product.productSFDetailDtos[0].imageList[0].url}
+                        alt="product-img"
+                        style={{ height: 200 }}
+                      />
                     </div>
                     <span className="onsale">Sale</span>
                     <div className="product-hover-overlay">
-                      <a href="#">
+                      <Link
+                        to={`/single-product/${product.productSFDetailDtos[0].serialNumber}`}
+                      >
                         <i className="tf-ion-android-cart"></i>
-                      </a>
+                      </Link>
                       <a href="#">
                         <i className="tf-ion-ios-heart"></i>
                       </a>
@@ -510,7 +507,7 @@ export default function Product({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.productDetailDtos[0].price} đ
+                          {product.productSFDetailDtos[0].price} đ
                         </h4>
                       </span>
                     </div>
