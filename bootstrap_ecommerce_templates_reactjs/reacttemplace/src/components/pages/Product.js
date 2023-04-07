@@ -9,6 +9,7 @@ export default function Product({ categories }) {
   const [products, setProducts] = useState([]);
   const [cursorProductCard, setCursorProductCard] = useState("");
   const [sort_price, setSortPrice] = useState("");
+  const [change, setChange] = useState(false);
   let isStop = false;
   let { name } = useParams();
   let navigate = useNavigate();
