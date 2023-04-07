@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import Pagination from "../pagination";
 import queryString from "query-string";
 export default function Product({ categories }) {
-  const [formSeacrh, setFormSearch] = useState();
+    const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
   const [cursorProductCard, setCursorProductCard] = useState("");
   const [sort_price, setSortPrice] = useState("");
@@ -14,74 +14,129 @@ export default function Product({ categories }) {
   let { name } = useParams();
   let navigate = useNavigate();
 
-
-
   const [offset, setOffset] = useState(0);
 
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    setOffset(0);
+    if(localStorage.getItem("token")!==null){
+      setOffset(0);
     if (!isStop) {
       if (sort_price === null) {
-        axios
-          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
-          .then((res) => {
-            setProducts(res.data.content);
-            setTotalPages(res.data.totalPages);
-          })
-          .catch((err) => {
-            throw err;
-          });
+      //   axios
+      //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+      //     .then((res) => {
+      //       setProducts(res.data.content);
+      //       setTotalPages(res.data.totalPages);
+      //     })
+      //     .catch((err) => {
+      //       throw err;
+      //     });
+      // }
+      axios({
+        url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(function (res) {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch(function (err) {
+        throw err;
+        });
       }
       if (sort_price !== null) {
-        axios
-          .get(
-            `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
-          )
-          .then((res) => {
+        // axios
+        //   .get(
+        //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
+        //   )
+        //   .then((res) => {
+        //     setProducts(res.data.content);
+        //     setTotalPages(res.data.totalPages);
+        //   })
+        //   .catch((err) => {
+        //     throw err;
+        //   });
+        axios({
+          url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then(function (res) {
             setProducts(res.data.content);
             setTotalPages(res.data.totalPages);
           })
-          .catch((err) => {
-            throw err;
+          .catch(function (err) {
+          throw err;
           });
       }
     }
-
+    }else{
+      navigate(`/login`);
+    }
     return () => {
       isStop = true;
     };
-  }, [name]);
+}, [name]);
 
   useEffect(() => {
+    if(localStorage.getItem("token")!==null){
+      setOffset(0);
     if (!isStop) {
       if (sort_price === null) {
-        axios
-          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
-          .then((res) => {
-            setProducts(res.data.content);
-            setTotalPages(res.data.totalPages);
-          })
-          .catch((err) => {
-            throw err;
-          });
+      //   axios
+      //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+      //     .then((res) => {
+      //       setProducts(res.data.content);
+      //       setTotalPages(res.data.totalPages);
+      //     })
+      //     .catch((err) => {
+      //       throw err;
+      //     });
+      // }
+      axios({
+        url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(function (res) {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch(function (err) {
+        throw err;
+        });
       }
       if (sort_price !== null) {
-        axios
-          .get(
-            `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
-          )
-          .then((res) => {
+        // axios
+        //   .get(
+        //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
+        //   )
+        //   .then((res) => {
+        //     setProducts(res.data.content);
+        //     setTotalPages(res.data.totalPages);
+        //   })
+        //   .catch((err) => {
+        //     throw err;
+        //   });
+        axios({
+          url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then(function (res) {
             setProducts(res.data.content);
             setTotalPages(res.data.totalPages);
           })
-          .catch((err) => {
-            throw err;
+          .catch(function (err) {
+          throw err;
           });
       }
     }
-
+    }else{
+      navigate(`/login`);
+    }
     return () => {
       isStop = true;
     };
@@ -539,3 +594,4 @@ export default function Product({ categories }) {
     </section>
   );
 }
+

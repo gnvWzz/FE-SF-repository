@@ -3,7 +3,6 @@ import "popper.js/dist/umd/popper.min.js";
 import "bootstrap/dist/js/bootstrap.min.js";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
 function Header({ categories }) {
   return (
     <nav
@@ -37,7 +36,6 @@ function Header({ categories }) {
                 About Us
               </a>
             </li>
-
             <li className="nav-item dropdown dropdown-slide">
               <a
                 className="nav-link dropdown-toggle"
@@ -97,7 +95,6 @@ function Header({ categories }) {
                 </li>
               </ul>
             </li>
-
             <li className="nav-item dropdown dropdown-slide">
               <a
                 className="nav-link dropdown-toggle"
@@ -111,12 +108,10 @@ function Header({ categories }) {
               >
                 Categories
               </a>
-
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown3">
                 {/* <li>
                   <Link to={{ pathname: "/shop/Computer" }}>Computer</Link>
                 </li> */}
-
                 {categories.map((category, index) => (
                   <li>
                     <Link
@@ -158,7 +153,6 @@ function Header({ categories }) {
             </li>
           </ul>
         </div>
-
         <ul
           className="top-menu list-inline mb-0 d-none d-lg-block"
           id="top-menu"
@@ -197,7 +191,6 @@ function Header({ categories }) {
                   <i className="tf-ion-close"></i>
                 </a>
               </div>
-
               <div className="media">
                 <a href="/product-single">
                   <img
