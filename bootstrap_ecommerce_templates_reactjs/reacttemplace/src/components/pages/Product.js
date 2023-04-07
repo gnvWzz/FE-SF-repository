@@ -18,129 +18,165 @@ export default function Product({ categories }) {
 
   const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(() => {
-    if(localStorage.getItem("token")!==null){
-      setOffset(0);
-    if (!isStop) {
-      if (sort_price === null) {
-      //   axios
-      //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
-      //     .then((res) => {
-      //       setProducts(res.data.content);
-      //       setTotalPages(res.data.totalPages);
-      //     })
-      //     .catch((err) => {
-      //       throw err;
-      //     });
-      // }
-      axios({
-        url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then(function (res) {
-          setProducts(res.data.content);
-          setTotalPages(res.data.totalPages);
-        })
-        .catch(function (err) {
-        throw err;
-        });
-      }
-      if (sort_price !== null) {
-        // axios
-        //   .get(
-        //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
-        //   )
-        //   .then((res) => {
-        //     setProducts(res.data.content);
-        //     setTotalPages(res.data.totalPages);
-        //   })
-        //   .catch((err) => {
-        //     throw err;
-        //   });
-        axios({
-          url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
-          method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
-        })
-          .then(function (res) {
-            setProducts(res.data.content);
-            setTotalPages(res.data.totalPages);
-          })
-          .catch(function (err) {
-          throw err;
-          });
-      }
-    }
-    }else{
-      navigate(`/login`);
-    }
-    return () => {
-      isStop = true;
-    };
-}, [name]);
+  let token =localStorage.getItem("token");
 
-  useEffect(() => {
-    if(localStorage.getItem("token")!==null){
-      setOffset(0);
+//   useEffect(() => {
+//     if(localStorage.getItem("token")!==null){
+//       setOffset(0);
+//     if (!isStop) {
+//       if (sort_price === null) {
+//       //   axios
+//       //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+//       //     .then((res) => {
+//       //       setProducts(res.data.content);
+//       //       setTotalPages(res.data.totalPages);
+//       //     })
+//       //     .catch((err) => {
+//       //       throw err;
+//       //     });
+//       // }
+//       axios({
+//         url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+//         method: "GET",
+//         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+//       })
+//         .then(function (res) {
+//           setProducts(res.data.content);
+//           setTotalPages(res.data.totalPages);
+//         })
+//         .catch(function (err) {
+//         throw err;
+//         });
+//       }
+//       if (sort_price !== null) {
+//         // axios
+//         //   .get(
+//         //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
+//         //   )
+//         //   .then((res) => {
+//         //     setProducts(res.data.content);
+//         //     setTotalPages(res.data.totalPages);
+//         //   })
+//         //   .catch((err) => {
+//         //     throw err;
+//         //   });
+//         axios({
+//           url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
+//           method: "GET",
+//           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+//         })
+//           .then(function (res) {
+//             setProducts(res.data.content);
+//             setTotalPages(res.data.totalPages);
+//           })
+//           .catch(function (err) {
+//           throw err;
+//           });
+//       }
+//     }
+//     }else{
+//       navigate(`/login`);
+//     }
+//     return () => {
+//       isStop = true;
+//     };
+// }, [name]);
+
+//   useEffect(() => {
+//     if(localStorage.getItem("token")!==null){
+//       setOffset(0);
+//     if (!isStop) {
+//       if (sort_price === null) {
+//       //   axios
+//       //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+//       //     .then((res) => {
+//       //       setProducts(res.data.content);
+//       //       setTotalPages(res.data.totalPages);
+//       //     })
+//       //     .catch((err) => {
+//       //       throw err;
+//       //     });
+//       // }
+//       axios({
+//         url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+//         method: "GET",
+//         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+//       })
+//         .then(function (res) {
+//           setProducts(res.data.content);
+//           setTotalPages(res.data.totalPages);
+//         })
+//         .catch(function (err) {
+//         throw err;
+//         });
+//       }
+//       if (sort_price !== null) {
+//         // axios
+//         //   .get(
+//         //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
+//         //   )
+//         //   .then((res) => {
+//         //     setProducts(res.data.content);
+//         //     setTotalPages(res.data.totalPages);
+//         //   })
+//         //   .catch((err) => {
+//         //     throw err;
+//         //   });
+//         axios({
+//           url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
+//           method: "GET",
+//           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+//         })
+//           .then(function (res) {
+//             setProducts(res.data.content);
+//             setTotalPages(res.data.totalPages);
+//           })
+//           .catch(function (err) {
+//           throw err;
+//           });
+//       }
+//     }
+//     }else{
+//       navigate(`/login`);
+//     }
+//     return () => {
+//       isStop = true;
+//     };
+//   }, [offset]);
+const headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'JWT fefege...'
+}
+
+useEffect(() => {
+  if (localStorage.getItem("token") !== null) {
+    console.log(token);
     if (!isStop) {
-      if (sort_price === null) {
-      //   axios
-      //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
-      //     .then((res) => {
-      //       setProducts(res.data.content);
-      //       setTotalPages(res.data.totalPages);
-      //     })
-      //     .catch((err) => {
-      //       throw err;
-      //     });
-      // }
       axios({
-        url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+        url: `http://localhost:8080/api/product`,
         method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
+        mode: 'cors',
+        headers: { 
+         'Authorization': `Bearer ${token}`,
+          "Access-Control-Allow-Origin":`*`
+         }
+
       })
-        .then(function (res) {
-          setProducts(res.data.content);
-          setTotalPages(res.data.totalPages);
+        .then((res) => {
+          setProducts(res.data);
+          console.log("Data: " + res.data);
         })
-        .catch(function (err) {
-        throw err;
-        });
-      }
-      if (sort_price !== null) {
-        // axios
-        //   .get(
-        //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
-        //   )
-        //   .then((res) => {
-        //     setProducts(res.data.content);
-        //     setTotalPages(res.data.totalPages);
-        //   })
-        //   .catch((err) => {
-        //     throw err;
-        //   });
-        axios({
-          url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
-          method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
-        })
-          .then(function (res) {
-            setProducts(res.data.content);
-            setTotalPages(res.data.totalPages);
-          })
-          .catch(function (err) {
+        .catch((err) => {
           throw err;
-          });
-      }
+        });
     }
-    }else{
-      navigate(`/login`);
-    }
-    return () => {
-      isStop = true;
-    };
-  }, [offset]);
+  } else {
+    navigate("/login");
+  }
+  return () => {
+    isStop = true;
+  };
+}, []);
 
   if (!products.length) {
     return (
