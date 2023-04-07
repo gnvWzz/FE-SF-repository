@@ -23,68 +23,120 @@ export default function Product({ categories }) {
       setOffset(0);
     if (!isStop) {
       if (sort_price === null) {
-        axios
-          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
-          .then((res) => {
-            setProducts(res.data.content);
-            setTotalPages(res.data.totalPages);
-          })
-          .catch((err) => {
-            throw err;
-          });
+      //   axios
+      //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+      //     .then((res) => {
+      //       setProducts(res.data.content);
+      //       setTotalPages(res.data.totalPages);
+      //     })
+      //     .catch((err) => {
+      //       throw err;
+      //     });
+      // }
+      axios({
+        url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(function (res) {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch(function (err) {
+        throw err;
+        });
       }
       if (sort_price !== null) {
-        axios
-          .get(
-            `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
-          )
-          .then((res) => {
+        // axios
+        //   .get(
+        //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
+        //   )
+        //   .then((res) => {
+        //     setProducts(res.data.content);
+        //     setTotalPages(res.data.totalPages);
+        //   })
+        //   .catch((err) => {
+        //     throw err;
+        //   });
+        axios({
+          url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then(function (res) {
             setProducts(res.data.content);
             setTotalPages(res.data.totalPages);
           })
-          .catch((err) => {
-            throw err;
+          .catch(function (err) {
+          throw err;
           });
       }
     }
     }else{
       navigate(`/login`);
     }
-    
-
     return () => {
       isStop = true;
     };
-  }, [name]);
+}, [name]);
 
   useEffect(() => {
+    if(localStorage.getItem("token")!==null){
+      setOffset(0);
     if (!isStop) {
       if (sort_price === null) {
-        axios
-          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
-          .then((res) => {
-            setProducts(res.data.content);
-            setTotalPages(res.data.totalPages);
-          })
-          .catch((err) => {
-            throw err;
-          });
+      //   axios
+      //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+      //     .then((res) => {
+      //       setProducts(res.data.content);
+      //       setTotalPages(res.data.totalPages);
+      //     })
+      //     .catch((err) => {
+      //       throw err;
+      //     });
+      // }
+      axios({
+        url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(function (res) {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch(function (err) {
+        throw err;
+        });
       }
       if (sort_price !== null) {
-        axios
-          .get(
-            `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
-          )
-          .then((res) => {
+        // axios
+        //   .get(
+        //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
+        //   )
+        //   .then((res) => {
+        //     setProducts(res.data.content);
+        //     setTotalPages(res.data.totalPages);
+        //   })
+        //   .catch((err) => {
+        //     throw err;
+        //   });
+        axios({
+          url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then(function (res) {
             setProducts(res.data.content);
             setTotalPages(res.data.totalPages);
           })
-          .catch((err) => {
-            throw err;
+          .catch(function (err) {
+          throw err;
           });
       }
     }
-
+    }else{
+      navigate(`/login`);
+    }
     return () => {
       isStop = true;
     };
