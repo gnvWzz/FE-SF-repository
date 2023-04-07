@@ -1,12 +1,13 @@
 import React, { useState,useEffect } from "react";
 import { Formik, Form, Field } from "formik";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { error } from "jquery";
-import { fakeLogin } from "../redux/action";
+// import { error } from "jquery";
+// import { fakeLogin } from "../redux/action";
 
 function Login() {
+
   const REGEX = {
     //username có ít nhất 8 kí tự dài nhất 20 kí tự, không có các dấu chấm . _ ở đầu tên giữa và cuối tên
     usernameRegex: /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
@@ -14,19 +15,29 @@ function Login() {
     passwordRegex:
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
   };
-  const dispatch = useDispatch();
+
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector(state => state.user);
+  // const[token,setToken] = useState("");
+  // const user = useSelector(state => state.user);
+
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
+
+  // useEffect (()=>{
+  //   if(token !=""){
+  //     navigate(`/`);
+  //   }
+  // },[token])
+
   const [msgError, setmsgError] = useState({
     username: "",
     password: "",
     confirm: ""
   });
-  // const[isLogin,setIsLogin] = useState(false);
+  
 
   // useEffect(() => {
   //   if (isLogin) {
@@ -35,35 +46,44 @@ function Login() {
   //   }
   // }, [isLogin]);
 
-  useEffect(() =>{
-    if(user.username){
-      navigate(`/`);
-    }
-  },[user,navigate])
-
-  const login = () => {
-    dispatch(fakeLogin(form));
-  };
-
-
-  // const handleSubmit =   ()=> {
-    
-  //      axios
-  //       .post(`http://localhost:8080/api/account/login`, form,{headers:{Authorization:`Bearer` + token}})
-  //       .then((res) => {
-  //         if(res.data === "Login successfully"){
-  //           setIsLogin(true);
-  //         }else{
-  //           setmsgError("Tài Khoản hoặc Mật Khẩu chưa đúng!");
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         throw err;
-  //       });
-     
-  //    ;
+  // useEffect(() =>{
+  //   if(user.username){
+  //     navigate(`/`);
   //   }
-  // }
+  // },[user,navigate])
+
+  // const login = () => {
+  //   dispatch(fakeLogin(form));
+  // };
+  // ,{headers:{Authorization:`Bearer` + token}}
+
+  const handleSubmit = ()=> {
+        axios
+        .post(`http://localhost:8080/api/account/login`,form
+        )
+        .then((res) => {
+          if(res.data !== ""){
+            console.log(res.data);
+            localStorage.setItem("token", res.data)
+            // setToken(res.data);
+          }else{
+            // setmsgError(...msgError, confirm : "Tài Khoản hoặc Mật Khẩu chưa đúng!");
+            setmsgError(msgError =>{
+              return{
+                ...msgError,confirm:"Tài khoản hoặc mật khẩu không đúng!"
+              }})
+          }
+        })
+        .catch((err) => {
+          alert("Tài khoản hoặc mật khẩu không đúng!");
+          throw err;
+        });
+        if(localStorage.getItem("token") !=""){
+          navigate(`/`);
+        }
+     
+    }
+
 
   const handleChange =(e)=> {
     setForm({
@@ -103,10 +123,10 @@ function Login() {
                 <Formik
                   initialValues={form}
                   // validate={handleValidate}
-                  onSubmit={login}
+                  onSubmit={handleSubmit}
                 >
                   {({errors, touched}) =>(
-                    <form onSubmit={login}>
+                    <form  onSubmit={handleSubmit}>
                     <div
                       class="form-group mb-4"
                       className={`custom-input ${

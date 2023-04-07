@@ -1,16 +1,16 @@
-import { FETCH_USER_SUCCESS, LOGIN_SUCCESS } from "./action";
+// import { FETCH_USER_SUCCESS, LOGIN_SUCCESS } from "./action";
 
-const initialState = {
-  user:{}
-};
+// const initialState = {
+//   user:{}
+// };
 
-const rootReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case LOGIN_SUCCESS:
-      return { ...state, user: action.payload };
-  }
+// const rootReducer = (state = initialState, action) => {
+//   switch (action.type) {
+//     case LOGIN_SUCCESS:
+//       return { ...state, user: action.payload };
+//   }
 
-  return state;
-};
+//   return state;
+// };
 
-export default rootReducer;
+// export default rootReducer;

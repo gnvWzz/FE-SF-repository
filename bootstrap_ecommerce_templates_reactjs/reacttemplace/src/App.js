@@ -37,7 +37,7 @@ function App() {
 
   return (
     <div className="App">
-      <Provider store={store}>
+      {/* <Provider store={store}> */}
         <BrowserRouter>
           <Header categories={categories}></Header>
           <Routes>
@@ -60,7 +60,7 @@ function App() {
           </Routes>
           <Footer></Footer>
         </BrowserRouter>
-      </Provider>
+      {/* </Provider> */}
     </div>
   );
 }

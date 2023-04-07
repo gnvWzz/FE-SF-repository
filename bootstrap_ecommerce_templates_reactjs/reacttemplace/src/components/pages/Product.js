@@ -13,6 +13,7 @@ export default function Product({ categories }) {
   let { name } = useParams();
   let navigate = useNavigate();
 
+
   const [offset, setOffset] = useState(0);
 
   const [totalPages, setTotalPages] = useState(0);

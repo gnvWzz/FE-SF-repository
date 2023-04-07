@@ -1,10 +1,33 @@
 import "jquery/dist/jquery.slim.min.js";
 import "popper.js/dist/umd/popper.min.js";
 import "bootstrap/dist/js/bootstrap.min.js";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function Header({ categories }) {
+  const[isLogin,setIsLogin] = useState();
+  const[change,setChange]=useState(false);
+  const navigate = useNavigate();
+
+  // useEffect(()=>{
+  //   console.log("token" +localStorage.getItem("token"));
+  //   if(localStorage.getItem("token")!==null){
+  //     setIsLogin(true);
+  //   }else{
+  //     setIsLogin(false);
+  //   }
+  // })
+
+  const handleNavigate = (name)=>{
+    console.log(name);
+    // const name = e.currentTaget.getAttribute("value");
+    if(localStorage.getItem("token")!==null){
+      navigate(`/shop/${name}`);
+    }else{
+      navigate(`/login`);
+    }
+  }
+
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light bg-white w-100 navigation"
@@ -87,13 +110,20 @@ function Header({ categories }) {
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown3">
                 <li>
-                  <Link to={{ pathname: "/shop" }}>Shop</Link>
+                  {isLogin
+                  ?<Link to={{ pathname: "/shop" }}>Shop</Link>
+                  :<Link to={{ pathname: "/login" }}>Shop</Link>
+                  }
+                  
                 </li>
                 <li>
-                  <Link to={{ pathname: "/checkout" }}>Checkout</Link>
+                {localStorage.getItem("token")!=""
+                  ?<Link to={{ pathname: "/checkout" }}>Checkout</Link>
+                  :<Link to={{ pathname: "/login" }}>Shop</Link>
+                  }
                 </li>
                 <li>
-                  <Link to={{ pathname: "/cart" }}>Cart</Link>
+                  <Link to={{ pathname: "/login" }}>Cart</Link>
                 </li>
               </ul>
             </li>
@@ -113,18 +143,9 @@ function Header({ categories }) {
               </a>
 
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown3">
-                {/* <li>
-                  <Link to={{ pathname: "/shop/Computer" }}>Computer</Link>
-                </li> */}
-
                 {categories.map((category, index) => (
-                  <li>
-                    <Link
-                      key={index}
-                      to={{ pathname: `/shop/${category.name}` }}
-                    >
-                      {category.name}
-                    </Link>
+                  <li  >
+                   <button onClick={() =>handleNavigate(category.name)}>{category.name}</button>
                   </li>
                 ))}
               </ul>
