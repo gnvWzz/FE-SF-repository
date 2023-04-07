@@ -18,21 +18,21 @@ import store from "./redux/store";
 function App() {
   const [categories, setCategorise] = useState([]);
   let isStop = false;
-  useEffect(() => {
-    if (!isStop) {
-      axios
-        .get("http://localhost:8080/api/categories/find-all")
-        .then((res) => {
-          setCategorise(res.data);
-        })
-        .catch((err) => {
-          throw err;
-        });
-    }
-    return () => {
-      isStop = true;
-    };
-  }, []);
+  // useEffect(() => {
+  //   if (!isStop) {
+  //     axios
+  //       .get("http://localhost:8080/api/categories/find-all")
+  //       .then((res) => {
+  //         setCategorise(res.data);
+  //       })
+  //       .catch((err) => {
+  //         throw err;
+  //       });
+  //   }
+  //   return () => {
+  //     isStop = true;
+  //   };
+  // }, []);
 
   return (
     <div className="App">
