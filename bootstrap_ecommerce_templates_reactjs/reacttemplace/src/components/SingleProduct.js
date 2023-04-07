@@ -64,8 +64,11 @@ function SingleProduct() {
         .then((res) => {
           setProduct(res.data);
           setProductName(res.data.name);
-          console.log(productName);
-          console.log(product.manufacturer);
+          console.log(res.data.name);
+          setColorOption(res.data.color);
+          console.log(res.data.color);
+          setSizeOption(res.data.size);
+          console.log(res.data.size);
         })
         .catch((err) => {
           throw err;

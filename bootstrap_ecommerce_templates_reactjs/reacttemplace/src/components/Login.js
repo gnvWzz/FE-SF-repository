@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 // import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,6 @@ import axios from "axios";
 // import { fakeLogin } from "../redux/action";
 
 function Login() {
-
   const REGEX = {
     //username có ít nhất 8 kí tự dài nhất 20 kí tự, không có các dấu chấm . _ ở đầu tên giữa và cuối tên
     usernameRegex: /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
@@ -16,28 +15,17 @@ function Login() {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
   };
 
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const[token,setToken] = useState("");
-  // const user = useSelector(state => state.user);
-
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
 
-  // useEffect (()=>{
-  //   if(token !=""){
-  //     navigate(`/`);
-  //   }
-  // },[token])
-
   const [msgError, setmsgError] = useState({
     username: "",
     password: "",
-    confirm: ""
+    confirm: "",
   });
-  
 
   // useEffect(() => {
   //   if (isLogin) {
@@ -57,40 +45,60 @@ function Login() {
   // };
   // ,{headers:{Authorization:`Bearer` + token}}
 
-  const handleSubmit = ()=> {
-        axios
-        .post(`http://localhost:8080/api/account/login`,form
-        )
-        .then((res) => {
-          if(res.data !== ""){
-            console.log(res.data);
-            localStorage.setItem("token", res.data)
-            // setToken(res.data);
-          }else{
-            // setmsgError(...msgError, confirm : "Tài Khoản hoặc Mật Khẩu chưa đúng!");
-            setmsgError(msgError =>{
-              return{
-                ...msgError,confirm:"Tài khoản hoặc mật khẩu không đúng!"
-              }})
-          }
-        })
-        .catch((err) => {
-          alert("Tài khoản hoặc mật khẩu không đúng!");
-          throw err;
-        });
-        if(localStorage.getItem("token") !=""){
-          navigate(`/`);
+  const handleSubmit = () => {
+    // axios
+    // .post(`http://localhost:8080/api/account/login`,form
+    // )
+    // .then((res) => {
+    //   if(res.data !== ""){
+    //     localStorage.setItem("token", res.data)
+    //     // setToken(res.data);
+    //   }else{
+    //     // setmsgError(...msgError, confirm : "Tài Khoản hoặc Mật Khẩu chưa đúng!");
+    //     setmsgError(msgError =>{
+    //       return{
+    //         ...msgError,confirm:"Tài khoản hoặc mật khẩu không đúng!"
+    //       }})
+    //   }
+    // })
+    // .catch((err) => {
+    //   throw err;
+    // });
+
+    // if(localStorage.getItem("token") !=""){
+    //   navigate(`/`);
+    // }
+
+    axios({
+      url: `http://localhost:8080/api/account/login`,
+      method: "POST",
+      responseType: "json",
+      contentType: "application/json",
+      data: form,
+    })
+      .then(function (response) {
+        console.log("status" +response.status);
+        console.log("data" +response.data);
+        if (response.data !== "") {
+          localStorage.setItem("token", response.data);
         }
-     
-    }
+      })
+      .catch(function (err) {
+        alert("Sai thông tin đăng nhập!");
+        console.log(err.response);
+      });
 
+      if(localStorage.getItem("token") !=""){
+        navigate(`/`);
+      }
+  };
 
-  const handleChange =(e)=> {
+  const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
-  }
+  };
 
   // const handleValidate = ()=> {
   //   const errors = {
@@ -99,10 +107,10 @@ function Login() {
   //   };
   //   if (!form.username) {
   //     errors.username = "Bắt buộc";
-  //   } 
+  //   }
   //   if (!form.password) {
   //     errors.password = "Bắt buộc";
-  //   } 
+  //   }
   //   setmsgError(errors);
   //   return errors;
   // }
@@ -125,64 +133,62 @@ function Login() {
                   // validate={handleValidate}
                   onSubmit={handleSubmit}
                 >
-                  {({errors, touched}) =>(
-                    <form  onSubmit={handleSubmit}>
-                    <div
-                      class="form-group mb-4"
-                      className={`custom-input ${
-                        errors.username ? "custom-input-error" : ""
-                      }`}
-                    >
-                      <label for="#">Enter username</label>
-                      <Field
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter Username"
-                        name="username"
-                        value={form.username || ""}
-                        onChange={handleChange}
-                      />
-                      {errors.username && touched.username ? (
-                        <p className="error">{msgError.username}</p>
-                      ) : null}
-                    </div>
-                    <div
-                      class="form-group"
-                      className={`custom-input ${
-                        errors.password ? "custom-input-error" : ""
-                      }`}
-                    >
-                      <label for="#">Enter Password</label>
-                      <a className="float-right" href="">
-                        Forget password?
-                      </a>
-                      <Field
-                        type="password"
-                        className="form-control"
-                        placeholder="Enter Password"
-                        name="password"
-                        value={form.password || ""}
-                        onChange={handleChange}
-                      />
-                      {errors.password && touched.password ? (
-                        <p className="error">{msgError.password}</p>
-                      ) : null}
-                    </div>
-                    <div>
-                        {msgError.confirm !== ""
-                        ?<p className="error">{msgError.confirm}</p>
-                        :null
-                      }
-                    </div>
-                    <button
-                      type="submit"
-                      className="btn btn-main mt-3 btn-block"
-                    >
-                      Login
-                    </button>
-                  </form>
+                  {({ errors, touched }) => (
+                    <form onSubmit={handleSubmit}>
+                      <div
+                        class="form-group mb-4"
+                        className={`custom-input ${
+                          errors.username ? "custom-input-error" : ""
+                        }`}
+                      >
+                        <label for="#">Enter username</label>
+                        <Field
+                          type="text"
+                          className="form-control"
+                          placeholder="Enter Username"
+                          name="username"
+                          value={form.username || ""}
+                          onChange={handleChange}
+                        />
+                        {errors.username && touched.username ? (
+                          <p className="error">{msgError.username}</p>
+                        ) : null}
+                      </div>
+                      <div
+                        class="form-group"
+                        className={`custom-input ${
+                          errors.password ? "custom-input-error" : ""
+                        }`}
+                      >
+                        <label for="#">Enter Password</label>
+                        <a className="float-right" href="">
+                          Forget password?
+                        </a>
+                        <Field
+                          type="password"
+                          className="form-control"
+                          placeholder="Enter Password"
+                          name="password"
+                          value={form.password || ""}
+                          onChange={handleChange}
+                        />
+                        {errors.password && touched.password ? (
+                          <p className="error">{msgError.password}</p>
+                        ) : null}
+                      </div>
+                      <div>
+                        {msgError.confirm !== "" ? (
+                          <p className="error">{msgError.confirm}</p>
+                        ) : null}
+                      </div>
+                      <button
+                        type="submit"
+                        className="btn btn-main mt-3 btn-block"
+                      >
+                        Login
+                      </button>
+                    </form>
                   )}
-                  
                 </Formik>
               </div>
             </div>

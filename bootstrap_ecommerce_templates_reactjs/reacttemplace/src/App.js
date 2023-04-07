@@ -16,7 +16,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 function App() {
-  const client = new QueryClient();
   const [categories, setCategorise] = useState([]);
   let isStop = false;
   useEffect(() => {
@@ -50,13 +49,16 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
 
             <Route
-              path="/single-product/:serial_number"
+              path="/single-product/:name/:manufacturer"
               element={<SingleProduct />}
             />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={<Home/>}
+            />
           </Routes>
           <Footer></Footer>
         </BrowserRouter>
