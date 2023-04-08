@@ -103,21 +103,31 @@ export default function Product({ categories }) {
   //   };
   // }, [offset]);
 
+  // Long da them o day ne ================================
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
-      console.log("Bearer " + localStorage.getItem("token"));
+      setOffset(0);
       if (!isStop) {
-        axios({
-          headers: {
-            Authorization: `Bearer ${useToken}`,
-            "Content-Type": "application/json",
-          },
-          url: `http://localhost:8080/api/product`,
-          method: "GET",
-        })
+        // axios({
+        //   headers: {
+        //     Authorization: `Bearer ${useToken}`,
+        //     "Content-Type": "application/json",
+        //   },
+        //   url: `http://localhost:8080/api/product`,
+        //   method: "GET",
+        // })
+        //   .then((res) => {
+        //     setProducts(res.data);
+        //     console.log("Data: " + res.data[0]);
+        //   })
+        //   .catch((err) => {
+        //     throw err;
+        //   });
+        axios
+          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
           .then((res) => {
-            setProducts(res.data);
-            console.log("Data: " + res.data[0]);
+            setProducts(res.data.content);
+            setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
             throw err;
@@ -129,7 +139,45 @@ export default function Product({ categories }) {
     return () => {
       isStop = true;
     };
-  }, []);
+  }, [offset]);
+
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      setOffset(0);
+      if (!isStop) {
+        // axios({
+        //   headers: {
+        //     Authorization: `Bearer ${useToken}`,
+        //     "Content-Type": "application/json",
+        //   },
+        //   url: `http://localhost:8080/api/product`,
+        //   method: "GET",
+        // })
+        //   .then((res) => {
+        //     setProducts(res.data);
+        //     console.log("Data: " + res.data[0]);
+        //   })
+        //   .catch((err) => {
+        //     throw err;
+        //   });
+        axios
+          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+          .then((res) => {
+            setProducts(res.data.content);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
+    } else {
+      navigate("/login");
+    }
+    return () => {
+      isStop = true;
+    };
+  }, [name]);
+  // =======================================================
 
   // useEffect(() => {
   //   setOffset(0);
@@ -478,176 +526,181 @@ export default function Product({ categories }) {
   };
 
   return (
-    // <section className="products-shop section">
-    //   <div className="container">
-    //     <div className="row">
-    //       <div className="col-md-2">
-    //         <div>
-    //           <div
-    //             className="bg-light border-right min-vh-50"
-    //             id="sidebar-wrapper"
-    //           >
-    //             <div className="sidebar-heading">
-    //               <h4>Categories</h4>
-    //             </div>
-    //             <div className="list-group list-group-flush" id="logsContainer">
-    //               {categories.map((category, index) => (
-    //                 <Link
-    //                   key={index}
-    //                   to={{ pathname: `/shop/${category.name}` }}
-    //                 >
-    //                   {category.name}
-    //                 </Link>
-    //               ))}
-    //             </div>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       {/* Đây là phần product listing */}
-    //       <div className="col-md-10">
-    //         <div className="row align-items-center">
-    //           <div className="col-lg-12 mb-4 mb-lg-0">
-    //             <div className="section-title">
-    //               {/*  */}
-    //               <h2 className="d-block text-left-sm">{name}</h2>
-    //               {/*  */}
-    //               <div className="heading d-flex justify-content-between mb-5">
-    //                 <span>
-    //                   <input
-    //                     id="searchBox"
-    //                     name="search"
-    //                     value={formSeacrh || ""}
-    //                     className="rounded-left pl-3"
-    //                     placeholder="Search"
-    //                     onChange={handleOnChangeSearch}
-    //                   ></input>
+    <section className="products-shop section">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-2">
+            <div>
+              <div
+                className="bg-light border-right min-vh-50"
+                id="sidebar-wrapper"
+              >
+                <div className="sidebar-heading">
+                  <h4>Categories</h4>
+                </div>
+                <div className="list-group list-group-flush" id="logsContainer">
+                  {categories.map((category, index) => (
+                    <Link
+                      key={index}
+                      to={{ pathname: `/shop/${category.name}` }}
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Đây là phần product listing */}
+          <div className="col-md-10">
+            <div className="row align-items-center">
+              <div className="col-lg-12 mb-4 mb-lg-0">
+                <div className="section-title">
+                  {/*  */}
+                  <h2 className="d-block text-left-sm">{name}</h2>
+                  {/*  */}
+                  <div className="heading d-flex justify-content-between mb-5">
+                    <span>
+                      <input
+                        id="searchBox"
+                        name="search"
+                        value={formSeacrh || ""}
+                        className="rounded-left pl-3"
+                        placeholder="Search"
+                        onChange={handleOnChangeSearch}
+                      ></input>
 
-    //                   <button
-    //                     id="searchIconBackGround"
-    //                     className="rounded-right"
-    //                     onClick={handleSubmit}
-    //                   >
-    //                     <i
-    //                       id="searchIcon"
-    //                       className="tf-ion-android-search"
-    //                     ></i>
-    //                   </button>
-    //                 </span>
-    //                 <form className="ordering " method="get">
-    //                   <select
-    //                     name="orderby"
-    //                     className="orderby form-control"
-    //                     aria-label="Shop order"
-    //                   >
-    //                     <option value="" selected="selected">
-    //                       Sort by size
-    //                     </option>
-    //                     <option value="L">L Large</option>
-    //                     <option value="XL">XL Extra Large</option>
-    //                     <option value="M">M Medium</option>
-    //                     <option value="S">S Small</option>
-    //                     <option value="XS">XS Extra Small</option>
-    //                   </select>
-    //                   <input type="hidden" name="paged" value="1" />
-    //                 </form>
-    //                 <form className="ordering " method="get">
-    //                   <select
-    //                     name="orderby"
-    //                     className="orderby form-control"
-    //                     aria-label="Shop order"
-    //                     onChange={handleChangeSortByPrice}
-    //                   >
-    //                     <option value="none" selected="selected">
-    //                       Sort by price
-    //                     </option>
-    //                     <option value="">Sort by popularity</option>
-    //                     <option value="">Sort by average rating</option>
-    //                     <option value="">Sort by latest</option>
-    //                     <option value="asc">Sort by price: low to high</option>
-    //                     <option value="desc">Sort by price: high to low</option>
-    //                   </select>
-    //                   <input type="hidden" name="paged" value="1" />
-    //                 </form>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </div>
+                      <button
+                        id="searchIconBackGround"
+                        className="rounded-right"
+                        onClick={handleSubmit}
+                      >
+                        <i
+                          id="searchIcon"
+                          className="tf-ion-android-search"
+                        ></i>
+                      </button>
+                    </span>
+                    <form className="ordering " method="get">
+                      <select
+                        name="orderby"
+                        className="orderby form-control"
+                        aria-label="Shop order"
+                      >
+                        <option value="" selected="selected">
+                          Sort by size
+                        </option>
+                        <option value="L">L Large</option>
+                        <option value="XL">XL Extra Large</option>
+                        <option value="M">M Medium</option>
+                        <option value="S">S Small</option>
+                        <option value="XS">XS Extra Small</option>
+                      </select>
+                      <input type="hidden" name="paged" value="1" />
+                    </form>
+                    <form className="ordering " method="get">
+                      <select
+                        name="orderby"
+                        className="orderby form-control"
+                        aria-label="Shop order"
+                        onChange={handleChangeSortByPrice}
+                      >
+                        <option value="none" selected="selected">
+                          Sort by price
+                        </option>
+                        <option value="">Sort by popularity</option>
+                        <option value="">Sort by average rating</option>
+                        <option value="">Sort by latest</option>
+                        <option value="asc">Sort by price: low to high</option>
+                        <option value="desc">Sort by price: high to low</option>
+                      </select>
+                      <input type="hidden" name="paged" value="1" />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-    //         <div className="row">
-    //           {products.map((product, index) => (
-    //             <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
-    //               <div
-    //                 className="product"
-    //                 onClick={handleNavigateToProductDetails}
-    //                 value={product.productSFDetailDtos[0].serialNumber}
-    //                 onMouseOver={handleCursorProductCard}
-    //                 style={{
-    //                   cursor: cursorProductCard,
-    //                   border: "1px solid lightgrey",
-    //                 }}
-    //               >
-    //                 <div className="product-wrap">
-    //                   <img
-    //                     className="img-fluid w-100 mb-3 img-first"
-    //                     src={JSON.parse(product.productSFDetail[0].size_color_img_quantity[0].)}
-    //                     alt="product-img"
-    //                     style={{ height: 200 }}
-    //                   />
-    //                 </div>
-    //                 <span className="onsale">Sale</span>
-    //                 <div className="product-hover-overlay">
-    //                   <Link
-    //                     to={`/single-product/${product.productSFDetailDtos[0].serialNumber}`}
-    //                   >
-    //                     <i className="tf-ion-android-cart"></i>
-    //                   </Link>
-    //                   <a href="#">
-    //                     <i className="tf-ion-ios-heart"></i>
-    //                   </a>
-    //                 </div>
-    //                 <div className="product-info">
-    //                   <h2
-    //                     className="product-title h5 mb-0"
-    //                     style={{
-    //                       height: 80,
-    //                       textAlign: "left",
-    //                       fontSize: "15px",
-    //                     }}
-    //                   >
-    //                     <a>{product.name}</a>
-    //                   </h2>
-    //                   <span className="price">
-    //                     <h4 style={{ color: "red", textAlign: "left" }}>
-    //                       {product.productSFDetailDtos[0].price} đ
-    //                     </h4>
-    //                   </span>
-    //                 </div>
-    //               </div>
-    //             </div>
-    //           ))}
-    //           <div className="col-12">
-    //             {" "}
-    //             <div style={{ textAlign: "center" }}>
-    //               <button
-    //                 disabled={offset + 1 <= 1}
-    //                 onClick={() => handlePageChange(offset - 1)}
-    //               >
-    //                 Prev
-    //               </button>
-    //               <span>{offset + 1}</span> / <span>{totalPages}</span>
-    //               <button
-    //                 disabled={offset + 1 >= totalPages}
-    //                 onClick={() => handlePageChange(offset + 1)}
-    //               >
-    //                 Next
-    //               </button>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </section>
-    <></>
+            <div className="row">
+              {products.map((product, index) => (
+                <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                  <div
+                    className="product"
+                    onClick={handleNavigateToProductDetails}
+                    value={"abc"}
+                    onMouseOver={handleCursorProductCard}
+                    style={{
+                      cursor: cursorProductCard,
+                      border: "1px solid lightgrey",
+                    }}
+                  >
+                    <div className="product-wrap">
+                      <img
+                        className="img-fluid w-100 mb-3 img-first"
+                        src={
+                          JSON.parse(
+                            product.productSFDetailDtos[0]
+                              .size_color_img_quantity
+                          ).img[0]
+                        }
+                        alt="product-img"
+                        style={{ height: 200 }}
+                      />
+                    </div>
+                    <span className="onsale">Sale</span>
+                    <div className="product-hover-overlay">
+                      <Link
+                        to={`/single-product/${product.productSFDetailDtos[0].serialNumber}`}
+                      >
+                        <i className="tf-ion-android-cart"></i>
+                      </Link>
+                      <a href="#">
+                        <i className="tf-ion-ios-heart"></i>
+                      </a>
+                    </div>
+                    <div className="product-info">
+                      <h2
+                        className="product-title h5 mb-0"
+                        style={{
+                          height: 80,
+                          textAlign: "left",
+                          fontSize: "15px",
+                        }}
+                      >
+                        <a>{product.name}</a>
+                      </h2>
+                      <span className="price">
+                        <h4 style={{ color: "red", textAlign: "left" }}>
+                          {product.productSFDetailDtos[0].price} đ
+                        </h4>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              <div className="col-12">
+                {" "}
+                <div style={{ textAlign: "center" }}>
+                  <button
+                    disabled={offset + 1 <= 1}
+                    onClick={() => handlePageChange(offset - 1)}
+                  >
+                    Prev
+                  </button>
+                  <span>{offset + 1}</span> / <span>{totalPages}</span>
+                  <button
+                    disabled={offset + 1 >= totalPages}
+                    onClick={() => handlePageChange(offset + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
