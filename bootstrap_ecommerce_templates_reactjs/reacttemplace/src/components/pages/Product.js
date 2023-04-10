@@ -107,25 +107,17 @@ export default function Product({ categories }) {
     if (localStorage.getItem("token") !== null) {
       setOffset(0);
       if (!isStop) {
-        // axios({
-        //   headers: {
-        //     Authorization: `Bearer ${useToken}`,
-        //     "Content-Type": "application/json",
-        //   },
-        //   url: `http://localhost:8080/api/product`,
-        //   method: "GET",
-        // })
-        //   .then((res) => {
-        //     setProducts(res.data);
-        //     console.log("Data: " + res.data[0]);
-        //   })
-        //   .catch((err) => {
-        //     throw err;
-        //   });
-        axios
-          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+        axios({
+          headers: {
+            'Authorization': `Bearer ${useToken}`,
+            "Content-Type": "application/json",
+          },
+          url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+          method: "GET",
+        })
           .then((res) => {
             setProducts(res.data.content);
+            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -177,7 +169,6 @@ export default function Product({ categories }) {
     };
   }, [name]);
   // ==========================================================Toi day
-
 
   //   useEffect(() => {
   //     if(localStorage.getItem("token")!==null){
