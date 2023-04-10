@@ -1,5 +1,6 @@
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
 
 function Home(props) {
   const [offset, setOffset] = useState(0);
@@ -9,6 +10,10 @@ function Home(props) {
   const [oldProducts, setOldProducts] = useState([]);
 
   const [totalPages, setTotalPages] = useState();
+
+  const [cursorProductCard, setCursorProductCard] = useState("");
+
+  let navigate = useNavigate();
 
   let isStop = false;
 
@@ -30,30 +35,22 @@ function Home(props) {
     }
   };
 
-  useEffect(() => {
-    if (!isStop) {
-      axios
-        .get(`http://localhost:8080/api/product?offset=${offset}`)
-        .then((res) => {
-          setProducts(res.data.content);
-          console.log(products);
-          setTotalPages(res.data.totalPages);
-        })
-        .catch((err) => {
-          throw err;
-        });
-    }
-    return () => {
-      isStop = true;
-    };
-  }, []);
+  const handleCursorProductCard = function () {
+    setCursorProductCard("pointer");
+  };
+
+  const handleNavigateToProductDetails = function (e) {
+    const manufacturer = e.currentTarget.getAttribute("value");
+
+    navigate(`/single-product/${manufacturer}`);
+  };
 
   useEffect(() => {
     if (!isStop) {
       axios
         .get(`http://localhost:8080/api/product?offset=${offset}`)
         .then((res) => {
-          setProducts((prev) => [...prev, res.data.content]);
+          setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
         })
         .catch((err) => {
@@ -65,11 +62,14 @@ function Home(props) {
     };
   }, [offset]);
 
-  window.onscroll = function () {
-    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-      alert("At the bottom!");
-    }
-  };
+  // window.onscroll = function () {
+  //   if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+  //     // you're at the bottom of the page, load more content here.
+  //     console.log("reach end");
+  //   } else {
+  //     console.log("Dont end");
+  //   }
+  // };
 
   return (
     <div className="home-container">
@@ -171,41 +171,42 @@ function Home(props) {
           </div>
 
           <div className="row" id="list">
-            {/* {products.map((product, index) => (
-              // <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
-              //   <div className="product">
-              //     <div className="product-wrap">
-              //       <a href="/product-single">
-              //         <img
-              //           className="img-fluid w-100 mb-3 img-first"
-              //           src={product.productSFDetailDtos[0].imageList[0].url}
-              //           alt="product-img"
-              //         />
-              //       </a>
-              //     </div>
-
-              //     <span className="onsale">Sale</span>
-              //     <div className="product-hover-overlay">
-              //       <a href="#">
-              //         <i className="tf-ion-android-cart"></i>
-              //       </a>
-              //       <a href="#">
-              //         <i className="tf-ion-ios-heart"></i>
-              //       </a>
-              //     </div>
-
-              //     <div className="product-info">
-              //       <h2 className="product-title h5 mb-0">
-              //         <a href="#">{product.name}</a>
-              //       </h2>
-              //       <span className="price">{product.price} đ</span>
-              //     </div>
-              //   </div>
-              // </div>
-              <p>{product.name}</p>
-            ))} */}
             {products.map((product, index) => (
-              <p>{product.name}</p>
+              <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                <div className="product">
+                  <div className="product-wrap">
+                    <a href="/product-single">
+                      <img
+                        className="img-fluid w-100 mb-3 img-first"
+                        src={
+                          JSON.parse(
+                            product.productSFDetailDtos[0]
+                              .size_color_img_quantity
+                          ).img[0]
+                        }
+                        alt="product-img"
+                      />
+                    </a>
+                  </div>
+                  <span className="onsale">Sale</span>
+                  <div className="product-hover-overlay">
+                    <a href="#">
+                      <i className="tf-ion-android-cart"></i>
+                    </a>
+                    <a href="#">
+                      <i className="tf-ion-ios-heart"></i>
+                    </a>
+                  </div>
+                  <div className="product-info">
+                    <h2 className="product-title h5 mb-0">
+                      <a href="#">{product.name}</a>
+                    </h2>
+                    <span className="price">
+                      {product.productSFDetailDtos[0].price} đ
+                    </span>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
