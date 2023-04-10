@@ -1,12 +1,19 @@
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
 
 function Home(props) {
   const [offset, setOffset] = useState(0);
 
   const [products, setProducts] = useState([]);
 
+  const [oldProducts, setOldProducts] = useState([]);
+
   const [totalPages, setTotalPages] = useState();
+
+  const [cursorProductCard, setCursorProductCard] = useState("");
+
+  let navigate = useNavigate();
 
   let isStop = false;
 
@@ -28,19 +35,41 @@ function Home(props) {
     }
   };
 
+  const handleCursorProductCard = function () {
+    setCursorProductCard("pointer");
+  };
+
+  const handleNavigateToProductDetails = function (e) {
+    const manufacturer = e.currentTarget.getAttribute("value");
+
+    navigate(`/single-product/${manufacturer}`);
+  };
+
   useEffect(() => {
     if (!isStop) {
-      if (offset + 1 >= totalPages) {
-        console.log("ok");
-      }else{
-        console.log("Hi");
-      }
+      axios
+        .get(`http://localhost:8080/api/product?offset=${offset}`)
+        .then((res) => {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
     }
-    window.addEventListener("scroll", handleScroll);
     return () => {
       isStop = true;
     };
   }, [offset]);
+
+  // window.onscroll = function () {
+  //   if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+  //     // you're at the bottom of the page, load more content here.
+  //     console.log("reach end");
+  //   } else {
+  //     console.log("Dont end");
+  //   }
+  // };
 
   return (
     <div className="home-container">
@@ -142,36 +171,43 @@ function Home(props) {
           </div>
 
           <div className="row" id="list">
-            {/* <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
-              <div className="product">
-                <div className="product-wrap">
-                  <a href="/product-single">
-                    <img
-                      className="img-fluid w-100 mb-3 img-first"
-                      src="assets/images/322.jpg"
-                      alt="product-img"
-                    />
-                  </a>
-                </div>
-
-                <span className="onsale">Sale</span>
-                <div className="product-hover-overlay">
-                  <a href="#">
-                    <i className="tf-ion-android-cart"></i>
-                  </a>
-                  <a href="#">
-                    <i className="tf-ion-ios-heart"></i>
-                  </a>
-                </div>
-
-                <div className="product-info">
-                  <h2 className="product-title h5 mb-0">
-                    <a href="#">Floral Kirby</a>
-                  </h2>
-                  <span className="price">$329.10</span>
+            {products.map((product, index) => (
+              <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+                <div className="product">
+                  <div className="product-wrap">
+                    <a href="/product-single">
+                      <img
+                        className="img-fluid w-100 mb-3 img-first"
+                        src={
+                          JSON.parse(
+                            product.productSFDetailDtos[0]
+                              .size_color_img_quantity
+                          ).img[0]
+                        }
+                        alt="product-img"
+                      />
+                    </a>
+                  </div>
+                  <span className="onsale">Sale</span>
+                  <div className="product-hover-overlay">
+                    <a href="#">
+                      <i className="tf-ion-android-cart"></i>
+                    </a>
+                    <a href="#">
+                      <i className="tf-ion-ios-heart"></i>
+                    </a>
+                  </div>
+                  <div className="product-info">
+                    <h2 className="product-title h5 mb-0">
+                      <a href="#">{product.name}</a>
+                    </h2>
+                    <span className="price">
+                      {product.productSFDetailDtos[0].price} đ
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div> */}
+            ))}
           </div>
         </div>
       </section>

@@ -19,6 +19,7 @@ function App() {
   const [categories, setCategorise] = useState([]);
   let isStop = false;
   useEffect(() => {
+    // localStorage.clearItem("token");
     if (!isStop) {
       axios
         .get("http://localhost:8080/api/categories/find-all")
