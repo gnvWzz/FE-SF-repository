@@ -6,6 +6,8 @@ function Home(props) {
 
   const [products, setProducts] = useState([]);
 
+  const [oldProducts, setOldProducts] = useState([]);
+
   const [totalPages, setTotalPages] = useState();
 
   let isStop = false;
@@ -30,17 +32,44 @@ function Home(props) {
 
   useEffect(() => {
     if (!isStop) {
-      if (offset + 1 >= totalPages) {
-        console.log("ok");
-      }else{
-        console.log("Hi");
-      }
+      axios
+        .get(`http://localhost:8080/api/product?offset=${offset}`)
+        .then((res) => {
+          setProducts(res.data.content);
+          console.log(products);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
     }
-    window.addEventListener("scroll", handleScroll);
+    return () => {
+      isStop = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isStop) {
+      axios
+        .get(`http://localhost:8080/api/product?offset=${offset}`)
+        .then((res) => {
+          setProducts((prev) => [...prev, res.data.content]);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    }
     return () => {
       isStop = true;
     };
   }, [offset]);
+
+  window.onscroll = function () {
+    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
+      alert("At the bottom!");
+    }
+  };
 
   return (
     <div className="home-container">
@@ -142,36 +171,42 @@ function Home(props) {
           </div>
 
           <div className="row" id="list">
-            {/* <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
-              <div className="product">
-                <div className="product-wrap">
-                  <a href="/product-single">
-                    <img
-                      className="img-fluid w-100 mb-3 img-first"
-                      src="assets/images/322.jpg"
-                      alt="product-img"
-                    />
-                  </a>
-                </div>
+            {/* {products.map((product, index) => (
+              // <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
+              //   <div className="product">
+              //     <div className="product-wrap">
+              //       <a href="/product-single">
+              //         <img
+              //           className="img-fluid w-100 mb-3 img-first"
+              //           src={product.productSFDetailDtos[0].imageList[0].url}
+              //           alt="product-img"
+              //         />
+              //       </a>
+              //     </div>
 
-                <span className="onsale">Sale</span>
-                <div className="product-hover-overlay">
-                  <a href="#">
-                    <i className="tf-ion-android-cart"></i>
-                  </a>
-                  <a href="#">
-                    <i className="tf-ion-ios-heart"></i>
-                  </a>
-                </div>
+              //     <span className="onsale">Sale</span>
+              //     <div className="product-hover-overlay">
+              //       <a href="#">
+              //         <i className="tf-ion-android-cart"></i>
+              //       </a>
+              //       <a href="#">
+              //         <i className="tf-ion-ios-heart"></i>
+              //       </a>
+              //     </div>
 
-                <div className="product-info">
-                  <h2 className="product-title h5 mb-0">
-                    <a href="#">Floral Kirby</a>
-                  </h2>
-                  <span className="price">$329.10</span>
-                </div>
-              </div>
-            </div> */}
+              //     <div className="product-info">
+              //       <h2 className="product-title h5 mb-0">
+              //         <a href="#">{product.name}</a>
+              //       </h2>
+              //       <span className="price">{product.price} đ</span>
+              //     </div>
+              //   </div>
+              // </div>
+              <p>{product.name}</p>
+            ))} */}
+            {products.map((product, index) => (
+              <p>{product.name}</p>
+            ))}
           </div>
         </div>
       </section>
