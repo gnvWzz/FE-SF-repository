@@ -227,10 +227,25 @@ function Header({ categories }) {
               </div>
             </div>
           </li>
-          <li className="list-inline-item">
+          <li className="dropdown cart-nav dropdown-slide list-inline-item">
             <a href="#">
               <i className="tf-ion-ios-person mr-3"></i>
             </a>
+            <div className="dropdown-menu cart-dropdown">          
+              <div className="cart-summary">
+                <div className="text-center cart-buttons mt-3">
+                  <a
+                    href="#"
+                    className="btn btn-small btn-transparent btn-block"
+                  >
+                    Edit
+                  </a>
+                  <a href="#" className="btn btn-small btn-main btn-block">
+                   Logout
+                  </a>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>

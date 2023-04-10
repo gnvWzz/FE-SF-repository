@@ -48,20 +48,21 @@ function Home(props) {
         <div
           className="slider-item"
           style={{
-            backgroundImage: "url('assets/images/slideshow1-2.jpg')",
-            backgroundPosition: "50%",
+            backgroundImage: "url('https://genshin-guide.com/wp-content/uploads/shenhe-genshin-impact.png')",
+            backgroundPosition: "60%",
             backgroundRepeat: "no-repeat",
+          
           }}
         >
           <div className="container">
             <div className="row">
-              <div className="col-lg-6 col-12 offset-lg-6 offset-md-6">
+              <div className="col-lg-6 col-12 offset-lg-8 offset-md-6">
                 <div className="slider-caption">
-                  <span className="lead">Trendy dress</span>
-                  <h1 className="mt-2 mb-5">
-                    <span className="text-color">Winter </span>Collection
+                  <span className="lead">毎日</span>
+                  <h1 className="mt-2 mb-5 ml-5">
+                    <span className="text-color">買い物とは </span> 特価です。
                   </h1>
-                  <a href="#" className="btn btn-main">
+                  <a href="#" className="btn btn-main ml-5">
                     Shop Now
                   </a>
                 </div>

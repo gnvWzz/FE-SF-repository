@@ -143,17 +143,14 @@ export default function Product({ categories }) {
 //       isStop = true;
 //     };
 //   }, [offset]);
-const headers = {
-  'Content-Type': 'application/json',
-  'Authorization': 'JWT fefege...'
-}
+
 
 useEffect(() => {
   if (localStorage.getItem("token") !== null) {
     console.log(token);
     if (!isStop) {
       axios({
-        url: `http://localhost:8080/api/product`,
+        url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
         method: "GET",
         mode: 'cors',
         headers: { 
@@ -164,7 +161,7 @@ useEffect(() => {
       })
         .then((res) => {
           setProducts(res.data);
-          console.log("Data: " + res.data);
+          console.log("Data: " + res.data.content);
         })
         .catch((err) => {
           throw err;
