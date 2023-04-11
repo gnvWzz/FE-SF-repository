@@ -321,9 +321,9 @@ export default function Product({ categories }) {
   };
 
   const handleNavigateToProductDetails = function (e) {
-    const manufacturer = e.currentTarget.getAttribute("value");
+    const package_id = e.currentTarget.getAttribute("value");
 
-    navigate(`/single-product/${manufacturer}`);
+    navigate(`/single-product/${package_id}`);
   };
 
   const handleCursorProductCard = function () {
