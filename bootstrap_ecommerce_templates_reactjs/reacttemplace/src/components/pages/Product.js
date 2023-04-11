@@ -55,21 +55,6 @@ export default function Product({ categories }) {
     if (localStorage.getItem("token") !== null) {
       setOffset(0);
       if (!isStop) {
-        // axios({
-        //   headers: {
-        //     Authorization: `Bearer ${useToken}`,
-        //     "Content-Type": "application/json",
-        //   },
-        //   url: `http://localhost:8080/api/product`,
-        //   method: "GET",
-        // })
-        //   .then((res) => {
-        //     setProducts(res.data);
-        //     console.log("Data: " + res.data[0]);
-        //   })
-        //   .catch((err) => {
-        //     throw err;
-        //   });
         axios
           .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
           .then((res) => {
@@ -326,9 +311,9 @@ export default function Product({ categories }) {
   };
 
   const handleNavigateToProductDetails = function (e) {
-    const manufacturer = e.currentTarget.getAttribute("value");
+    const package_id = e.currentTarget.getAttribute("value");
 
-    navigate(`/single-product/${manufacturer}`);
+    navigate(`/single-product/${package_id}`);
   };
 
   const handleCursorProductCard = function () {

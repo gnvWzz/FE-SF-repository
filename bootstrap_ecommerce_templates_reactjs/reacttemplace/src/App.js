@@ -48,9 +48,8 @@ function App() {
           />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-
           <Route
-            path="/single-product/:packageId"
+            path="/single-product/:package_id"
             element={<SingleProduct />}
           />
           <Route path="/login" element={<Login />} />
