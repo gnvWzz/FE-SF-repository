@@ -4,6 +4,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import Pagination from "../pagination";
 import queryString from "query-string";
+import { PRODUCT_URL } from "../URLS/url";
 export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
@@ -21,6 +22,8 @@ export default function Product({ categories }) {
 
   const [totalPages, setTotalPages] = useState(0);
 
+  const url = PRODUCT_URL;
+
   // Long da them o day ne ================================ lay du lieu khuc nay may cai kia chua co lam
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
@@ -28,10 +31,10 @@ export default function Product({ categories }) {
       if (!isStop) {
         axios({
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
-          url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+          url: `${url}/${name}?offset=${offset}`,
           method: "GET",
         })
           .then((res) => {
@@ -55,10 +58,17 @@ export default function Product({ categories }) {
     if (localStorage.getItem("token") !== null) {
       setOffset(0);
       if (!isStop) {
-        axios
-          .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+        axios({
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          url: `${url}/${name}?offset=${offset}`,
+          method: "GET",
+        })
           .then((res) => {
             setProducts(res.data.content);
+            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {

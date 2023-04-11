@@ -42,7 +42,6 @@ function SingleProduct() {
               temp.img = i
               console.log(temp);
               if (!tempList.includes(temp)) {
-                console.log(tempList)
                 tempList.push(temp);
               }
             })
