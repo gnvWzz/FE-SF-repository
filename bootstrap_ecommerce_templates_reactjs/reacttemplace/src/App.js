@@ -20,6 +20,7 @@ function App() {
   let isStop = false;
   useEffect(() => {
     // localStorage.removeItem("token");
+
     if (!isStop) {
       axios
         .get("http://localhost:8080/api/categories/find-all")
@@ -38,31 +39,28 @@ function App() {
   return (
     <div className="App">
       {/* <Provider store={store}> */}
-        <BrowserRouter>
-          <Header categories={categories}></Header>
-          <Routes>
-            <Route path="/shop/" element={<Shop categories={categories} />} />
-            <Route
-              path="/shop/:name"
-              element={<Product categories={categories} />}
-            />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
+      <BrowserRouter>
+        <Header categories={categories}></Header>
+        <Routes>
+          <Route path="/shop/" element={<Shop categories={categories} />} />
+          <Route
+            path="/shop/:name"
+            element={<Product categories={categories} />}
+          />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
 
-            <Route
-              path="/single-product/:name/:manufacturer"
-              element={<SingleProduct />}
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route
-              path="/"
-              element={<Home/>}
-            />
-          </Routes>
-          <Footer></Footer>
-        </BrowserRouter>
+          <Route
+            path="/single-product/:name/:manufacturer"
+            element={<SingleProduct />}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
+        <Footer></Footer>
+      </BrowserRouter>
       {/* </Provider> */}
     </div>
   );

@@ -109,9 +109,6 @@ function Header({ categories }) {
                 Categories
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown3">
-                {/* <li>
-                  <Link to={{ pathname: "/shop/Computer" }}>Computer</Link>
-                </li> */}
                 {categories.map((category, index) => (
                   <li>
                     <Link

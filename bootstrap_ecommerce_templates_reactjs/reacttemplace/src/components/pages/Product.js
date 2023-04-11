@@ -5,175 +5,65 @@ import { useQuery } from "react-query";
 import Pagination from "../pagination";
 import queryString from "query-string";
 export default function Product({ categories }) {
-    const [formSeacrh, setFormSearch] = useState();
+  const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
   const [cursorProductCard, setCursorProductCard] = useState("");
   const [sort_price, setSortPrice] = useState("");
   const [change, setChange] = useState(false);
+  const [imageList, setImageList] = useState([]);
   let isStop = false;
   let { name } = useParams();
   let navigate = useNavigate();
 
+  let useToken = localStorage.getItem("token");
+
   const [offset, setOffset] = useState(0);
 
   const [totalPages, setTotalPages] = useState(0);
-
-  let token =localStorage.getItem("token");
-
-//   useEffect(() => {
-//     if(localStorage.getItem("token")!==null){
-//       setOffset(0);
-//     if (!isStop) {
-//       if (sort_price === null) {
-//       //   axios
-//       //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
-//       //     .then((res) => {
-//       //       setProducts(res.data.content);
-//       //       setTotalPages(res.data.totalPages);
-//       //     })
-//       //     .catch((err) => {
-//       //       throw err;
-//       //     });
-//       // }
-//       axios({
-//         url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
-//         method: "GET",
-//         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-//       })
-//         .then(function (res) {
-//           setProducts(res.data.content);
-//           setTotalPages(res.data.totalPages);
-//         })
-//         .catch(function (err) {
-//         throw err;
-//         });
-//       }
-//       if (sort_price !== null) {
-//         // axios
-//         //   .get(
-//         //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
-//         //   )
-//         //   .then((res) => {
-//         //     setProducts(res.data.content);
-//         //     setTotalPages(res.data.totalPages);
-//         //   })
-//         //   .catch((err) => {
-//         //     throw err;
-//         //   });
-//         axios({
-//           url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
-//           method: "GET",
-//           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-//         })
-//           .then(function (res) {
-//             setProducts(res.data.content);
-//             setTotalPages(res.data.totalPages);
-//           })
-//           .catch(function (err) {
-//           throw err;
-//           });
-//       }
-//     }
-//     }else{
-//       navigate(`/login`);
-//     }
-//     return () => {
-//       isStop = true;
-//     };
-// }, [name]);
-
-//   useEffect(() => {
-//     if(localStorage.getItem("token")!==null){
-//       setOffset(0);
-//     if (!isStop) {
-//       if (sort_price === null) {
-//       //   axios
-//       //     .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
-//       //     .then((res) => {
-//       //       setProducts(res.data.content);
-//       //       setTotalPages(res.data.totalPages);
-//       //     })
-//       //     .catch((err) => {
-//       //       throw err;
-//       //     });
-//       // }
-//       axios({
-//         url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
-//         method: "GET",
-//         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-//       })
-//         .then(function (res) {
-//           setProducts(res.data.content);
-//           setTotalPages(res.data.totalPages);
-//         })
-//         .catch(function (err) {
-//         throw err;
-//         });
-//       }
-//       if (sort_price !== null) {
-//         // axios
-//         //   .get(
-//         //     `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`
-//         //   )
-//         //   .then((res) => {
-//         //     setProducts(res.data.content);
-//         //     setTotalPages(res.data.totalPages);
-//         //   })
-//         //   .catch((err) => {
-//         //     throw err;
-//         //   });
-//         axios({
-//           url: `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${sort_price}`,
-//           method: "GET",
-//           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-//         })
-//           .then(function (res) {
-//             setProducts(res.data.content);
-//             setTotalPages(res.data.totalPages);
-//           })
-//           .catch(function (err) {
-//           throw err;
-//           });
-//       }
-//     }
-//     }else{
-//       navigate(`/login`);
-//     }
-//     return () => {
-//       isStop = true;
-//     };
-//   }, [offset]);
-
-
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'JWT fefege...'
+  }
+  
 useEffect(() => {
   if (localStorage.getItem("token") !== null) {
-    console.log(token);
+    console.log(localStorage.getItem("token"));
+    useToken = 'Bearer ' + localStorage.getItem("token");
     if (!isStop) {
-      axios({
-        url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
-        method: "GET",
-        mode: 'cors',
-        headers: { 
-         'Authorization': `Bearer ${token}`,
-          "Access-Control-Allow-Origin":`*`
-         }
+      // axios({
+      //   url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
+      //   method: "GET",
+      //   // mode: 'cors',
+      //   headers: { 
+      //   //'Authorization': `${useToken}`,
+      //   'Authorization' : 'ashdsjd',
+      //     'Access-Control-Allow-Origin': `**`,
+      //     'Content-Type': 'application/json',
+      //     Accept: 'application/json'
+      //    }
 
+      // })
+      axios.get(`http://localhost:8080/api/product/${name}?offset=${offset}`, {
+        headers: headers
       })
-        .then((res) => {
-          setProducts(res.data);
-          console.log("Data: " + res.data.content);
-        })
-        .catch((err) => {
-          throw err;
-        });
+          .then((res) => {
+            setProducts(res.data.content);
+            console.log(res.data.content);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
+    } else {
+      navigate("/login");
     }
-  } else {
-    navigate("/login");
-  }
-  return () => {
-    isStop = true;
-  };
-}, []);
+    return () => {
+      isStop = true;
+    };
+  }, [offset]);
+
+
 
   if (!products.length) {
     return (
@@ -430,7 +320,7 @@ useEffect(() => {
     if (e.target.value === "none") {
       setOffset(0);
       await axios
-        .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+        .get(`http://192.168.4.182:8080/api/product/${name}?offset=${offset}`)
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
@@ -556,7 +446,7 @@ useEffect(() => {
                   <div
                     className="product"
                     onClick={handleNavigateToProductDetails}
-                    value={product.productSFDetailDtos[0].serialNumber}
+                    value={"abc"}
                     onMouseOver={handleCursorProductCard}
                     style={{
                       cursor: cursorProductCard,
@@ -566,7 +456,12 @@ useEffect(() => {
                     <div className="product-wrap">
                       <img
                         className="img-fluid w-100 mb-3 img-first"
-                        src={product.productSFDetailDtos[0].imageList[0].url}
+                        src={
+                          JSON.parse(
+                            product.productSFDetailDtos[0]
+                              .size_color_img_quantity
+                          ).img[0]
+                        }
                         alt="product-img"
                         style={{ height: 200 }}
                       />
@@ -602,6 +497,7 @@ useEffect(() => {
                   </div>
                 </div>
               ))}
+
               <div className="col-12">
                 {" "}
                 <div style={{ textAlign: "center" }}>
@@ -627,4 +523,3 @@ useEffect(() => {
     </section>
   );
 }
-
