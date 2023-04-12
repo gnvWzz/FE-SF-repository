@@ -51,11 +51,9 @@ function Home(props) {
   useEffect(() => {
     if (!isStop) {
       axios
-<<<<<<< HEAD
-        .get(`http://localhost:8080/api/product/get_home?offset=${offset}`)
-=======
+
         .get(`${product_url}/get_home?offset=${offset}`)
->>>>>>> ea1fd5b61f13e21176c26af2221b3fb4408e6109
+
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
