@@ -1,36 +1,24 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 function Cart() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+    } else {
+      navigate("/login");
+    }
+  });
+
+  
+
   return (
     <div className="checkout-container">
-      <section className="page-header">
-        <div className="overly"></div>
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-lg-6">
-              <div className="content text-center">
-                <h1 className="mb-3">Cart</h1>
-                Hath after appear tree great fruitful green dominion moveth
-                sixth abundantly image that midst of god day multiply you’ll
-                which
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb bg-transparent justify-content-center">
-                    <li className="breadcrumb-item">
-                      <a href="/">Home</a>
-                    </li>
-                    <li className="breadcrumb-item active" aria-current="page">
-                      Cart
-                    </li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="cart shopping page-wrapper">
         <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-lg-12">
+          <div className="row">
+            <div className="col-lg-7">
               <div className="product-list">
                 <form className="cart-form">
                   <table
@@ -173,22 +161,6 @@ function Cart() {
                       <tr>
                         <td colspan="6" className="actions">
                           <div className="coupon">
-                            <input
-                              type="text"
-                              name="coupon_code"
-                              className="input-text form-control"
-                              id="coupon_code"
-                              value=""
-                              placeholder="Coupon code"
-                            />
-                            <button
-                              type="button"
-                              className="btn btn-black btn-small"
-                              name="apply_coupon"
-                              value="Apply coupon"
-                            >
-                              Apply coupon
-                            </button>
                             <span className="float-right mt-3 mt-lg-0">
                               <button
                                 type="button"
@@ -219,9 +191,7 @@ function Cart() {
                 </form>
               </div>
             </div>
-          </div>
-          <div className="row justify-content-end">
-            <div className="col-lg-4">
+            <div className="col-lg-5">
               <div className="cart-info card p-4 mt-4">
                 <h4 className="mb-4">Cart totals</h4>
                 <ul className="list-unstyled mb-4">

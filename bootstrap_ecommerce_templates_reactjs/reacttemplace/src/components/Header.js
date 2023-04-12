@@ -166,7 +166,9 @@ function Header({ categories }) {
               data-toggle="dropdown"
               data-hover="dropdown"
             >
-              <i className="tf-ion-android-cart"></i>
+              <i className="tf-ion-android-cart">
+                <sub>1</sub>
+              </i>
             </a>
             <div className="dropdown-menu cart-dropdown">
               <div className="media">
