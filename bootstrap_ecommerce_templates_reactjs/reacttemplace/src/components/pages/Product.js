@@ -39,7 +39,6 @@ export default function Product({ categories }) {
         })
           .then((res) => {
             setProducts(res.data.content);
-            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -68,7 +67,6 @@ export default function Product({ categories }) {
         })
           .then((res) => {
             setProducts(res.data.content);
-            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
