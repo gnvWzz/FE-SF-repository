@@ -4,6 +4,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import Pagination from "../pagination";
 import queryString from "query-string";
+import { PRODUCT_URL } from "../URLS/url";
 export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
@@ -20,32 +21,23 @@ export default function Product({ categories }) {
   const [offset, setOffset] = useState(0);
 
   const [totalPages, setTotalPages] = useState(0);
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'JWT fefege...'
-  }
-  
-useEffect(() => {
-  if (localStorage.getItem("token") !== null) {
-    console.log(localStorage.getItem("token"));
-    useToken = 'Bearer ' + localStorage.getItem("token");
-    if (!isStop) {
-      // axios({
-      //   url: `http://localhost:8080/api/product/${name}?offset=${offset}`,
-      //   method: "GET",
-      //   // mode: 'cors',
-      //   headers: { 
-      //   //'Authorization': `${useToken}`,
-      //   'Authorization' : 'ashdsjd',
-      //     'Access-Control-Allow-Origin': `**`,
-      //     'Content-Type': 'application/json',
-      //     Accept: 'application/json'
-      //    }
 
-      // })
-      axios.get(`http://localhost:8080/api/product/${name}?offset=${offset}`, {
-        headers: headers
-      })
+  const url = PRODUCT_URL;
+
+  // Long da them o day ne ================================ lay du lieu khuc nay may cai kia chua co lam
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      setOffset(0);
+      if (!isStop) {
+        axios({
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            'Access-Control-Allow-Origin': "*",
+            "Content-Type": "application/json",
+          },
+          url: `${url}/${name}?offset=${offset}`,
+          method: "GET",
+        })
           .then((res) => {
             setProducts(res.data.content);
             console.log(res.data.content);
@@ -63,7 +55,34 @@ useEffect(() => {
     };
   }, [offset]);
 
-
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      setOffset(0);
+      if (!isStop) {
+        axios({
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          url: `${url}/${name}?offset=${offset}`,
+          method: "GET",
+        })
+          .then((res) => {
+            setProducts(res.data.content);
+            console.log(res.data.content);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
+    } else {
+      navigate("/login");
+    }
+    return () => {
+      isStop = true;
+    };
+  }, [name]);
 
   if (!products.length) {
     return (
@@ -303,9 +322,9 @@ useEffect(() => {
   };
 
   const handleNavigateToProductDetails = function (e) {
-    const manufacturer = e.currentTarget.getAttribute("value");
+    const package_id = e.currentTarget.getAttribute("value");
 
-    navigate(`/single-product/${manufacturer}`);
+    navigate(`/single-product/${package_id}`);
   };
 
   const handleCursorProductCard = function () {
@@ -446,7 +465,7 @@ useEffect(() => {
                   <div
                     className="product"
                     onClick={handleNavigateToProductDetails}
-                    value={"abc"}
+                    value={product.packageId}
                     onMouseOver={handleCursorProductCard}
                     style={{
                       cursor: cursorProductCard,

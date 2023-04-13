@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { PRODUCT_URL } from "./URLS/url";
 
 function Home(props) {
   const [offset, setOffset] = useState(0);
@@ -15,9 +16,9 @@ function Home(props) {
 
   let navigate = useNavigate();
 
+  let product_url = PRODUCT_URL;
+
   let isStop = false;
-
-
 
   const handleScroll = (e) => {
     if (
@@ -41,7 +42,7 @@ function Home(props) {
   useEffect(() => {
     if (!isStop) {
       axios
-        .get(`http://localhost:8080/api/product?offset=${offset}`)
+        .get(`${product_url}/get_home?offset=${offset}`)
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
@@ -54,6 +55,10 @@ function Home(props) {
       isStop = true;
     };
   }, [offset]);
+
+
+
+
 
  
 

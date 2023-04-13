@@ -51,7 +51,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
 
           <Route
-            path="/single-product/:name/:manufacturer"
+            path="/single-product/:package_id"
             element={<SingleProduct />}
           />
           <Route path="/login" element={<Login />} />

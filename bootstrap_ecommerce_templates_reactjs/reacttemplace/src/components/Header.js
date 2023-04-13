@@ -1,9 +1,77 @@
 import "jquery/dist/jquery.slim.min.js";
 import "popper.js/dist/umd/popper.min.js";
 import "bootstrap/dist/js/bootstrap.min.js";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 function Header({ categories }) {
+  const navigate = useNavigate();
+
+  const handleOut = () =>{
+   localStorage.clear();
+   navigate(`/`);
+   setTimeout(() => {
+     window.location.reload();
+   }, 1000);
+    
+  }
+
+  const handleLogin = () =>{
+    return(
+      <li className="dropdown cart-nav dropdown-slide list-inline-item">
+            <a href="#">
+              <i className="tf-ion-ios-person mr-3"></i>
+            </a>
+            <div className="dropdown-menu cart-dropdown">          
+              <div className="cart-summary">
+                <div className="text-center cart-buttons mt-3">
+                  <a
+                    href="#"
+                    className="btn btn-small btn-transparent btn-block "
+                    style={{width:"250px",height:"40px"}}
+                  >
+                    My Orders
+                  </a>
+                  <a
+                    href="#"
+                    className="btn btn-small btn-transparent btn-block "
+                    style={{width:"250px",height:"40px"}}
+                  >
+                    My Favorites
+                  </a>
+                  <a onClick={handleOut} className="btn btn-small btn-main btn-block" style={{width:"250px",height:"40px"}}>
+                   Logout
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+    )
+  }
+  const handleLogout = ()=>{
+    return(
+      <li className="dropdown cart-nav dropdown-slide list-inline-item">
+          <a href="#">
+            <i className="tf-ion-ios-person mr-3"></i>
+          </a>
+          <div className="dropdown-menu cart-dropdown">          
+            <div className="cart-summary">
+              <div className="text-center cart-buttons mt-3">
+                <a
+                  href="/login"
+                  className="btn btn-small btn-transparent btn-block "
+                  style={{width:"250px",height:"40px"}}
+                >
+                  Login
+                </a>
+                <a href="/signup" className="btn btn-small btn-main btn-block" style={{width:"250px",height:"40px"}}>
+                 SignUp
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+    )
+  }
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light bg-white w-100 navigation"
@@ -224,26 +292,13 @@ function Header({ categories }) {
               </div>
             </div>
           </li>
-          <li className="dropdown cart-nav dropdown-slide list-inline-item">
-            <a href="#">
-              <i className="tf-ion-ios-person mr-3"></i>
-            </a>
-            <div className="dropdown-menu cart-dropdown">          
-              <div className="cart-summary">
-                <div className="text-center cart-buttons mt-3">
-                  <a
-                    href="#"
-                    className="btn btn-small btn-transparent btn-block"
-                  >
-                    Edit
-                  </a>
-                  <a href="#" className="btn btn-small btn-main btn-block">
-                   Logout
-                  </a>
-                </div>
-              </div>
-            </div>
-          </li>
+          
+          {localStorage.getItem("token")?
+            handleLogin()
+          :
+          handleLogout()
+          }
+        
         </ul>
       </div>
     </nav>

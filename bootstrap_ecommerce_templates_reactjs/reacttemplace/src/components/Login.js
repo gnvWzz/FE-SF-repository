@@ -27,47 +27,10 @@ function Login() {
     confirm: "",
   });
 
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     setIsLogin(false);
-  //     navigate("/");
-  //   }
-  // }, [isLogin]);
-
-  // useEffect(() =>{
-  //   if(user.username){
-  //     navigate(`/`);
-  //   }
-  // },[user,navigate])
-
-  // const login = () => {
-  //   dispatch(fakeLogin(form));
-  // };
-  // ,{headers:{Authorization:`Bearer` + token}}
+  const text = "text";
 
   const handleSubmit = () => {
-    // axios
-    // .post(`http://localhost:8080/api/account/login`,form
-    // )
-    // .then((res) => {
-    //   if(res.data !== ""){
-    //     localStorage.setItem("token", res.data)
-    //     // setToken(res.data);
-    //   }else{
-    //     // setmsgError(...msgError, confirm : "Tài Khoản hoặc Mật Khẩu chưa đúng!");
-    //     setmsgError(msgError =>{
-    //       return{
-    //         ...msgError,confirm:"Tài khoản hoặc mật khẩu không đúng!"
-    //       }})
-    //   }
-    // })
-    // .catch((err) => {
-    //   throw err;
-    // });
-
-    // if(localStorage.getItem("token") !=""){
-    //   navigate(`/`);
-    // }
+    
 
     axios({
       url: `http://localhost:8080/api/account/login`,
@@ -80,18 +43,26 @@ function Login() {
         console.log("status" +response.status);
         console.log("data" +response.data);
         if (response.data !== "") {
-          localStorage.setItem("token", response.data);
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("username",response.data.username)
+
         }
+        
+        
       })
       .catch(function (err) {
         alert("Sai thông tin đăng nhập!");
         console.log(err.response);
       });
-
       if(localStorage.getItem("token") !==""){
         navigate(`/`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
+
   };
+ 
 
   const handleChange = (e) => {
     setForm({
@@ -100,20 +71,7 @@ function Login() {
     });
   };
 
-  // const handleValidate = ()=> {
-  //   const errors = {
-  //     username: "",
-  //     password: "",
-  //   };
-  //   if (!form.username) {
-  //     errors.username = "Bắt buộc";
-  //   }
-  //   if (!form.password) {
-  //     errors.password = "Bắt buộc";
-  //   }
-  //   setmsgError(errors);
-  //   return errors;
-  // }
+
 
   return (
     <div className="login-container">
@@ -125,7 +83,7 @@ function Login() {
                 <div className="text-center heading">
                   <h2 className="mb-2">Login</h2>
                   <p className="lead">
-                    Don’t have an account? <a href="#">Create a free account</a>
+                    Don’t have an account? <a href="/signup">Create a free account</a>
                   </p>
                 </div>
                 <Formik
@@ -134,7 +92,7 @@ function Login() {
                   onSubmit={handleSubmit}
                 >
                   {({ errors, touched }) => (
-                    <form onSubmit={handleSubmit}>
+                    <form method="post" onSubmit={handleSubmit}> 
                       <div
                         class="form-group mb-4"
                         className={`custom-input ${

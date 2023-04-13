@@ -169,7 +169,7 @@ function SignUp() {
                                           : "form-group mb-4"
                            }`}
                          >
-                           <label for="#">Enter Email Address</label>
+                           <label for="#"> Email Address</label>
                            <Field
                             
                              type="email"
@@ -191,7 +191,7 @@ function SignUp() {
                                errors.username ? "custom-input-error":""
                            }`}
                          >
-                           <label for="#">Enter username</label>
+                           <label for="#"> Username</label>
                            <a class="float-right" href="">
                              Forget password?
                            </a>
@@ -214,7 +214,7 @@ function SignUp() {
                                errors.password ? "custom-input-error":""
                            }`}
                          >
-                           <label for="#">Enter Password</label>
+                           <label for="#"> Password</label>
                            <Field
                              type="password"
                              class="form-control"
