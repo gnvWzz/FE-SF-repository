@@ -16,7 +16,7 @@ export default function Product({ categories }) {
   let { name } = useParams();
   let navigate = useNavigate();
 
-  const useToken = localStorage.getItem("token");
+  let useToken = localStorage.getItem("token");
 
   const [offset, setOffset] = useState(0);
 
@@ -31,7 +31,8 @@ export default function Product({ categories }) {
       if (!isStop) {
         axios({
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            'Access-Control-Allow-Origin': "*",
             "Content-Type": "application/json",
           },
           url: `${url}/${name}?offset=${offset}`,
@@ -335,7 +336,7 @@ export default function Product({ categories }) {
     if (e.target.value === "none") {
       setOffset(0);
       await axios
-        .get(`http://localhost:8080/api/product/${name}?offset=${offset}`)
+        .get(`http://192.168.4.182:8080/api/product/${name}?offset=${offset}`)
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
