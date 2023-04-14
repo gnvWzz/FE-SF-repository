@@ -51,7 +51,7 @@ function Home(props) {
   useEffect(() => {
     if (!isStop) {
       axios
-        .get(`http://localhost:8080/api/product/get_home?offset=${offset}`)
+        .get(`${product_url}/get_home?offset=${offset}`)
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);

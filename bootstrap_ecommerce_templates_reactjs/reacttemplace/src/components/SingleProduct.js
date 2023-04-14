@@ -48,8 +48,6 @@ function SingleProduct() {
             setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
             setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
             setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
-            setPrice(res.data.productSFDetailDtos[0].price1);
-            setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
             res.data.productSFDetailDtos.map((p) => {
               ((JSON.parse(p.size_color_img_quantity)).img).map((i) => {
                 const temp = {
@@ -58,42 +56,36 @@ function SingleProduct() {
                 }
                 temp.color = (JSON.parse(p.size_color_img_quantity)).color;
                 temp.img = i
-                let isExisted = tempList.some(item => item.img === temp.img);
-                if (!isExisted) {
+                console.log(temp);
+                if (!tempList.includes(temp)) {
                   tempList.push(temp);
                 }
               })
-            })
-            setImgList(tempList)
-            tempList.map((ele) => {
-              if (!tempColors.some(item => item === ele.color)) {
-                tempColors.push(ele.color);
-              }
-            })
-            tempColors.map((tempColor) => {
-              const imgs_to_color = {
-                color: tempColor,
-                img: []
-              }
-              tempList2.push(imgs_to_color);
-            })
-            tempList.map((t1) => {
-              tempList2.map((t2) => {
-                if (t1.color === t2.color) {
-                  t2.img.push(t1.img);
+              tempColors.map((tempColor) => {
+                const imgs_to_color = {
+                  color: tempColor,
+                  img: []
                 }
+                tempList2.push(imgs_to_color);
               })
-            });
-            setImgList2(tempList2);
-            localStorage.setItem("imgList2", JSON.stringify(tempList2))
-            localStorage.setItem("choosingColor", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color)
-            localStorage.setItem("choosingSize", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size)
+              tempList.map((t1) => {
+                tempList2.map((t2) => {
+                  if (t1.color === t2.color) {
+                    t2.img.push(t1.img);
+                  }
+                })
+              });
+              setImgList2(tempList2);
+              localStorage.setItem("imgList2", JSON.stringify(tempList2))
+              localStorage.setItem("choosingColor", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color)
+              localStorage.setItem("choosingSize", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size)
+            })
+            setImgList(tempList);
           })
           .catch((err) => {
             throw err;
           });
       }
-
     } else {
       navigate("/login");
     }
@@ -209,6 +201,7 @@ function SingleProduct() {
     for (var i = 1; i < imgListToChoseColor[0].img.length; i++) {
       secondList.push(imgListToChoseColor[0].img[i]);
     }
+
     return (
       <div class="single-product-slider">
         <div class="carousel slide" data-ride="carousel" id="single-product-slider">
@@ -477,7 +470,7 @@ function SingleProduct() {
                         </td>
                       </tr>
                     ) : undefined}
-                    {}
+                    { }
                     {productDetail.material ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">

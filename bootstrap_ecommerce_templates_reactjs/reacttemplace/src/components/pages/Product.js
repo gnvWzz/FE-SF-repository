@@ -39,7 +39,6 @@ export default function Product({ categories }) {
         })
           .then((res) => {
             setProducts(res.data.content);
-            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -68,7 +67,6 @@ export default function Product({ categories }) {
         })
           .then((res) => {
             setProducts(res.data.content);
-            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -377,6 +375,7 @@ export default function Product({ categories }) {
                 <div className="list-group list-group-flush" id="logsContainer">
                   {categories.map((category, index) => (
                     <Link
+                      className="ml-3 mt-3"
                       key={index}
                       to={{ pathname: `/shop/${category.name}` }}
                     >

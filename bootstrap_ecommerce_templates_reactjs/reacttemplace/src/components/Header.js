@@ -3,7 +3,156 @@ import "popper.js/dist/umd/popper.min.js";
 import "bootstrap/dist/js/bootstrap.min.js";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-function Header({ categories }) {
+function Header({ categories }, {cart}) {
+  const cartRender = () => {
+    if (localStorage.getItem("quantity") != null) {
+      return (
+        <>
+          <li className="dropdown cart-nav dropdown-slide list-inline-item">
+            <a
+              href="#"
+              className="dropdown-toggle cart-icon"
+              data-toggle="dropdown"
+              data-hover="dropdown"
+            >
+              <i className="tf-ion-android-cart">
+                <sub>1</sub>
+              </i>
+            </a>
+            <div className="dropdown-menu cart-dropdown">
+              <div className="media">
+                <a href="/product-single">
+                  <img
+                    className="media-object img- mr-3"
+                    src="assets/images/cart-1.jpg"
+                    alt="image"
+                  />
+                </a>
+                <div className="media-body">
+                  <h6>Ladies Bag</h6>
+                  <div className="cart-price">
+                    <span>1 x</span>
+                    <span>1250.00</span>
+                  </div>
+                </div>
+                <a href="#" className="remove">
+                  <i className="tf-ion-close"></i>
+                </a>
+              </div>
+              <div className="media">
+                <a href="/product-single">
+                  <img
+                    className="media-object img-fluid mr-3"
+                    src="assets/images/cart-2.jpg"
+                    alt="image"
+                  />
+                </a>
+                <div className="media-body">
+                  <h6>Skinny Jeans</h6>
+                  <div className="cart-price">
+                    <span>1 x</span>
+                    <span>1250.00</span>
+                  </div>
+                </div>
+                <a href="#" className="remove">
+                  <i className="tf-ion-close"></i>
+                </a>
+              </div>
+              <div className="cart-summary">
+                <span className="h6">Total</span>
+                <span className="total-price h6">$1799.00</span>
+                <div className="text-center cart-buttons mt-3">
+                  <a
+                    href="#"
+                    className="btn btn-small btn-transparent btn-block"
+                  >
+                    View Cart
+                  </a>
+                  <a href="#" className="btn btn-small btn-main btn-block">
+                    Checkout
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <li className="dropdown cart-nav dropdown-slide list-inline-item">
+            <a
+              href="#"
+              className="dropdown-toggle cart-icon"
+              data-toggle="dropdown"
+              data-hover="dropdown"
+            >
+              <i className="tf-ion-android-cart">
+                <sub>0</sub>
+              </i>
+            </a>
+            <div className="dropdown-menu cart-dropdown">
+              {/* <div className="media">
+                <a href="/product-single">
+                  <img
+                    className="media-object img- mr-3"
+                    src="assets/images/cart-1.jpg"
+                    alt="image"
+                  />
+                </a>
+                <div className="media-body">
+                  <h6>Ladies Bag</h6>
+                  <div className="cart-price">
+                    <span>1 x</span>
+                    <span>1250.00</span>
+                  </div>
+                </div>
+                <a href="#" className="remove">
+                  <i className="tf-ion-close"></i>
+                </a>
+              </div>
+              <div className="media">
+                <a href="/product-single">
+                  <img
+                    className="media-object img-fluid mr-3"
+                    src="assets/images/cart-2.jpg"
+                    alt="image"
+                  />
+                </a>
+                <div className="media-body">
+                  <h6>Skinny Jeans</h6>
+                  <div className="cart-price">
+                    <span>1 x</span>
+                    <span>1250.00</span>
+                  </div>
+                </div>
+                <a href="#" className="remove">
+                  <i className="tf-ion-close"></i>
+                </a>
+              </div>
+              <div className="cart-summary">
+                <span className="h6">Total</span>
+                <span className="total-price h6">$1799.00</span>
+                <div className="text-center cart-buttons mt-3">
+                  <a
+                    href="#"
+                    className="btn btn-small btn-transparent btn-block"
+                  >
+                    View Cart
+                  </a>
+                  <a href="#" className="btn btn-small btn-main btn-block">
+                    Checkout
+                  </a>
+                </div>
+              </div> */}
+              <p>Ban chua dang nhap</p>
+            </div>
+          </li>
+        </>
+      );
+    }
+  };
+
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light bg-white w-100 navigation"
@@ -159,71 +308,9 @@ function Header({ categories }) {
               <i className="tf-ion-android-search"></i>
             </a>
           </li>
-          <li className="dropdown cart-nav dropdown-slide list-inline-item">
-            <a
-              href="#"
-              className="dropdown-toggle cart-icon"
-              data-toggle="dropdown"
-              data-hover="dropdown"
-            >
-              <i className="tf-ion-android-cart"></i>
-            </a>
-            <div className="dropdown-menu cart-dropdown">
-              <div className="media">
-                <a href="/product-single">
-                  <img
-                    className="media-object img- mr-3"
-                    src="assets/images/cart-1.jpg"
-                    alt="image"
-                  />
-                </a>
-                <div className="media-body">
-                  <h6>Ladies Bag</h6>
-                  <div className="cart-price">
-                    <span>1 x</span>
-                    <span>1250.00</span>
-                  </div>
-                </div>
-                <a href="#" className="remove">
-                  <i className="tf-ion-close"></i>
-                </a>
-              </div>
-              <div className="media">
-                <a href="/product-single">
-                  <img
-                    className="media-object img-fluid mr-3"
-                    src="assets/images/cart-2.jpg"
-                    alt="image"
-                  />
-                </a>
-                <div className="media-body">
-                  <h6>Skinny Jeans</h6>
-                  <div className="cart-price">
-                    <span>1 x</span>
-                    <span>1250.00</span>
-                  </div>
-                </div>
-                <a href="#" className="remove">
-                  <i className="tf-ion-close"></i>
-                </a>
-              </div>
-              <div className="cart-summary">
-                <span className="h6">Total</span>
-                <span className="total-price h6">$1799.00</span>
-                <div className="text-center cart-buttons mt-3">
-                  <a
-                    href="#"
-                    className="btn btn-small btn-transparent btn-block"
-                  >
-                    View Cart
-                  </a>
-                  <a href="#" className="btn btn-small btn-main btn-block">
-                    Checkout
-                  </a>
-                </div>
-              </div>
-            </div>
-          </li>
+          {/* Phan cart  */}
+          {cartRender()}
+          {/*  */}
           <li className="list-inline-item">
             <a href="#">
               <i className="tf-ion-ios-person mr-3"></i>
