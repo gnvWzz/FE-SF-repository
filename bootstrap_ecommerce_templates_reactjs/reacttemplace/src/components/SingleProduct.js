@@ -46,6 +46,9 @@ function SingleProduct() {
             setProductDetails(res.data.productSFDetailDtos);
             setProductDetail(res.data.productSFDetailDtos[0]);
             setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
+            setPrice(res.data.productSFDetailDtos[0].price1);
+            setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
+            setQuantity(1);
             setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
             setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
             res.data.productSFDetailDtos.map((p) => {
@@ -56,31 +59,36 @@ function SingleProduct() {
                 }
                 temp.color = (JSON.parse(p.size_color_img_quantity)).color;
                 temp.img = i
-                console.log(temp);
-                if (!tempList.includes(temp)) {
+                let isExisted = tempList.some(item => item.img === temp.img);
+                if (!isExisted) {
                   tempList.push(temp);
                 }
               })
-              tempColors.map((tempColor) => {
-                const imgs_to_color = {
-                  color: tempColor,
-                  img: []
-                }
-                tempList2.push(imgs_to_color);
-              })
-              tempList.map((t1) => {
-                tempList2.map((t2) => {
-                  if (t1.color === t2.color) {
-                    t2.img.push(t1.img);
-                  }
-                })
-              });
-              setImgList2(tempList2);
-              localStorage.setItem("imgList2", JSON.stringify(tempList2))
-              localStorage.setItem("choosingColor", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color)
-              localStorage.setItem("choosingSize", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size)
             })
-            setImgList(tempList);
+            setImgList(tempList)
+            tempList.map((ele) => {
+              if (!tempColors.some(item => item === ele.color)) {
+                tempColors.push(ele.color);
+              }
+            })
+            tempColors.map((tempColor) => {
+              const imgs_to_color = {
+                color: tempColor,
+                img: []
+              }
+              tempList2.push(imgs_to_color);
+            })
+            tempList.map((t1) => {
+              tempList2.map((t2) => {
+                if (t1.color === t2.color) {
+                  t2.img.push(t1.img);
+                }
+              })
+            });
+            setImgList2(tempList2);
+            localStorage.setItem("imgList2", JSON.stringify(tempList2))
+            localStorage.setItem("choosingColor", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color)
+            localStorage.setItem("choosingSize", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size)
           })
           .catch((err) => {
             throw err;
@@ -142,6 +150,7 @@ function SingleProduct() {
     if (parseInt(quantity) >= stock) {
       setQuantity(stock);
     }
+    console.log(imgList2)
   }
 
   function handleCursorOver() {
@@ -189,58 +198,60 @@ function SingleProduct() {
   }
 
   function showCarousel() {
-    const imgListToPerColor = JSON.parse(localStorage.getItem("imgList2"));
-    const colorChoosing = localStorage.getItem("choosingColor");
-    const imgListToChoseColor = imgListToPerColor.filter(ele => {
-      if (ele.color === colorChoosing) {
-        return ele;
+    if (localStorage.getItem("imgList2") && localStorage.getItem("choosingColor")) {
+      const imgListToPerColor = JSON.parse(localStorage.getItem("imgList2"));
+      const colorChoosing = localStorage.getItem("choosingColor");
+      const imgListToChoseColor = imgListToPerColor.filter(ele => {
+        if (ele.color === colorChoosing) {
+          return ele;
+        }
+      })
+      const firstList = imgListToChoseColor;
+      const secondList = [];
+      for (var i = 1; i < imgListToChoseColor[0].img.length; i++) {
+        secondList.push(imgListToChoseColor[0].img[i]);
       }
-    })
-    const firstList = imgListToChoseColor;
-    const secondList = [];
-    for (var i = 1; i < imgListToChoseColor[0].img.length; i++) {
-      secondList.push(imgListToChoseColor[0].img[i]);
-    }
 
-    return (
-      <div class="single-product-slider">
-        <div class="carousel slide" data-ride="carousel" id="single-product-slider">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+      return (
+        <div class="single-product-slider">
+          <div class="carousel slide" data-ride="carousel" id="single-product-slider">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+              </div>
+              {
+                secondList.map((i) => (
+                  <div class="carousel-item">
+                    <img src={i} alt="" class="img-fluid" />
+                  </div>
+                ))}
             </div>
-            {
-              secondList.map((i) => (
-                <div class="carousel-item">
-                  <img src={i} alt="" class="img-fluid" />
-                </div>
-              ))}
+
+            <ol class="carousel-indicators">
+              <li data-target="#single-product-slider" data-slide-to="0" class="active">
+                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+              </li>
+              {
+                secondList.map((i, index) => (
+                  <li data-target="#single-product-slider" data-slide-to={index + 1}>
+                    <img src={i} alt="" class="img-fluid" />
+                  </li>
+                ))
+              }
+            </ol>
+
+            <a class="carousel-control-prev" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
           </div>
-
-          <ol class="carousel-indicators">
-            <li data-target="#single-product-slider" data-slide-to="0" class="active">
-              <img src={firstList[0].img[0]} alt="" class="img-fluid" />
-            </li>
-            {
-              secondList.map((i, index) => (
-                <li data-target="#single-product-slider" data-slide-to={index + 1}>
-                  <img src={i} alt="" class="img-fluid" />
-                </li>
-              ))
-            }
-          </ol>
-
-          <a class="carousel-control-prev" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
         </div>
-      </div>
-    )
+      )
+    }
   }
 
   const handleChangeQuantity = (event) => {
