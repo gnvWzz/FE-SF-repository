@@ -1,114 +1,156 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { PRODUCT_URL } from "./URLS/url";
 
 function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
   const [cursor, setCursor] = useState("");
-  const { serial_number } = useParams();
-  const [productColor, setProductColor] = useState([]);
-  const [productSize, setProductSize] = useState([]);
-  const [product, setProduct] = useState({
-    name: "",
-    category: "",
-    serial_number: "",
-    list: [],
-    price: 0,
-    brief_description: "",
-    full_description: "",
-    manufacturer: "",
-    weight: "",
-    material: "",
-    color: "",
-    cpu: "",
-    gpu: "",
-    storageDrive: "",
-    display: "",
-    size: "",
-  });
-  const [products, setProducts] = useState([]);
-  const [colorOption, setColorOption] = useState("");
-  const [sizeOption, setSizeOption] = useState("");
-  const [productName, setProductName] = useState("");
+  const { package_id } = useParams();
+  const [product, setProduct] = useState({});
+  const [productDetails, setProductDetails] = useState([]);
+  const [productDetail, setProductDetail] = useState({})
+  const [productColors, setProductColors] = useState([]);
+  const [productSizes, setProductSizes] = useState([]);
+  const [categoriesNoSizesAndColors, setCategoriseNoSizesAndColors] = useState(["Computer", "Electronics", "Toys"])
+  const [stock, setStock] = useState();
+  const [serialNumber, setSerialNumber] = useState("");
+  const [price, setPrice] = useState(0);
+  const [choosingColor, setChoosingColor] = useState("");
+  const [choosingSize, setChoosingSize] = useState("");
+  const [imgList, setImgList] = useState([]);
+  const [imgList2, setImgList2] = useState([]);
+  const [imgListToColor, setImgListToColor] = useState({});
   let isStop = false;
-
-  // useEffect(() => {
-  //   if (!isStop) {
-  //     axios
-  //       .get(
-  //         `http://localhost:8080/api/product/find-by-serial-number/${serial_number}`
-  //       )
-  //       .then((res) => {
-  //         setProduct(res.data);
-  //         console.log(res.data);
-  //         if (res.data.colors.length != 0) {
-  //           setProductColor(res.data.colors.split(","));
-  //         }
-  //         if (res.data.size !== null) {
-  //           setProductSize(res.data.size.split(","));
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         throw err;
-  //       });
-  //   }
-  //   return () => {
-  //     isStop = true;
-  //   };
-  // }, []);
+  const url = PRODUCT_URL;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isStop) {
-      axios
-        .get(`http://localhost:8080/api/product/find-by-serial-number/${serial_number}`)
-        .then((res) => {
-          setProduct(res.data);
-          setProductName(res.data.name);
-          console.log(res.data.name);
-          setColorOption(res.data.color);
-          console.log(res.data.color);
-          setSizeOption(res.data.size);
-          console.log(res.data.size);
+    if (localStorage.getItem("token") !== null) {
+      if (!isStop) {
+        const tempList = [];
+        const tempColors = [];
+        const tempList2 = [];
+        axios({
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          url: `${url}/package-id-product/${package_id}`,
+          method: "GET",
         })
-        .catch((err) => {
-          throw err;
-        })
-
-      axios
-        .get(
-          `http://localhost:8080/api/product/find-by-name-manufacturer/${productName}&manufacturer=${product.manufacturer}`
-        )
-        .then((res) => {
-          setProducts(res.data);
-          console.log(res.data);
-          products.map((product) => {
-            setProductColor(productColor => [...productColor, product.color])
+          .then((res) => {
+            setProduct(res.data);
+            generateProductColors(res.data);
+            generateProductSizes(res.data);
+            setProductDetails(res.data.productSFDetailDtos);
+            setProductDetail(res.data.productSFDetailDtos[0]);
+            setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
+            setPrice(res.data.productSFDetailDtos[0].price1);
+            setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
+            setQuantity(1);
+            setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
+            setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
+            res.data.productSFDetailDtos.map((p) => {
+              ((JSON.parse(p.size_color_img_quantity)).img).map((i) => {
+                const temp = {
+                  color: "",
+                  img: ""
+                }
+                temp.color = (JSON.parse(p.size_color_img_quantity)).color;
+                temp.img = i
+                let isExisted = tempList.some(item => item.img === temp.img);
+                if (!isExisted) {
+                  tempList.push(temp);
+                }
+              })
+            })
+            setImgList(tempList)
+            tempList.map((ele) => {
+              if (!tempColors.some(item => item === ele.color)) {
+                tempColors.push(ele.color);
+              }
+            })
+            tempColors.map((tempColor) => {
+              const imgs_to_color = {
+                color: tempColor,
+                img: []
+              }
+              tempList2.push(imgs_to_color);
+            })
+            tempList.map((t1) => {
+              tempList2.map((t2) => {
+                if (t1.color === t2.color) {
+                  t2.img.push(t1.img);
+                }
+              })
+            });
+            setImgList2(tempList2);
+            localStorage.setItem("imgList2", JSON.stringify(tempList2))
+            localStorage.setItem("choosingColor", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color)
+            localStorage.setItem("choosingSize", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size)
           })
-          products.map((product) => {
-            setProductSize(productSize => [...productSize, product.size])
-          })
-          setProduct(products[0]);
-          setColorOption(product.color);
-          setSizeOption(product.size);
-        })
-        .catch((err) => {
-          throw err;
-        });
+          .catch((err) => {
+            throw err;
+          });
+      }
+    } else {
+      navigate("/login");
     }
     return () => {
       isStop = true;
     };
-  }, []);
+  }, [package_id]);
+
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      if ((quantity < 100 && quantity >= 0) || Number.isNaN(quantity)) {
+        setPrice(productDetail.price1);
+      } else if (quantity >= 100 && quantity < 500) {
+        setPrice(productDetail.price2);
+      } else if (quantity >= 500 && quantity < 1000) {
+        setPrice(productDetail.price3);
+      } else if (quantity >= 1000) {
+        setPrice(productDetail.price4);
+      }
+    } else {
+      navigate("/")
+    }
+  }, [quantity])
+
+  const generateProductColors = (data) => {
+    let colors = [];
+    data.productSFDetailDtos.map((p) => {
+      if (!colors.includes((JSON.parse(p.size_color_img_quantity)).color)) {
+        colors.push((JSON.parse(p.size_color_img_quantity)).color)
+      }
+    })
+    setProductColors(colors);
+  }
+
+  const generateProductSizes = (data) => {
+    let sizes = [];
+    data.productSFDetailDtos.map((p) => {
+      if (!sizes.includes((JSON.parse(p.size_color_img_quantity)).size)) {
+        sizes.push((JSON.parse(p.size_color_img_quantity)).size)
+      }
+    })
+    setProductSizes(sizes);
+  }
 
   function handleDecreaseQuantity() {
-    setQuantity(quantity - 1);
+    setQuantity(parseInt(quantity) - 1);
     if (quantity === 2) {
       setCursor("not-allowed");
     }
   }
 
   function handleIncreaseQuantity() {
-    setQuantity(quantity + 1);
+    setQuantity(parseInt(quantity) + 1);
+    if (parseInt(quantity) >= stock) {
+      setQuantity(stock);
+    }
+    console.log(imgList2)
   }
 
   function handleCursorOver() {
@@ -119,147 +161,145 @@ function SingleProduct() {
     }
   }
 
-  function handleClickColor(e) {
-    setColorOption(e.currenttarget.attr("value"));
-
-    axios
-      .get(`http://localhost:8080/api/product/find-product-by-name-manufacturer-color-size/${productName}?manufacturer=${product.manufacturer}&color=${colorOption}&size=${sizeOption}`)
+  const handleGetProductDetailByColorAndSize = async (e) => {
+    const c = e.currentTarget.getAttribute("value");
+    const oldSize = localStorage.getItem("choosingSize");
+    await axios
+      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`)
       .then((res) => {
-        setProduct(res);
-        setColorOption("");
-        setSizeOption("");
+        setProductDetail(res.data);
+        setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
+        setPrice(res.data.price1);
+        setQuantity(1);
+        localStorage.setItem("choosingColor", c);
+        setSerialNumber(res.data.serialNumber);
       })
       .catch((err) => {
-        throw err;
-      })
+        console.log(err);
+      });
   }
 
-  function handleClickSize(e) {
-    setSizeOption(e.currenttarget.attr("value"));
-
-    axios
-      .get(`http://localhost:8080/api/product/find-product-by-name-manufacturer-color-size/${productName}?manufacturer=${product.manufacturer}&color=${colorOption}&size=${sizeOption}`)
+  const handleChoosingSize = async (e) => {
+    const s = e.target.value;
+    const oldColor = localStorage.getItem("choosingColor");
+    await axios
+      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`)
       .then((res) => {
-        setProduct(res);
-        setColorOption("");
-        setSizeOption("");
+        setProductDetail(res.data);
+        setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
+        setPrice(res.data.price1);
+        localStorage.setItem("choosingSize", s)
+        setQuantity(1);
+        setSerialNumber(res.data.serialNumber);
       })
       .catch((err) => {
-        throw err;
+        console.log(err);
+      });
+  }
+
+  function showCarousel() {
+    if (localStorage.getItem("imgList2") && localStorage.getItem("choosingColor")) {
+      const imgListToPerColor = JSON.parse(localStorage.getItem("imgList2"));
+      const colorChoosing = localStorage.getItem("choosingColor");
+      const imgListToChoseColor = imgListToPerColor.filter(ele => {
+        if (ele.color === colorChoosing) {
+          return ele;
+        }
       })
+      const firstList = imgListToChoseColor;
+      const secondList = [];
+      for (var i = 1; i < imgListToChoseColor[0].img.length; i++) {
+        secondList.push(imgListToChoseColor[0].img[i]);
+      }
+
+      return (
+        <div class="single-product-slider">
+          <div class="carousel slide" data-ride="carousel" id="single-product-slider">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+              </div>
+              {
+                secondList.map((i) => (
+                  <div class="carousel-item">
+                    <img src={i} alt="" class="img-fluid" />
+                  </div>
+                ))}
+            </div>
+
+            <ol class="carousel-indicators">
+              <li data-target="#single-product-slider" data-slide-to="0" class="active">
+                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+              </li>
+              {
+                secondList.map((i, index) => (
+                  <li data-target="#single-product-slider" data-slide-to={index + 1}>
+                    <img src={i} alt="" class="img-fluid" />
+                  </li>
+                ))
+              }
+            </ol>
+
+            <a class="carousel-control-prev" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+      )
+    }
+  }
+
+  const handleChangeQuantity = (event) => {
+    if (event.target.value > stock) {
+      setQuantity(stock);
+      setPrice(productDetail.price4)
+    } else if (event.target.value <= stock && event.target.value >= 0) {
+      setQuantity(parseInt(event.target.value));
+    } else if (event.target.value < 0) {
+      setQuantity(1);
+    }
+  }
+
+  function handleAddToCart() {
+    navigate("/cart", { state: { serialNumber, price, quantity } })
   }
 
   return (
     <div className="single-product-container">
-      {/* <section class="page-header">
-        <div class="overly"></div>
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-6">
-              <div class="content text-center">
-                <h1 class="mb-3">Product Single</h1>
-                <p>
-                  Hath after appear tree great fruitful green dominion moveth
-                  sixth abundantly image that midst of god day multiply you’ll
-                  which
-                </p>
-
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb bg-transparent justify-content-center">
-                    <li class="breadcrumb-item">
-                      <a routerLink="/">Home</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                      Product Single
-                    </li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
       <section class="single-product">
         <div class="container">
           <div class="row">
             <div class="col-md-5">
-              {/* <div class="single-product-slider">
-                <div
-                  class="carousel slide"
-                  data-ride="carousel"
-                  id="single-product-slider"
-                >
-                  <div class="carousel-inner" style={{ textAlign: "center" }}>
-                    <div class="carousel-item active">
-                      <img src={product.list[0]} alt="" class="img-fluid" />
-                    </div>
-                    {product.list.map((img) => (
-                      <div class="carousel-item">
-                        <img src={img} alt="" class="img-fluid" />
-                      </div>
-                    ))}
-                  </div>
-
-                  <ol class="carousel-indicators">
-                    <li
-                      data-target="#single-product-slider"
-                      data-slide-to="0"
-                      class="active"
-                    >
-                      <img
-                        src="assets/images/product-3.jpg"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </li>
-                    {product.list.map((img, index) => (
-                      <li
-                        data-target="#single-product-slider"
-                        data-slide-to={index + 1}
-                      >
-                        <img src={img} alt="" class="img-fluid" />
-                      </li>
-                    ))}
-                  </ol>
-
-                  <a
-                    class="carousel-control-prev"
-                    href="#single-product-slider"
-                    role="button"
-                    data-slide="prev"
-                  >
-                    <span aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                  </a>
-                  <a
-                    class="carousel-control-next"
-                    href="#single-product-slider"
-                    role="button"
-                    data-slide="next"
-                  >
-                    <span aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                  </a>
-                </div>
-              </div> */}
+              {showCarousel()}
             </div>
 
             <div class="col-md-7">
               <div class="single-product-details mt-5 mt-lg-0">
                 <h2>{product.name}</h2>
                 <div class="sku_wrapper mb-4">
-                  SKU: <span class="text-muted">{product.serial_number} </span>
+                  SKU: <span class="text-muted">{productDetail.serialNumber} </span>
                 </div>
 
                 <hr />
 
-                <h3 class="product-price">
-                  {product.price} đ<del></del>
-                </h3>
+                {price !== productDetail.price1
+                  ?
+                  <h3 class="product-price">
+                    <del>{productDetail.price1} đ</del> {price} đ
+                  </h3>
+                  :
+                  <h3 class="product-price">
+                    {price} đ
+                  </h3>
+                }
 
                 <p class="product-description my-4 ">
-                  {product.brief_description}
+                  {productDetail.briefDescription}
                 </p>
                 <div class="quantity d-flex align-items-center">
                   <div className="mr-3">
@@ -274,7 +314,7 @@ function SingleProduct() {
                       {" "}
                       -{" "}
                     </button>
-                    {quantity}
+                    <input type="number" onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} style={{ width: 120, textAlign: "center" }} value={quantity} onChange={handleChangeQuantity}></input>
                     <button
                       style={{ color: "black" }}
                       className="btn btn-light ml-3"
@@ -287,47 +327,50 @@ function SingleProduct() {
                   <button
                     class="btn btn-main rounded-pill btn-small"
                     type="submit"
+                    onClick={handleAddToCart}
                   >
                     Add to cart
                   </button>
                 </div>
 
                 {/* Phần chọn color sản phẩm */}
-                {productColor.length !== 0 ? (
-                  <div class="color-swatches mt-4 d-flex align-items-center">
-                    <span class="font-weight-bold text-capitalize product-meta-title">
-                      Color:
-                    </span>
-                    <ul class="list-inline mb-0">
-                      {productColor.map((color) => (
-                        <li class="list-inline-item">
-                          <button
-                            id="product-color-option"
-                            className="rounded-pill"
-                            style={{ backgroundColor: color }}
-                            onClick={handleClickColor}
-                            value={color}
-                          ></button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : undefined}
+                {productColors.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
+                  ? (
+                    <div class="color-swatches mt-4 d-flex align-items-center">
+                      <span class="font-weight-bold text-capitalize product-meta-title">
+                        Color:
+                      </span>
+                      <ul class="list-inline mb-0">
+                        {productColors.map((color) => (
+                          <li class="list-inline-item">
+                            <button
+                              id="product-color-option"
+                              className="rounded-pill"
+                              style={{ backgroundColor: color }}
+                              value={color}
+                              onClick={handleGetProductDetailByColorAndSize}
+                            ></button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : undefined}
                 {/* Hết phần chọn color sản phẩm */}
 
                 {/* Phần chọn size sản phẩm */}
-                {productSize.length !== 0 ? (
-                  <div class="product-size d-flex align-items-center mt-4">
-                    <span class="font-weight-bold text-capitalize product-meta-title">
-                      Size:
-                    </span>
-                    <select class="form-control">
-                      {productSize.map((size) => (
-                        <option onClick={handleClickSize}>{size}</option>
-                      ))}
-                    </select>
-                  </div>
-                ) : undefined}
+                {productSizes.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
+                  ? (
+                    <div class="product-size d-flex align-items-center mt-4">
+                      <span class="font-weight-bold text-capitalize product-meta-title">
+                        Size:
+                      </span>
+                      <select onChange={handleChoosingSize} class="form-control">
+                        {productSizes.map((size) => (
+                          <option value={size}>{size}</option>
+                        ))}
+                      </select>
+                    </div>
+                  ) : undefined}
                 {/* Hết phần chọn size sản phẩm */}
 
                 <div class="products-meta mt-4">
@@ -337,30 +380,11 @@ function SingleProduct() {
                     </span>
                     <a href="#">{product.category}</a>
                   </div>
+                </div>
 
-                  <div class="product-share mt-5">
-                    <ul class="list-inline">
-                      <li class="list-inline-item">
-                        <a href="#">
-                          <i class="tf-ion-social-facebook"></i>
-                        </a>
-                      </li>
-                      <li class="list-inline-item">
-                        <a href="#">
-                          <i class="tf-ion-social-twitter"></i>
-                        </a>
-                      </li>
-                      <li class="list-inline-item">
-                        <a href="#">
-                          <i class="tf-ion-social-linkedin"></i>
-                        </a>
-                      </li>
-                      <li class="list-inline-item">
-                        <a href="#">
-                          <i class="tf-ion-social-pinterest"></i>
-                        </a>
-                      </li>
-                    </ul>
+                <div class="products-meta mt-4">
+                  <div class="product-category d-flex align-items-center">
+                    <h2>{stock} left in stock</h2>
                   </div>
                 </div>
               </div>
@@ -416,7 +440,7 @@ function SingleProduct() {
                 >
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: product.full_description,
+                      __html: productDetail.fullDescription,
                     }}
                   />
                 </div>
@@ -437,71 +461,82 @@ function SingleProduct() {
                         </td>
                       </tr>
                     ) : undefined}
-                    {product.weight ? (
+                    {productDetail.weight && productDetail.weight < 1 ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
                           <strong>Weight</strong>
                         </th>
                         <td>
-                          <td id="information-value">{product.weight} kg</td>
+                          <td id="information-value">{productDetail.weight * 1000} g</td>
                         </td>
                       </tr>
                     ) : undefined}
-                    {product.material ? (
+                    {productDetail.weight && productDetail.weight >= 1 ? (
+                      <tr class="list-unstyled info-desc">
+                        <th className="d-flex">
+                          <strong>Weight</strong>
+                        </th>
+                        <td>
+                          <td id="information-value">{productDetail.weight} kg</td>
+                        </td>
+                      </tr>
+                    ) : undefined}
+                    { }
+                    {productDetail.material ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
                           <strong>Material</strong>
                         </th>
                         <td>
-                          <td id="information-value">{product.material}</td>
+                          <td id="information-value">{productDetail.material}</td>
                         </td>
                       </tr>
                     ) : undefined}
-                    {product.cpu ? (
+                    {productDetail.cpu ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
                           <strong>CPU</strong>
                         </th>
                         <td>
-                          <td id="information-value">{product.cpu}</td>
+                          <td id="information-value">{productDetail.cpu}</td>
                         </td>
                       </tr>
                     ) : undefined}
-                    {product.gpu ? (
+                    {productDetail.gpu ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
                           <strong>GPU</strong>
                         </th>
-                        <td id="information-value">{product.gpu}</td>
+                        <td id="information-value">{productDetail.gpu}</td>
                       </tr>
                     ) : undefined}
-                    {product.ram ? (
+                    {productDetail.ram ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
                           <strong>RAM</strong>
                         </th>
                         <td>
-                          <td id="information-value">{product.ram}</td>
+                          <td id="information-value">{productDetail.ram}</td>
                         </td>
                       </tr>
                     ) : undefined}
-                    {product.storageDrive ? (
+                    {productDetail.storageDrive ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
                           <strong>Storage Drive</strong>
                         </th>
                         <td>
-                          <td id="information-value">{product.storageDrive}</td>
+                          <td id="information-value">{productDetail.storageDrive}</td>
                         </td>
                       </tr>
                     ) : undefined}
-                    {product.display ? (
+                    {productDetail.display ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
                           <strong>Display</strong>
                         </th>
                         <td>
-                          <td id="information-value">{product.display}</td>
+                          <td id="information-value">{productDetail.display}</td>
                         </td>
                       </tr>
                     ) : undefined}

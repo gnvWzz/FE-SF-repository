@@ -40,7 +40,6 @@ export default function Product({ categories }) {
         })
           .then((res) => {
             setProducts(res.data.content);
-            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -69,7 +68,6 @@ export default function Product({ categories }) {
         })
           .then((res) => {
             setProducts(res.data.content);
-            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -323,7 +321,6 @@ export default function Product({ categories }) {
 
   const handleNavigateToProductDetails = function (e) {
     const package_id = e.currentTarget.getAttribute("value");
-
     navigate(`/single-product/${package_id}`);
   };
 
@@ -379,6 +376,7 @@ export default function Product({ categories }) {
                 <div className="list-group list-group-flush" id="logsContainer">
                   {categories.map((category, index) => (
                     <Link
+                      className="ml-3 mt-3"
                       key={index}
                       to={{ pathname: `/shop/${category.name}` }}
                     >
@@ -465,7 +463,7 @@ export default function Product({ categories }) {
                   <div
                     className="product"
                     onClick={handleNavigateToProductDetails}
-                    value={product.packageId}
+                    value={[product.packageId]}
                     onMouseOver={handleCursorProductCard}
                     style={{
                       cursor: cursorProductCard,
