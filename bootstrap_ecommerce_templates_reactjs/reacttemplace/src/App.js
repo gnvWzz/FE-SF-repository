@@ -18,18 +18,21 @@ import store from "./redux/store";
 import { CART_URL } from "./components/URLS/url";
 function App() {
   const [categories, setCategorise] = useState([]);
+  const[provinces,setProvinces] = useState([]);
   const [cart, setCarTemp] = useState([]);
   const cart_url = CART_URL;
   let isStop = false;
   let isStop1 = false;
   // LAY CATEGORIES BANG CACH LAY CACHE BEN BACK END==========
   useEffect(() => {
-    // localStorage.clearItem("token");
+    // localStorage.removeItem("token");
+
     if (!isStop) {
       axios
         .get("http://localhost:8080/api/categories/find-all")
         .then((res) => {
-          setCategorise(res.data);
+          setCategorise(res.data.categories);
+          setProvinces(res.data.provinces);
         })
         .catch((err) => {
           throw err;
@@ -96,7 +99,7 @@ function App() {
             element={<SingleProduct />}
           />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp provinces = {provinces} />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={<Home />} />
         </Routes>
