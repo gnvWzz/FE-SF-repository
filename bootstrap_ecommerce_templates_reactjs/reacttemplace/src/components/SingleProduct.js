@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { PRODUCT_URL } from "./URLS/url";
 
 function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
@@ -17,12 +18,57 @@ function SingleProduct() {
   const [choosingSize, setChoosingSize] = useState("");
   const [imgList, setImgList] = useState([]);
   let isStop = false;
+  const navigate = useNavigate();
+
+  let url = PRODUCT_URL;
 
   useEffect(() => {
-    if (!isStop) {
-      const tempList = [];
-      axios
-        .get(`http://localhost:8080/api/product/package-id-product/${package_id}`)
+    // if (!isStop) {
+    //   const tempList = [];
+    //   axios
+    //     .get(`http://localhost:8080/api/product/package-id-product/${package_id}`)
+    //     .then((res) => {
+    //       setProduct(res.data);
+    //       generateProductColors(res.data);
+    //       generateProductSizes(res.data);
+    //       setProductDetails(res.data.productSFDetailDtos);
+    //       setProductDetail(res.data.productSFDetailDtos[0]);
+    //       setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
+    //       setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
+    //       setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
+    //       res.data.productSFDetailDtos.map((p) => {
+    //         ((JSON.parse(p.size_color_img_quantity)).img).map((i) => {
+    //           const temp = {
+    //             color: "",
+    //             img: ""
+    //           }
+    //           temp.color = (JSON.parse(p.size_color_img_quantity)).color;
+    //           temp.img = i
+    //           console.log(temp);
+    //           if (!tempList.includes(temp)) {
+    //             tempList.push(temp);
+    //           }
+    //         })
+    //       })
+    //       setImgList(tempList);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     })
+    // }
+
+
+    if (localStorage.getItem("token") !== null) {
+      if (!isStop) {
+        const tempList = [];
+        axios({
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          url: `${url}/package-id-product/${package_id}`,
+          method: "GET",
+        })
         .then((res) => {
           setProduct(res.data);
           generateProductColors(res.data);
@@ -48,14 +94,16 @@ function SingleProduct() {
           })
           setImgList(tempList);
         })
-        .catch((err) => {
-          console.log(err);
-        })
+          .catch((err) => {
+            throw err;
+          });
+      }
+    } else {
+      navigate("/login");
     }
-
     return () => {
       isStop = true;
-    }
+    };
   }, [])
 
   const generateProductColors = (data) => {

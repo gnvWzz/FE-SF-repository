@@ -125,7 +125,7 @@ function Login() {
                 <div className="text-center heading">
                   <h2 className="mb-2">Login</h2>
                   <p className="lead">
-                    Don’t have an account? <a href="#">Create a free account</a>
+                    Don’t have an account? <a href="/signup">Create a free account</a>
                   </p>
                 </div>
                 <Formik

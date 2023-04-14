@@ -1,53 +1,14 @@
+import { Link } from "react-router-dom";
+
 function Checkout() {
   return (
     <div className="checkout-container">
-      <section className="page-header">
-        <div className="overly"></div>
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-lg-6">
-              <div className="content text-center">
-                <h1 className="mb-3">Checkout</h1>
-                <p>
-                  Hath after appear tree great fruitful green dominion moveth
-                  sixth abundantly image that midst of god day multiply you’ll
-                  which
-                </p>
-
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb bg-transparent justify-content-center">
-                    <li className="breadcrumb-item">
-                      <a href="/">Home</a>
-                    </li>
-                    <li className="breadcrumb-item active" aria-current="page">
-                      Checkout
-                    </li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       <div className="page-wrapper">
         <div className="checkout shopping">
           <div className="container">
             <div className="row">
-              <div className="col-lg-8 pr-5">
-                <div
-                  className="coupon-notice "
-                  data-toggle="modal"
-                  data-target="#coupon-modal"
-                >
-                  <div className="bg-light p-3">
-                    Have a coupon?{" "}
-                    <a href="/checkout" className="showcoupon">
-                      Click here to enter your code
-                    </a>
-                  </div>
-                </div>
-
-                <div className="billing-details mt-5">
+              <div className="col-lg-7 pr-5">
+                <div className="billing-details">
                   <h4 className="mb-4">Billing Details</h4>
                   <form className="checkout-form">
                     <div className="row">
@@ -69,19 +30,6 @@ function Checkout() {
                             type="text"
                             className="form-control"
                             id="last_name"
-                            placeholder=""
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-12">
-                        <div className="form-group mb-4">
-                          <label for="company_name">
-                            Company Name(Optional)
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="company_name"
                             placeholder=""
                           />
                         </div>
@@ -119,19 +67,7 @@ function Checkout() {
                           />
                         </div>
                       </div>
-                      <div className="col-lg-12">
-                        <div className="form-group mb-4">
-                          <label for="first_name">
-                            Apartment, suite, unit etc. (optional) (optional)
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="apartment"
-                            placeholder="Apartment"
-                          />
-                        </div>
-                      </div>
+                     
 
                       <div className="col-lg-12">
                         <div className="form-group mb-4">
@@ -168,19 +104,6 @@ function Checkout() {
 
                       <div className="col-lg-12">
                         <div className="form-group mb-4">
-                          <label for="first_name">
-                            Postcode / ZIP (optional)
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="postcode"
-                            placeholder=""
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-12">
-                        <div className="form-group mb-4">
                           <label for="first_name">Phone </label>
                           <input
                             type="text"
@@ -201,58 +124,23 @@ function Checkout() {
                           />
                         </div>
                       </div>
-
-                      <div className="col-lg-12">
-                        <div className="form-check mb-4">
-                          <input
-                            type="checkbox"
-                            className="form-check-input"
-                            id="exampleCheck1"
-                          />
-                          <label
-                            className="form-check-label"
-                            for="exampleCheck1"
-                          >
-                            Create an account?
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-lg-12">
-                        <div className="form-check mb-4">
-                          <input
-                            type="checkbox"
-                            className="form-check-input"
-                            id="exampleCheck2"
-                          />
-                          <label
-                            className="form-check-label"
-                            for="exampleCheck2"
-                          >
-                            Ship to a different address?
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-lg-12">
-                        <div className="form-group mb-4">
-                          <label for="first_name">Order notes (optional)</label>
-                          <textarea
-                            className="form-control"
-                            id="msg"
-                            cols="30"
-                            rows="5"
-                            placeholder="Notes about order e:g: want to say something"
-                          ></textarea>
-                        </div>
-                      </div>
                     </div>
                   </form>
                 </div>
               </div>
-
-              <div className="col-md-6 col-lg-4">
+              <div className="col-md-6 col-lg-5">
                 <div className="product-checkout-details mt-5 mt-lg-0">
-                  <h4 className="mb-4 border-bottom pb-4">Order Summary</h4>
-
+                  <div className="mb-4 border-bottom pb-4">
+                    <h3>Order Summary</h3>
+                    <div style={{textAlign : "center"}}>
+                      <Link
+                        style={{ fontSize: "18px"}}
+                        to={{ pathname: "/cart" }}
+                      >
+                        Go to cart
+                      </Link>
+                    </div>
+                  </div>
                   <div className="media product-card">
                     <p>Kirby Shirt</p>
                     <div className="media-body text-right">
@@ -275,53 +163,22 @@ function Checkout() {
                     </li>
                   </ul>
 
-                  <form action="#">
-                    <div className="form-check mb-3">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="exampleRadios"
-                        id="exampleRadios1"
-                        value="option1"
-                        checked
-                      />
-                      <label className="form-check-label" for="exampleRadios1">
-                        Direct bank transfer
-                      </label>
+                  <h3 style={{ textAlign: "center" }}>DISCOUNT CODE</h3>
 
-                      <div className="alert alert-secondary mt-3" role="alert">
-                        Make your payment directly into our bank account. Please
-                        use your Order ID as the payment reference. Your order
-                        will not be shipped until the funds have cleared in our
-                        account.
-                      </div>
-                    </div>
-
-                    <div className="form-check mb-3">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="exampleRadios"
-                        id="exampleRadios2"
-                        value="option2"
-                      />
-                      <label className="form-check-label" for="exampleRadios2">
-                        Check payments
-                      </label>
-                    </div>
-
-                    <div className="form-check mb-3">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="exampleCheck3"
-                      />
-                      <label className="form-check-label" for="exampleCheck3">
-                        I have read and agree to the website terms and
-                        conditions *
-                      </label>
-                    </div>
-                  </form>
+                  <div style={{ textAlign: "center" }}>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="first_name"
+                      placeholder=""
+                    />
+                    <button
+                      href="/checkout"
+                      className="mt-3 btn btn-main btn-small"
+                    >
+                      Apply
+                    </button>
+                  </div>
 
                   <div className="info mt-4 border-top pt-4 mb-5">
                     Your personal data will be used to process your order,
@@ -329,36 +186,11 @@ function Checkout() {
                     other purposes described in our{" "}
                     <a href="#">privacy policy</a>.
                   </div>
-                  <a href="/checkout" className="btn btn-main btn-small">
-                    Place Order
-                  </a>
+                  <button href="/checkout" className="btn btn-main btn-small">
+                    Check out
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="coupon-modal" tabindex="-1" role="dialog">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content py-5">
-            <div className="modal-body">
-              <form>
-                <div className="form-group">
-                  <input
-                    className="form-control"
-                    type="text"
-                    placeholder="Enter Coupon Code"
-                  />
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-main btn-small"
-                  data-dismiss="modal"
-                >
-                  Apply Coupon
-                </button>
-              </form>
             </div>
           </div>
         </div>
