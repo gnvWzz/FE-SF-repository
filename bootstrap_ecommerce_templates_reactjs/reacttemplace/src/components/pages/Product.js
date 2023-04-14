@@ -320,7 +320,6 @@ export default function Product({ categories }) {
 
   const handleNavigateToProductDetails = function (e) {
     const package_id = e.currentTarget.getAttribute("value");
-
     navigate(`/single-product/${package_id}`);
   };
 
@@ -463,7 +462,7 @@ export default function Product({ categories }) {
                   <div
                     className="product"
                     onClick={handleNavigateToProductDetails}
-                    value={product.packageId}
+                    value={[product.packageId]}
                     onMouseOver={handleCursorProductCard}
                     style={{
                       cursor: cursorProductCard,
