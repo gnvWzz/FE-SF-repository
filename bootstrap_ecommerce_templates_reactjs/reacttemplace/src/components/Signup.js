@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import { readyException } from "jquery";
 
-function SignUp() {
+function SignUp({provinces}) {
 
   const REGEX = {
     //username có ít nhất 8 kí tự dài nhất 20 kí tự, không có các dấu chấm . _ ở đầu tên giữa và cuối tên
@@ -14,12 +14,18 @@ function SignUp() {
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
     //password có ít nhất 8 kí tự, có chữ cái in hoa, chữ cái thường, kí tự đặt biệt
     passwordRegex:
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    phoneRegex:
+    /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/
   };
 
   const [form, setForm] = useState({
     email:"",
     username:"",
+    phone:"",
+    city:"",
+    district:"",
+    street:"",
     password:"",
     confirmPassword:""
   });
@@ -29,6 +35,7 @@ function SignUp() {
   const [msgError, setmsgError] = useState({
     email:"",
     username:"",
+    phone:"",
     password:"",
     confirmPassword:""
   });
@@ -79,11 +86,13 @@ function SignUp() {
     const errors = {
         email:"",
         username:"",
+        phone:"",
         password:"",
         confirmPassword:""
     }; 
     const isValidEmail = REGEX.emailRegex.test(form.email);
     const isValidUsername = REGEX.usernameRegex.test(form.username);
+    const isValidPhone = REGEX.phoneRegex.test(form.phone);
     if (!form.email) {
         errors.email = "Bắt buộc";
     } else if (!isValidEmail) {
@@ -123,6 +132,28 @@ function SignUp() {
          throw err;
        });
     }
+
+    if (!form.phone) {
+      errors.phone = "Bắt buộc";
+  } else if (!isValidPhone) {
+      errors.phone = "Số điện thoại chưa đúng";
+  }else if(isValidPhone){
+    const data = form.phone;
+    await  axios
+     .get(`http://localhost:8080/api/account/duplicate-phone/${data}`)
+     .then((res) => {
+       if(res.data === "Exist"){
+         errors.phone = "Số điện thoại đã tồn tại";  
+       }else{
+         errors.phone = "";
+       }
+     })
+     .catch((err) => {
+       throw err;
+     });
+  }
+
+
 
     if (!form.password) {
         errors.password = "Bắt buộc";
@@ -169,7 +200,7 @@ function SignUp() {
                                           : "form-group mb-4"
                            }`}
                          >
-                           <label for="#">Enter Email Address</label>
+                           <label for="#"> Email Address</label>
                            <Field
                             
                              type="email"
@@ -191,7 +222,7 @@ function SignUp() {
                                errors.username ? "custom-input-error":""
                            }`}
                          >
-                           <label for="#">Enter username</label>
+                           <label for="#"> Username</label>
                            <a class="float-right" href="">
                              Forget password?
                            </a>
@@ -211,10 +242,70 @@ function SignUp() {
                          <div
                            class="form-group mb-4"
                            className={`custom-input ${
+                               errors.phone ? "custom-input-error":""
+                           }`}
+                         >
+                           <label for="#"> Phone</label>
+                           <Field
+                             type="text"
+                             class="form-control"
+                             placeholder="Enter Phone"
+                             name="phone"
+                             value={form.phone  || ""}
+                             onChange={handleChange}
+                           />  
+                             {errors.phone && touched.phone
+                           ?<p className="error">{errors.phone}</p>    
+                           :null
+                           }           
+                         </div>
+                         <div
+                           class="form-group mb-4"
+                           
+                         >
+                           <label for="company_name">Province</label>
+                            <select className="form-control"
+                             name="city"
+                             onChange={handleChange}
+                            >
+                            <option value="">Select an Option</option>
+                            {provinces.map((province)=>(
+                               <option value={province.name}>{province.name}</option>
+                            ))}
+                          </select>           
+                         </div>
+
+                         <div className="form-group mb-4">
+                          <label for="first_name">District</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="street"
+                            name="district"
+                            placeholder="Enter your District"
+                            onChange={handleChange}
+                          />
+                        </div>
+                        
+                        <div className="form-group mb-4">
+                          <label for="first_name">Street Address</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="street"
+                            name="street"
+                            placeholder="Enter your Street Address"
+                            onChange={handleChange}
+                          />
+                        </div>
+                      
+                         <div
+                           class="form-group mb-4"
+                           className={`custom-input ${
                                errors.password ? "custom-input-error":""
                            }`}
                          >
-                           <label for="#">Enter Password</label>
+                           <label for="#"> Password</label>
                            <Field
                              type="password"
                              class="form-control"
