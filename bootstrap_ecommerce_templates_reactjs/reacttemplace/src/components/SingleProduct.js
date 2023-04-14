@@ -259,28 +259,12 @@ function SingleProduct() {
       setQuantity(stock);
       setPrice(productDetail.price4)
     } else if (event.target.value <= stock && event.target.value >= 0) {
-      console.log(event.target.value)
+      console.log(event.target.value);
       setQuantity(parseInt(event.target.value));
     } else if (event.target.value < 0) {
       setQuantity(1);
     }
   }
-
-  // const handleChangeQuantity = (event) => {
-  //   if (event.target.value == 0 || event.target.value == "-") {
-  //     console.log(event.target.value);
-  //     setQuantity('');
-  //   } else {
-  //     if (event.target.value > stock) {
-  //       setQuantity(stock);
-  //       setPrice(productDetail.price4)
-  //     } else if (event.target.value <= stock && event.target.value >= 0) {
-  //       setQuantity(parseInt(event.target.value));
-  //     } else if (event.target.value < 0) {
-  //       setQuantity(1);
-  //     }
-  //   }
-  // }
 
   function handleAddToCart() {
     navigate("/cart", { state: { serialNumber, price, quantity } })
