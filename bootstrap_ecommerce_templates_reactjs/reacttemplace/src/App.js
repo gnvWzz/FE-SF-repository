@@ -22,6 +22,7 @@ function App() {
   const cart_url = CART_URL;
   let isStop = false;
   let isStop1 = false;
+  // LAY CATEGORIES BANG CACH LAY CACHE BEN BACK END==========
   useEffect(() => {
     // localStorage.clearItem("token");
     if (!isStop) {
@@ -38,7 +39,9 @@ function App() {
       isStop = true;
     };
   }, []);
+  // ============================================================
 
+  // LAY CART KHI CO TOKEN VA ACCOUNT NAME=============================
   useEffect(() => {
     if (
       localStorage.getItem("token") !== null &&
@@ -52,7 +55,9 @@ function App() {
       isStop1 = true;
     };
   }, []);
+  // ===========================================================
 
+  // LAY CART THONG QUA AXIOS KHI CO TOKEN VA ACCOUNT NAME========
   const getCart = async () => {
     await axios({
       headers: {
@@ -70,6 +75,7 @@ function App() {
         throw err;
       });
   };
+  // ===============================================
 
 
   return (
@@ -84,7 +90,7 @@ function App() {
             element={<Product categories={categories} />}
           />
           <Route path="/cart" element={<Cart cart={cart} />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout" element={<Checkout cart={cart} />} />
           <Route
             path="/single-product/:package_id"
             element={<SingleProduct />}

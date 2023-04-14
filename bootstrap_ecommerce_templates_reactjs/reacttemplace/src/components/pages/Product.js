@@ -39,6 +39,7 @@ export default function Product({ categories }) {
         })
           .then((res) => {
             setProducts(res.data.content);
+            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -67,6 +68,7 @@ export default function Product({ categories }) {
         })
           .then((res) => {
             setProducts(res.data.content);
+            console.log(res.data.content);
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
@@ -507,7 +509,7 @@ export default function Product({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.productSFDetailDtos[0].price} đ
+                          {product.productSFDetailDtos[0].price1} đ
                         </h4>
                       </span>
                     </div>
