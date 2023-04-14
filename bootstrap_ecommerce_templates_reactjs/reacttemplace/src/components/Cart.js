@@ -1,4 +1,21 @@
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 function Cart() {
+
+  const state = useLocation();
+
+  const [passObject, setPassObject] = useState({})
+
+  useEffect(() => {
+    setPassObject(state);
+  }, [])
+
+  function showState() {
+    console.log(state);
+    console.log(passObject);
+  }
+
   return (
     <div className="checkout-container">
       <section className="page-header">
@@ -186,6 +203,7 @@ function Cart() {
                               className="btn btn-black btn-small"
                               name="apply_coupon"
                               value="Apply coupon"
+                              onClick={showState}
                             >
                               Apply coupon
                             </button>

@@ -14,6 +14,8 @@ function SingleProduct() {
   const [productSizes, setProductSizes] = useState([]);
   const [categoriesNoSizesAndColors, setCategoriseNoSizesAndColors] = useState(["Computer", "Electronics", "Toys"])
   const [stock, setStock] = useState();
+  const [serialNumber, setSerialNumber] = useState("");
+  const [price, setPrice] = useState(0);
   const [choosingColor, setChoosingColor] = useState("");
   const [choosingSize, setChoosingSize] = useState("");
   const [imgList, setImgList] = useState([]);
@@ -46,6 +48,8 @@ function SingleProduct() {
             setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
             setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
             setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
+            setPrice(res.data.productSFDetailDtos[0].price1);
+            setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
             res.data.productSFDetailDtos.map((p) => {
               ((JSON.parse(p.size_color_img_quantity)).img).map((i) => {
                 const temp = {
@@ -83,11 +87,13 @@ function SingleProduct() {
             setImgList2(tempList2);
             localStorage.setItem("imgList2", JSON.stringify(tempList2))
             localStorage.setItem("choosingColor", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color)
+            localStorage.setItem("choosingSize", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size)
           })
           .catch((err) => {
             throw err;
           });
       }
+
     } else {
       navigate("/login");
     }
@@ -95,6 +101,22 @@ function SingleProduct() {
       isStop = true;
     };
   }, [package_id]);
+
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      if ((quantity < 100 && quantity >= 0) || Number.isNaN(quantity)) {
+        setPrice(productDetail.price1);
+      } else if (quantity >= 100 && quantity < 500) {
+        setPrice(productDetail.price2);
+      } else if (quantity >= 500 && quantity < 1000) {
+        setPrice(productDetail.price3);
+      } else if (quantity >= 1000) {
+        setPrice(productDetail.price4);
+      }
+    } else {
+      navigate("/")
+    }
+  }, [quantity])
 
   const generateProductColors = (data) => {
     let colors = [];
@@ -140,12 +162,16 @@ function SingleProduct() {
 
   const handleGetProductDetailByColorAndSize = async (e) => {
     const c = e.currentTarget.getAttribute("value");
+    const oldSize = localStorage.getItem("choosingSize");
     await axios
-      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${c}/${choosingSize}/${package_id}`)
+      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`)
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
-        localStorage.setItem("choosingColor", c)
+        setPrice(res.data.price1);
+        setQuantity(1);
+        localStorage.setItem("choosingColor", c);
+        setSerialNumber(res.data.serialNumber);
       })
       .catch((err) => {
         console.log(err);
@@ -154,12 +180,16 @@ function SingleProduct() {
 
   const handleChoosingSize = async (e) => {
     const s = e.target.value;
+    const oldColor = localStorage.getItem("choosingColor");
     await axios
-      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${choosingColor}/${s}/${package_id}`)
+      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`)
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
-        setChoosingSize(s);
+        setPrice(res.data.price1);
+        localStorage.setItem("choosingSize", s)
+        setQuantity(1);
+        setSerialNumber(res.data.serialNumber);
       })
       .catch((err) => {
         console.log(err);
@@ -223,11 +253,16 @@ function SingleProduct() {
   const handleChangeQuantity = (event) => {
     if (event.target.value > stock) {
       setQuantity(stock);
+      setPrice(productDetail.price4)
     } else if (event.target.value <= stock && event.target.value >= 0) {
       setQuantity(parseInt(event.target.value));
     } else if (event.target.value < 0) {
       setQuantity(1);
     }
+  }
+
+  function handleAddToCart() {
+    navigate("/cart", { state: { serialNumber, price, quantity } })
   }
 
   return (
@@ -248,40 +283,15 @@ function SingleProduct() {
 
                 <hr />
 
-                {(quantity < 100 && quantity >= 0) || Number.isNaN(quantity)
+                {price !== productDetail.price1
                   ?
                   <h3 class="product-price">
-                    {productDetail.price1} đ<del></del>
+                    <del>{productDetail.price1} đ</del> {price} đ
                   </h3>
                   :
-                  undefined
-                }
-
-                {quantity >= 100 && quantity < 500
-                  ?
                   <h3 class="product-price">
-                    <del>{productDetail.price1} đ</del> {productDetail.price2} đ
+                    {price} đ
                   </h3>
-                  :
-                  undefined
-                }
-
-                {quantity >= 500 && quantity < 1000
-                  ?
-                  <h3 class="product-price">
-                    <del>{productDetail.price2} đ</del> {productDetail.price3} đ
-                  </h3>
-                  :
-                  undefined
-                }
-
-                {quantity >= 1000
-                  ?
-                  <h3 class="product-price">
-                    <del>{productDetail.price3} đ</del> {productDetail.price4} đ
-                  </h3>
-                  :
-                  undefined
                 }
 
                 <p class="product-description my-4 ">
@@ -313,6 +323,7 @@ function SingleProduct() {
                   <button
                     class="btn btn-main rounded-pill btn-small"
                     type="submit"
+                    onClick={handleAddToCart}
                   >
                     Add to cart
                   </button>
@@ -466,6 +477,7 @@ function SingleProduct() {
                         </td>
                       </tr>
                     ) : undefined}
+                    {}
                     {productDetail.material ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
