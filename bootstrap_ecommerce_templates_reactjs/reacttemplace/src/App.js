@@ -45,7 +45,7 @@ function App() {
   useEffect(() => {
     if (
       localStorage.getItem("token") !== null &&
-      localStorage.getItem("account_name") !== null
+      localStorage.getItem("username") !== null
     ) {
       if (!isStop1) {
         getCart();

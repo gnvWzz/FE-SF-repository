@@ -90,6 +90,7 @@ function Login() {
 
       if(localStorage.getItem("token") !==""){
         navigate(`/`);
+      
       }
   };
 

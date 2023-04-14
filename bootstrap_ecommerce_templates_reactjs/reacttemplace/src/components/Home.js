@@ -205,7 +205,7 @@ function Home(props) {
                       <a href="#">{product.name}</a>
                     </h2>
                     <span className="price">
-                      {product.productSFDetailDtos[0].price} đ
+                      {product.productSFDetailDtos[0].price1} đ
                     </span>
                   </div>
                 </div>
