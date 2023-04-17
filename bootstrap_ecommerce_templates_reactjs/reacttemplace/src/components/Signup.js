@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form,Field } from "formik";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import { readyException } from "jquery";
 
 function SignUp({provinces}) {
 

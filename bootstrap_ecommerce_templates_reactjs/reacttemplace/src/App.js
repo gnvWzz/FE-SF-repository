@@ -17,6 +17,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { CART_URL } from "./components/URLS/url";
 import Profile from "./components/Profile";
+import Password from "./components/Password";
 function App() {
   const [categories, setCategorise] = useState([]);
   const[provinces,setProvinces] = useState([]);
@@ -67,6 +68,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp provinces = {provinces} />} />
           <Route path="/profile" element={<Profile/>}/>
+          <Route path="/password" element={<Password/>}/>
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={<Home />} />
         </Routes>

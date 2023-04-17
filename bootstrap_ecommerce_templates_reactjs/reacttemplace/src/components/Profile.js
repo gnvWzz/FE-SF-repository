@@ -5,8 +5,11 @@ import { ACCOUNT_URL } from "./URLS/url";
 
 function Profile(){
 	const loginName = localStorage.getItem("username");
-	const[user,setUser] = useState({});
+	const[user,setUser] = useState({
+	});
 	const url = ACCOUNT_URL;
+	const navigate = useNavigate();
+	
 	useEffect(()=>{
 		axios({
 			headers: {
@@ -28,6 +31,34 @@ function Profile(){
 			});
 	},[]);
 
+	const handleChange = (e)=>{
+		setUser({
+			...user,
+			[e.target.name]:e.target.value 
+		  });
+	}
+
+	const handleCancel = ()=>{
+		navigate(`/`);
+	}
+	const handleSubmit = () =>{
+		axios({
+			headers: {
+			  Authorization: `Bearer ${localStorage.getItem("token")}`,
+			  "Access-Control-Allow-Origin": "*",
+			  "Content-Type": "application/json",
+			},
+			url: `${url}`,
+			method: "PUT",
+			data:user
+		  })
+			.then((res) => {
+			 alert("Cập nhật thành công!");
+			})
+			.catch((err) => {
+			  throw err;
+			});
+	}
     return (
         <div>
                   <div class="container">
@@ -73,19 +104,19 @@ function Profile(){
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="firstName">First Name</label>
-					<input type="text" class="form-control" name="firstName" value={user.firstName}/>
+					<input type="text" class="form-control" name="firstName" value={user.firstName} onChange={handleChange}/>
 				</div>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="lastName">Last Name</label>
-					<input type="text" class="form-control" name="lastName" value={user.lastName}/>
+					<input type="text" class="form-control" name="lastName" value={user.lastName} onChange={handleChange}/>
 				</div>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="phone">Phone</label>
-					<input type="text" class="form-control" name="phone" value={user.phone}/>
+					<input type="text" class="form-control" name="phone" value={user.phone} onChange={handleChange}/>
 				</div>
 			</div>
 		</div>
@@ -102,27 +133,27 @@ function Profile(){
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="ciTy">Province</label>
-					<input type="name" class="form-control" name="city" value={user.city}/>
+					<input type="name" class="form-control" name="city" value={user.city} onChange={handleChange}/>
 				</div>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="sTate">District</label>
-					<input type="text" class="form-control" name="district" value={user.district}/>
+					<input type="text" class="form-control" name="district" value={user.district} onChange={handleChange}/>
 				</div>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="zIp">Street Address</label>
-					<input type="text" class="form-control" name="street" value={user.street}/>
+					<input type="text" class="form-control" name="street" value={user.street} onChange={handleChange}/>
 				</div>
 			</div>
 		</div>
 		<div class="row gutters">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="text-right">
-					<button style={{height:"45px"}} type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button>
-					<button style={{height:"45px"}} type="button" id="submit" name="submit" class="btn btn-primary">Update</button>
+					<button style={{height:"45px"}} type="button"  class="btn btn-secondary" onClick={handleCancel}>Cancel</button>
+					<button style={{height:"45px"}} type="button"  name="submit" class="btn btn-primary" onClick={handleSubmit} >Update</button>
 				</div>
 			</div>
 		</div>
