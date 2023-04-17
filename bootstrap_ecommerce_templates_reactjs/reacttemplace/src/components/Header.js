@@ -156,9 +156,6 @@ function Header({ categories }) {
                   <Link to={{ pathname: "/shop" }}>Shop</Link>
                 </li>
                 <li>
-                  <Link to={{ pathname: "/checkout" }}>Checkout</Link>
-                </li>
-                <li>
                   <Link to={{ pathname: "/cart" }}>Cart</Link>
                 </li>
               </ul>

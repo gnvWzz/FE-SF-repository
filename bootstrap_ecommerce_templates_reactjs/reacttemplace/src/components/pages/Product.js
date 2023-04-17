@@ -417,23 +417,7 @@ export default function Product({ categories }) {
                         ></i>
                       </button>
                     </span>
-                    <form className="ordering " method="get">
-                      <select
-                        name="orderby"
-                        className="orderby form-control"
-                        aria-label="Shop order"
-                      >
-                        <option value="" selected="selected">
-                          Sort by size
-                        </option>
-                        <option value="L">L Large</option>
-                        <option value="XL">XL Extra Large</option>
-                        <option value="M">M Medium</option>
-                        <option value="S">S Small</option>
-                        <option value="XS">XS Extra Small</option>
-                      </select>
-                      <input type="hidden" name="paged" value="1" />
-                    </form>
+                   
                     <form className="ordering " method="get">
                       <select
                         name="orderby"
@@ -442,11 +426,8 @@ export default function Product({ categories }) {
                         onChange={handleChangeSortByPrice}
                       >
                         <option value="none" selected="selected">
-                          Sort by price
+                          Default
                         </option>
-                        <option value="">Sort by popularity</option>
-                        <option value="">Sort by average rating</option>
-                        <option value="">Sort by latest</option>
                         <option value="asc">Sort by price: low to high</option>
                         <option value="desc">Sort by price: high to low</option>
                       </select>
