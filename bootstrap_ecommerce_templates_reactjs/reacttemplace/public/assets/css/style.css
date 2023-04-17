@@ -2366,3 +2366,34 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.product-creating-information table,
+th,
+td {
+  text-align: center;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.product-creating-information table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.product-images-table table,
+th,
+td {
+  text-align: center;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.product-images-table table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.product-image-per-variant {
+  width: 300px;
+  height: 300px;
+}

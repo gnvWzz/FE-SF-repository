@@ -11,6 +11,8 @@ import Shop from "./components/Shop";
 import SignUp from "./components/Signup";
 import SingleProduct from "./components/SingleProduct";
 import Product from "./components/pages/Product";
+import FirstForm from "./components/testCreateProduct/FirstForm";
+import SecondForm from "./components/testCreateProduct/SecondForm";
 import axios from "axios";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
@@ -95,6 +97,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp provinces = {provinces} />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/firstForm" element={<FirstForm />} />
+          <Route path="/secondForm" element={<SecondForm />} />
           <Route path="/" element={<Home />} />
         </Routes>
         <Footer></Footer>
