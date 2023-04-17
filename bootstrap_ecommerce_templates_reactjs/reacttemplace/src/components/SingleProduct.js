@@ -164,8 +164,14 @@ function SingleProduct() {
   const handleGetProductDetailByColorAndSize = async (e) => {
     const c = e.currentTarget.getAttribute("value");
     const oldSize = localStorage.getItem("choosingSize");
-    await axios
-      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`)
+    await axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      url: `${url}/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`,
+      method: "GET"
+    }) 
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
@@ -182,8 +188,14 @@ function SingleProduct() {
   const handleChoosingSize = async (e) => {
     const s = e.target.value;
     const oldColor = localStorage.getItem("choosingColor");
-    await axios
-      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`)
+    await axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      url: `${url}/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`,
+      method: "GET"
+    })
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
@@ -217,24 +229,24 @@ function SingleProduct() {
           <div class="carousel slide" data-ride="carousel" id="single-product-slider">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+                <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
               </div>
               {
                 secondList.map((i) => (
                   <div class="carousel-item">
-                    <img src={i} alt="" class="img-fluid" />
+                    <img src={i.url} alt="" class="img-fluid" />
                   </div>
                 ))}
             </div>
 
             <ol class="carousel-indicators">
               <li data-target="#single-product-slider" data-slide-to="0" class="active">
-                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+                <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
               </li>
               {
                 secondList.map((i, index) => (
                   <li data-target="#single-product-slider" data-slide-to={index + 1}>
-                    <img src={i} alt="" class="img-fluid" />
+                    <img src={i.url} alt="" class="img-fluid" />
                   </li>
                 ))
               }

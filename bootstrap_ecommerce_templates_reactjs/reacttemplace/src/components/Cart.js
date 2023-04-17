@@ -14,6 +14,8 @@ function Cart() {
 
   const cart_url = CART_URL;
 
+  const [checkEmpty, setCheckEmpty] = useState(true);
+
   const [cart, setCarTemp] = useState([]);
 
   // LAY CART KHI CO TOKEN VA ACCOUNT NAME=============================
@@ -44,6 +46,9 @@ function Cart() {
     })
       .then((res) => {
         setCarTemp(res.data);
+        if (res.data === "Fail") {
+          setCheckEmpty(false);
+        }
         localStorage.setItem("quantity", res.data.cartDetailModelList.length);
       })
       .catch((err) => {
@@ -105,7 +110,13 @@ function Cart() {
   if (cart.length === 0) {
     return (
       <>
-        <p style={{ textAlign: "center" }}>Khong co san pham nao het</p>
+        <p style={{ textAlign: "center" }}>Ban chua dang nhap</p>
+      </>
+    );
+  } else if (checkEmpty === false) {
+    return (
+      <>
+        <p style={{textAlign : "center"}}>Gio hang rong</p>
       </>
     );
   } else {
@@ -115,9 +126,9 @@ function Cart() {
       }
     };
 
-    const handleCheckout = () =>{
-      navigate("/checkout", {state : { temp_list, cart}});
-    }
+    const handleCheckout = () => {
+      navigate("/checkout", { state: { temp_list, cart } });
+    };
 
     const totalPrice = (list) => {
       if (cart.length === 0) {
@@ -142,7 +153,10 @@ function Cart() {
                     <span>{list.totalPrice} VND</span>
                   </li>
                 </ul>
-                <button type="button" onClick={handleCheckout} className="btn btn-main btn-small"
+                <button
+                  type="button"
+                  onClick={handleCheckout}
+                  className="btn btn-main btn-small"
                 >
                   Process to checkout
                 </button>
@@ -242,7 +256,7 @@ function Cart() {
                             </td>
                             <td>
                               <p style={{ fontSize: "20px" }}>
-                                {/* <input
+                                <input
                                   style={{ fontSize: "20px" }}
                                   value={i.quantity}
                                   type="number"
@@ -252,8 +266,8 @@ function Cart() {
                                   max="10"
                                   title="Qty"
                                   size="2"
-                                /> */}
-                                {i.quantity}
+                                />
+                                {/* {i.quantity} */}
                               </p>
                             </td>
                             <td data-title="Total">
