@@ -59,7 +59,7 @@ function App() {
             element={<Product categories={categories} />}
           />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout  />} />
+          <Route path="/checkout" element={<Checkout provinces={provinces} />} />
           <Route
             path="/single-product/:package_id"
             element={<SingleProduct />}
