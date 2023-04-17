@@ -30,6 +30,7 @@ function Login() {
   const text = "text";
 
   const handleSubmit = () => {
+
     axios({
       url: `http://localhost:8080/api/account/login`,
       method: "POST",
@@ -42,6 +43,7 @@ function Login() {
         console.log("data" + response.data);
         if (response.data !== "") {
           localStorage.setItem("token", response.data.token);
+
           localStorage.setItem("username", response.data.username);
         }
       })
@@ -49,9 +51,9 @@ function Login() {
         alert("Sai thông tin đăng nhập!");
         console.log(err.response);
       });
+
     if (localStorage.getItem("token") !== "") {
       navigate(`/`);
-
       setTimeout(() => {
         window.location.reload();
       }, 1000);

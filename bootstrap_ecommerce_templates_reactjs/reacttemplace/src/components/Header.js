@@ -38,6 +38,13 @@ function Header({ categories }) {
                   >
                     My Favorites
                   </a>
+                  <a
+                    href="/profile"
+                    className="btn btn-small btn-transparent btn-block "
+                    style={{width:"250px",height:"40px"}}
+                  >
+                    Profile
+                  </a>
                   <a onClick={handleOut} className="btn btn-small btn-main btn-block" style={{width:"250px",height:"40px"}}>
                    Logout
                   </a>
