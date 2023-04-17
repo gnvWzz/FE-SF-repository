@@ -11,7 +11,7 @@ function Header({ categories }) {
    navigate(`/`);
    setTimeout(() => {
      window.location.reload();
-   }, 1000);
+   }, 100);
     
   }
 

@@ -30,7 +30,6 @@ function Login() {
   const text = "text";
 
   const handleSubmit = () => {
-
     axios({
       url: `http://localhost:8080/api/account/login`,
       method: "POST",
@@ -43,7 +42,6 @@ function Login() {
         console.log("data" + response.data);
         if (response.data !== "") {
           localStorage.setItem("token", response.data.token);
-
           localStorage.setItem("username", response.data.username);
         }
       })
@@ -51,14 +49,13 @@ function Login() {
         alert("Sai thông tin đăng nhập!");
         console.log(err.response);
       });
-
     if (localStorage.getItem("token") !== "") {
       navigate(`/`);
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     }
-  };
+  }
 
   const handleChange = (e) => {
     setForm({
@@ -90,9 +87,8 @@ function Login() {
                     <form method="post" onSubmit={handleSubmit}>
                       <div
                         class="form-group mb-4"
-                        className={`custom-input ${
-                          errors.username ? "custom-input-error" : ""
-                        }`}
+                        className={`custom-input ${errors.username ? "custom-input-error" : ""
+                          }`}
                       >
                         <label for="#">Enter username</label>
                         <Field
@@ -109,9 +105,8 @@ function Login() {
                       </div>
                       <div
                         class="form-group"
-                        className={`custom-input ${
-                          errors.password ? "custom-input-error" : ""
-                        }`}
+                        className={`custom-input ${errors.password ? "custom-input-error" : ""
+                          }`}
                       >
                         <label for="#">Enter Password</label>
                         <a className="float-right" href="">
