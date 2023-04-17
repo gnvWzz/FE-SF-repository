@@ -488,7 +488,7 @@ export default function Product({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.productSFDetailDtos[0].price1} đ
+                          {product.productSFDetailDtos[0].price} đ
                         </h4>
                       </span>
                     </div>

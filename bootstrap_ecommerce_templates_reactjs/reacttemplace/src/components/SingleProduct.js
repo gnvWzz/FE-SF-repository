@@ -164,8 +164,14 @@ function SingleProduct() {
   const handleGetProductDetailByColorAndSize = async (e) => {
     const c = e.currentTarget.getAttribute("value");
     const oldSize = localStorage.getItem("choosingSize");
-    await axios
-      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`)
+    await axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      url: `${url}/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`,
+      method: "GET"
+    }) 
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
@@ -182,8 +188,14 @@ function SingleProduct() {
   const handleChoosingSize = async (e) => {
     const s = e.target.value;
     const oldColor = localStorage.getItem("choosingColor");
-    await axios
-      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`)
+    await axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      url: `${url}/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`,
+      method: "GET"
+    })
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);

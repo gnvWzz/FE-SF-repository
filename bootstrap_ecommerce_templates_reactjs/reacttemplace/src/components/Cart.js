@@ -187,7 +187,7 @@ function Cart() {
                 <div className="product-list">
                   <form className="cart-form">
                     <table
-                      className="table shop_table shop_table_responsive cart"
+                      className="table table-primary shop_table shop_table_responsive cart"
                       cellspacing="0"
                     >
                       <thead>
