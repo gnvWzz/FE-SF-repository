@@ -229,24 +229,24 @@ function SingleProduct() {
           <div class="carousel slide" data-ride="carousel" id="single-product-slider">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+                <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
               </div>
               {
                 secondList.map((i) => (
                   <div class="carousel-item">
-                    <img src={i} alt="" class="img-fluid" />
+                    <img src={i.url} alt="" class="img-fluid" />
                   </div>
                 ))}
             </div>
 
             <ol class="carousel-indicators">
               <li data-target="#single-product-slider" data-slide-to="0" class="active">
-                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+                <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
               </li>
               {
                 secondList.map((i, index) => (
                   <li data-target="#single-product-slider" data-slide-to={index + 1}>
-                    <img src={i} alt="" class="img-fluid" />
+                    <img src={i.url} alt="" class="img-fluid" />
                   </li>
                 ))
               }

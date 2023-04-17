@@ -7,6 +7,8 @@ function Profile() {
   const loginName = localStorage.getItem("username");
   const [user, setUser] = useState({});
   const url = ACCOUNT_URL;
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios({
       headers: {
@@ -28,6 +30,34 @@ function Profile() {
       });
   }, []);
 
+  const handleChange = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCancel = () => {
+    navigate(`/`);
+  };
+  const handleSubmit = () => {
+    axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+      url: `${url}`,
+      method: "PUT",
+      data: user,
+    })
+      .then((res) => {
+        alert("Cập nhật thành công!");
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
   return (
     <div>
       <div class="container">
@@ -83,6 +113,7 @@ function Profile() {
                         class="form-control"
                         name="firstName"
                         value={user.firstName}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -94,6 +125,7 @@ function Profile() {
                         class="form-control"
                         name="lastName"
                         value={user.lastName}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -105,6 +137,7 @@ function Profile() {
                         class="form-control"
                         name="phone"
                         value={user.phone}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -114,6 +147,7 @@ function Profile() {
                     <h6 class="mt-3 mb-2 text-primary">Address</h6>
                   </div>
                   {/* <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+>>>>>>> 79b40d5c8138e86e46bd47099bffd1cd1e4cc013
 				<div class="form-group">
 					<label for="Street">Street</label>
 					<input type="name" class="form-control" id="Street" placeholder="Enter Street"/>
@@ -127,6 +161,7 @@ function Profile() {
                         class="form-control"
                         name="city"
                         value={user.city}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -138,6 +173,7 @@ function Profile() {
                         class="form-control"
                         name="district"
                         value={user.district}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -149,6 +185,7 @@ function Profile() {
                         class="form-control"
                         name="street"
                         value={user.street}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -159,18 +196,17 @@ function Profile() {
                       <button
                         style={{ height: "45px" }}
                         type="button"
-                        id="submit"
-                        name="submit"
                         class="btn btn-secondary"
+                        onClick={handleCancel}
                       >
                         Cancel
                       </button>
                       <button
                         style={{ height: "45px" }}
                         type="button"
-                        id="submit"
                         name="submit"
                         class="btn btn-primary"
+                        onClick={handleSubmit}
                       >
                         Update
                       </button>
