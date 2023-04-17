@@ -31,8 +31,8 @@ export default function Product({ categories }) {
       if (!isStop) {
         axios({
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem("token")}`,
-            'Access-Control-Allow-Origin': "*",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
           },
           url: `${url}/${name}?offset=${offset}`,
@@ -507,7 +507,7 @@ export default function Product({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.productSFDetailDtos[0].price} đ
+                          {product.productSFDetailDtos[0].price1} đ
                         </h4>
                       </span>
                     </div>

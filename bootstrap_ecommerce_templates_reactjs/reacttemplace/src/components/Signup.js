@@ -26,6 +26,8 @@ function SignUp({provinces}) {
     city:"",
     district:"",
     street:"",
+    firstName:"",
+    lastName:"",
     password:"",
     confirmPassword:""
   });
@@ -56,7 +58,13 @@ function SignUp({provinces}) {
     
     form.password &&
     
-    form.confirmPassword;
+    form.confirmPassword &&
+    form.city &&
+   
+    form.firstName &&
+    form.lastName &&
+    form.street &&
+    form.district;
   
   const isError =
     isFilled &&
@@ -193,6 +201,29 @@ function SignUp({provinces}) {
                 >
                     {({errors, touched}) =>(
                          <form  onSubmit={handleSubmit}>
+                           <div className="form-group mb-4">
+                          <label for="firstName">First Name</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="street"
+                            name="firstName"
+                            placeholder="Enter your First Name"
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="form-group mb-4">
+                          <label for="lastName">Last Name</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="street"
+                            name="lastName"
+                            placeholder="Enter your Last Name"
+                            onChange={handleChange}
+                          />
+                        </div>
+
                          <div
                            class="form-group mb-4"
                            className={`custom-input ${

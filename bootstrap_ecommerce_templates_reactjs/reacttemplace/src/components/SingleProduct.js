@@ -37,7 +37,7 @@ function SingleProduct() {
             "Content-Type": "application/json",
           },
           url: `${url}/package-id-product/${package_id}`,
-          method: "GET",
+          method: "GET"
         })
           .then((res) => {
             setProduct(res.data);

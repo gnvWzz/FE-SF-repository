@@ -1,18 +1,100 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CART_URL } from "./URLS/url";
 
-function Cart({ cart }) {
+function Cart() {
   const navigate = useNavigate();
 
   let isStop = false;
 
+  let isStop1 = false;
+
+  let { state } = useLocation();
+
   const cart_url = CART_URL;
 
-  const account_name = "longhoang123";
+  const [cart, setCarTemp] = useState([]);
 
-  const [cart_items_temp, setCartItemsTemp] = useState([]);
+  // LAY CART KHI CO TOKEN VA ACCOUNT NAME=============================
+  useEffect(() => {
+    if (
+      localStorage.getItem("token") !== null &&
+      localStorage.getItem("username") !== null
+    ) {
+      if (!isStop1) {
+        getCart();
+      }
+    }
+    return () => {
+      isStop1 = true;
+    };
+  }, []);
+  // ===========================================================
+
+  // LAY CART THONG QUA AXIOS KHI CO TOKEN VA ACCOUNT NAME========
+  const getCart = async () => {
+    await axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      url: `${cart_url}?account-name=${localStorage.getItem("username")}`,
+      method: "GET",
+    })
+      .then((res) => {
+        setCarTemp(res.data);
+        localStorage.setItem("quantity", res.data.cartDetailModelList.length);
+      })
+      .catch((err) => {
+        console.log("Khong co du lieu");
+      });
+  };
+  // ===============================================
+
+  const add_to_cart = async (temp) => {
+    await axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      url: `${cart_url}/add-to-cart`,
+      method: "POST",
+      data: temp,
+    })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+
+  useEffect(() => {
+    if (state !== null) {
+      let temp = {
+        accountName: localStorage.getItem("username"),
+        cartDetailDtos: [
+          {
+            price: state.price,
+            quantity: state.quantity,
+            serialNumber: state.serialNumber,
+          },
+        ],
+      };
+
+      if (!isStop) {
+        add_to_cart(temp);
+      }
+      window.history.replaceState({}, document.title);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+    return () => {
+      isStop = true;
+    };
+  }, []);
 
   const temp_list = [];
 
@@ -20,12 +102,22 @@ function Cart({ cart }) {
 
   const [cursorProductCard, setCursorProductCard] = useState("");
 
-  if (cart.length !== 0) {
+  if (cart.length === 0) {
+    return (
+      <>
+        <p style={{ textAlign: "center" }}>Khong co san pham nao het</p>
+      </>
+    );
+  } else {
     const map = (list) => {
       for (let i = 0; i < list.cartDetailModelList.length; i++) {
         temp_list.push(list.cartDetailModelList[i]);
       }
     };
+
+    const handleCheckout = () =>{
+      navigate("/checkout", {state : { temp_list, cart}});
+    }
 
     const totalPrice = (list) => {
       if (cart.length === 0) {
@@ -50,9 +142,10 @@ function Cart({ cart }) {
                     <span>{list.totalPrice} VND</span>
                   </li>
                 </ul>
-                <a href="#" className="btn btn-main btn-small">
-                  Proceed to checkout
-                </a>
+                <button type="button" onClick={handleCheckout} className="btn btn-main btn-small"
+                >
+                  Process to checkout
+                </button>
               </div>
             </div>
           </>
@@ -62,7 +155,7 @@ function Cart({ cart }) {
 
     const handleDelete = async (e) => {
       const json = {
-        accountName: localStorage.getItem("account_name"),
+        accountName: localStorage.getItem("username"),
         serialNumber: e.currentTarget.getAttribute("value"),
       };
       await axios({
@@ -149,7 +242,7 @@ function Cart({ cart }) {
                             </td>
                             <td>
                               <p style={{ fontSize: "20px" }}>
-                                <input
+                                {/* <input
                                   style={{ fontSize: "20px" }}
                                   value={i.quantity}
                                   type="number"
@@ -159,7 +252,8 @@ function Cart({ cart }) {
                                   max="10"
                                   title="Qty"
                                   size="2"
-                                />
+                                /> */}
+                                {i.quantity}
                               </p>
                             </td>
                             <td data-title="Total">
@@ -184,7 +278,6 @@ function Cart({ cart }) {
                             </td>
                           </tr>
                         ))}
-                       
                       </tbody>
                     </table>
                   </form>
@@ -195,12 +288,6 @@ function Cart({ cart }) {
           </div>
         </section>
       </div>
-    );
-  } else {
-    return (
-      <>
-        <p style={{ textAlign: "center" }}>Ban chua dang nhap</p>
-      </>
     );
   }
 }

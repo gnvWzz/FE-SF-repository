@@ -30,8 +30,6 @@ function Login() {
   const text = "text";
 
   const handleSubmit = () => {
-
-
     axios({
       url: `http://localhost:8080/api/account/login`,
       method: "POST",
@@ -44,11 +42,8 @@ function Login() {
         console.log("data" + response.data);
         if (response.data !== "") {
           localStorage.setItem("token", response.data.token);
-          localStorage.setItem("username", response.data.username)
-
+          localStorage.setItem("username", response.data.username);
         }
-
-
       })
       .catch(function (err) {
         alert("Sai thông tin đăng nhập!");
@@ -58,11 +53,9 @@ function Login() {
       navigate(`/`);
       setTimeout(() => {
         window.location.reload();
-      }, 100);
+      }, 1000);
     }
-
-  };
-
+  }
 
   const handleChange = (e) => {
     setForm({
@@ -70,8 +63,6 @@ function Login() {
       [e.target.name]: e.target.value,
     });
   };
-
-
 
   return (
     <div className="login-container">
@@ -83,7 +74,8 @@ function Login() {
                 <div className="text-center heading">
                   <h2 className="mb-2">Login</h2>
                   <p className="lead">
-                    Don’t have an account? <a href="/signup">Create a free account</a>
+                    Don’t have an account?{" "}
+                    <a href="/signup">Create a free account</a>
                   </p>
                 </div>
                 <Formik
