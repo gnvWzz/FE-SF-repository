@@ -20,13 +20,13 @@ import Profile from "./components/Profile";
 function App() {
   const [categories, setCategorise] = useState([]);
   const[provinces,setProvinces] = useState([]);
-  const [cart, setCarTemp] = useState([]);
+  
   const cart_url = CART_URL;
   let isStop = false;
   let isStop1 = false;
+  // LAY CATEGORIES BANG CACH LAY CACHE BEN BACK END==========
   useEffect(() => {
     // localStorage.removeItem("token");
-
     if (!isStop) {
       axios
         .get("http://localhost:8080/api/categories/find-all")
@@ -42,53 +42,24 @@ function App() {
       isStop = true;
     };
   }, []);
+  // ============================================================
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("token") !== null &&
-      localStorage.getItem("account_name") !== null
-    ) {
-      if (!isStop1) {
-        getCart();
-      }
-    }
-    return () => {
-      isStop1 = true;
-    };
-  }, []);
-
-  const getCart = async () => {
-    await axios({
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      url: `${cart_url}?account-name=${localStorage.getItem("account_name")}`,
-      method: "GET",
-    })
-      .then((res) => {
-        setCarTemp(res.data);
-        localStorage.setItem("quantity", res.data.cartDetailModelList.length);
-      })
-      .catch((err) => {
-        throw err;
-      });
-  };
+  
 
 
   return (
     <div className="App">
       {/* <Provider store={store}> */}
       <BrowserRouter>
-        <Header categories={categories} cart={cart}></Header>
+        <Header categories={categories}></Header>
         <Routes>
           <Route path="/shop/" element={<Shop categories={categories} />} />
           <Route
             path="/shop/:name"
             element={<Product categories={categories} />}
           />
-          <Route path="/cart" element={<Cart cart={cart} />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout  />} />
           <Route
             path="/single-product/:package_id"
             element={<SingleProduct />}
