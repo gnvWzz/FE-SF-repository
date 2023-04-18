@@ -121,7 +121,7 @@ function Cart() {
     const map = (list) => {};
 
     const handleCheckout = () => {
-      navigate("/checkout", { state: { temp_list, cart } });
+      navigate("/checkout", { state: { cart } });
     };
 
     const totalPrice = (list) => {
