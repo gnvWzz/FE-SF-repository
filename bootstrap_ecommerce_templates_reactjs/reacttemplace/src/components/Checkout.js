@@ -44,6 +44,8 @@ function Checkout({ provinces }) {
       .catch((err) => {
         throw err;
       });
+    const cartDetailModelListNew = state.cart.cartDetailModelList
+    setForm({...form, orderDetails : cartDetailModelListNew})
   }, []);
 
   const REGEX = {
@@ -65,7 +67,7 @@ function Checkout({ provinces }) {
   });
 
   if (localStorage.getItem("username") !== null) {
-    const cart_detail = state.temp_list;
+    const cart_detail = state.cart;
 
     const cart = state.cart;
 
@@ -77,11 +79,6 @@ function Checkout({ provinces }) {
     };
 
     const handleSubmitOrder = (e) => {
-      setForm({
-        ...form,
-        orderDetails: cart_detail,
-      });
-
       const isFilled =
         form.firstName &&
         form.lastName &&
@@ -97,12 +94,7 @@ function Checkout({ provinces }) {
     };
 
     const place_order = async (e) => {
-      setForm({
-        ...form,
-        orderDetails: cart_detail,
-      });
-
-      if (form.orderDetails.length === 0) {
+      if (state.cart.cartDetailModelList === 0) {
         <p>Loading</p>;
       } else {
         await axios({
@@ -356,7 +348,7 @@ function Checkout({ provinces }) {
                           </div>
                         </div>
 
-                        {cart_detail.map((cart, index) => (
+                        {cart.cartDetailModelList.map((cart, index) => (
                           <div className="media product-card">
                             <p>
                               {cart.name} {cart.serialNumber}
