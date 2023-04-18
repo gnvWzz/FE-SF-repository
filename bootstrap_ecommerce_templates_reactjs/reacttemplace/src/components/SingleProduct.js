@@ -8,7 +8,7 @@ function SingleProduct() {
   const [cursor, setCursor] = useState("");
   const { package_id } = useParams();
   const [product, setProduct] = useState({});
-  // const [productDetails, setProductDetails] = useState([]);
+  const [productDetails, setProductDetails] = useState([]);
   const [productDetail, setProductDetail] = useState({})
   const [productColors, setProductColors] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
@@ -16,11 +16,12 @@ function SingleProduct() {
   const [stock, setStock] = useState();
   const [serialNumber, setSerialNumber] = useState("");
   const [price, setPrice] = useState(0);
-  // const [choosingColor, setChoosingColor] = useState("");
-  // const [choosingSize, setChoosingSize] = useState("");
-  // const [imgList, setImgList] = useState([]);
+  const [priceList, setPriceList] = useState([])
+  const [choosingColor, setChoosingColor] = useState("");
+  const [choosingSize, setChoosingSize] = useState("");
+  const [imgList, setImgList] = useState([]);
   const [imgList2, setImgList2] = useState([]);
-  // const [imgListToColor, setImgListToColor] = useState({});
+  const [imgListToColor, setImgListToColor] = useState({});
   let isStop = false;
   const url = PRODUCT_URL;
   const navigate = useNavigate();
@@ -43,13 +44,16 @@ function SingleProduct() {
             setProduct(res.data);
             generateProductColors(res.data);
             generateProductSizes(res.data);
-            // setProductDetails(res.data.productSFDetailDtos);
+            setProductDetails(res.data.productSFDetailDtos);
             setProductDetail(res.data.productSFDetailDtos[0]);
             setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
+            setPrice(res.data.priceListDtos[0].price);
             setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
             setQuantity(1);
-            // setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
-            // setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
+            setPriceList(res.data.priceListDtos);
+            localStorage.setItem("productPricesList", JSON.stringify(res.data.priceListDtos));
+            setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
+            setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
             res.data.productSFDetailDtos.map((p) => {
               ((JSON.parse(p.size_color_img_quantity)).img).map((i) => {
                 const temp = {
@@ -57,14 +61,14 @@ function SingleProduct() {
                   img: ""
                 }
                 temp.color = (JSON.parse(p.size_color_img_quantity)).color;
-                temp.img = i.url
+                temp.img = i
                 let isExisted = tempList.some(item => item.img === temp.img);
                 if (!isExisted) {
                   tempList.push(temp);
                 }
               })
             })
-            // setImgList(tempList)
+            setImgList(tempList)
             tempList.map((ele) => {
               if (!tempColors.some(item => item === ele.color)) {
                 tempColors.push(ele.color);
@@ -102,18 +106,11 @@ function SingleProduct() {
   }, [package_id]);
 
   useEffect(() => {
-    if (localStorage.getItem("token") !== null) {
-      if ((quantity < 100 && quantity >= 0) || Number.isNaN(quantity)) {
-        setPrice(productDetail.price1);
-      } else if (quantity >= 100 && quantity < 500) {
-        setPrice(productDetail.price2);
-      } else if (quantity >= 500 && quantity < 1000) {
-        setPrice(productDetail.price3);
-      } else if (quantity >= 1000) {
-        setPrice(productDetail.price4);
+    const pricesList = JSON.parse(localStorage.getItem("productPricesList"));
+    for (let i = 0; i < pricesList.length; i++) {
+      if (quantity <= pricesList[i].toQuantity && quantity >= pricesList[i].fromQuantity) {
+        setPrice(pricesList[i].price);
       }
-    } else {
-      navigate("/")
     }
   }, [quantity])
 
@@ -163,15 +160,20 @@ function SingleProduct() {
   const handleGetProductDetailByColorAndSize = async (e) => {
     const c = e.currentTarget.getAttribute("value");
     const oldSize = localStorage.getItem("choosingSize");
-    await axios
-      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`)
+    await axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      url: `${url}/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`,
+      method: "GET"
+    })
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
-        setPrice(res.data.price1);
         setQuantity(1);
-        localStorage.setItem("choosingColor", c);
         setSerialNumber(res.data.serialNumber);
+        localStorage.setItem("choosingColor", c);
       })
       .catch((err) => {
         console.log(err);
@@ -181,15 +183,20 @@ function SingleProduct() {
   const handleChoosingSize = async (e) => {
     const s = e.target.value;
     const oldColor = localStorage.getItem("choosingColor");
-    await axios
-      .get(`http://localhost:8080/api/product/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`)
+    await axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      url: `${url}/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`,
+      method: "GET"
+    })
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
-        setPrice(res.data.price1);
-        localStorage.setItem("choosingSize", s)
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
+        localStorage.setItem("choosingSize", s)
       })
       .catch((err) => {
         console.log(err);
@@ -205,51 +212,60 @@ function SingleProduct() {
           return ele;
         }
       })
+      console.log("imgListToChoseColor: " + JSON.stringify(imgListToChoseColor));
       const firstList = imgListToChoseColor;
       const secondList = [];
       for (var i = 1; i < imgListToChoseColor[0].img.length; i++) {
         secondList.push(imgListToChoseColor[0].img[i]);
       }
 
-      return (
-        <div class="single-product-slider">
-          <div class="carousel slide" data-ride="carousel" id="single-product-slider">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
+      if (imgListToChoseColor[0].img.length > 1) {
+        return (
+          <div class="single-product-slider">
+            <div class="carousel slide" data-ride="carousel" id="single-product-slider">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
+                </div>
+                {
+                  secondList.map((i) => (
+                    <div class="carousel-item">
+                      <img src={i.url} alt="" class="img-fluid" />
+                    </div>
+                  ))}
               </div>
-              {
-                secondList.map((i) => (
-                  <div class="carousel-item">
-                    <img src={i} alt="" class="img-fluid" />
-                  </div>
-                ))}
+
+              <ol class="carousel-indicators">
+                <li data-target="#single-product-slider" data-slide-to="0" class="active">
+                  <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
+                </li>
+                {
+                  secondList.map((i, index) => (
+                    <li data-target="#single-product-slider" data-slide-to={index + 1}>
+                      <img src={i.url} alt="" class="img-fluid" />
+                    </li>
+                  ))
+                }
+              </ol>
+
+              <a class="carousel-control-prev" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
             </div>
-
-            <ol class="carousel-indicators">
-              <li data-target="#single-product-slider" data-slide-to="0" class="active">
-                <img src={firstList[0].img[0]} alt="" class="img-fluid" />
-              </li>
-              {
-                secondList.map((i, index) => (
-                  <li data-target="#single-product-slider" data-slide-to={index + 1}>
-                    <img src={i} alt="" class="img-fluid" />
-                  </li>
-                ))
-              }
-            </ol>
-
-            <a class="carousel-control-prev" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
           </div>
-        </div>
-      )
+        )
+      } else {
+        return (
+          <div className="product-preview-image">
+            <img style={{ height: "667px", width: "445px" }} src={firstList[0].img[0].url} alt="" />
+          </div>
+        )
+      }
     }
   }
 
@@ -267,6 +283,23 @@ function SingleProduct() {
 
   function handleAddToCart() {
     navigate("/cart", { state: { serialNumber, price, quantity } })
+  }
+
+  function showPrice() {
+    const prices = JSON.parse(localStorage.getItem("productPricesList"));
+    if (price === prices[0].price) {
+      return (
+        <h3 class="product-price">
+          {price} đ
+        </h3>
+      )
+    } else {
+      return (
+        <h3 class="product-price">
+          <del>{prices[0].price} đ</del> {price} đ
+        </h3>
+      )
+    }
   }
 
   return (
@@ -287,16 +320,7 @@ function SingleProduct() {
 
                 <hr />
 
-                {price !== productDetail.price1
-                  ?
-                  <h3 class="product-price">
-                    <del>{productDetail.price1} đ</del> {price} đ
-                  </h3>
-                  :
-                  <h3 class="product-price">
-                    {price} đ
-                  </h3>
-                }
+                {showPrice()}
 
                 <p class="product-description my-4 ">
                   {productDetail.briefDescription}
