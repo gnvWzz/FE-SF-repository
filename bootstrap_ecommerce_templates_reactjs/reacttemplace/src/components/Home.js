@@ -173,7 +173,7 @@ function Home(props) {
                           JSON.parse(
                             product.productSFDetailDtos[0]
                               .size_color_img_quantity
-                          ).img[0]
+                          ).img[0].url
                         }
                         alt="product-img"
                       />
