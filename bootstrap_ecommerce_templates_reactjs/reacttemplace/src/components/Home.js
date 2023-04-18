@@ -199,7 +199,7 @@ function Home(props) {
                       </div>
                     </h2>
                     <span className="price">
-                      {product.productSFDetailDtos[0].price1} VND
+                      {product.productSFDetailDtos[0].price} VND
                     </span>
                   </div>
                 </div>

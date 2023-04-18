@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PRODUCT_URL } from "./URLS/url";
 
-function SingleProduct() {
+export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
   const [cursor, setCursor] = useState("");
   const { package_id } = useParams();
@@ -167,7 +167,7 @@ function SingleProduct() {
       },
       url: `${url}/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`,
       method: "GET"
-    })
+    }) 
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
@@ -256,7 +256,7 @@ function SingleProduct() {
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
               </a>
-            </div>
+            </div>  
           </div>
         )
       } else {
@@ -869,4 +869,3 @@ function SingleProduct() {
     </div>
   );
 }
-export default SingleProduct;

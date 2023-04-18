@@ -79,6 +79,38 @@ function Header({ categories }) {
         </li>
     )
   }
+  const handleAccount = () =>{
+    return(
+      <li className="nav-item dropdown dropdown-slide">
+      <a
+        className="nav-link dropdown-toggle"
+        href="#"
+        id="navbarDropdown5"
+        role="button"
+        data-delay="350"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Account
+      </a>
+      <ul className="dropdown-menu" aria-labelledby="navbarDropdown5">
+        <li>
+          <Link to={{ pathname: "/login" }}>Login Page</Link>
+        </li>
+        <li>
+          <Link to={{ pathname: "/signup" }}>SignUp Page</Link>
+        </li>
+        <li>
+          <Link to={{ pathname: "/forgot-password" }}>
+            Forgot Password
+          </Link>
+        </li>
+      </ul>
+    </li>
+    )
+  }
+
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light bg-white w-100 navigation"
@@ -163,9 +195,6 @@ function Header({ categories }) {
                   <Link to={{ pathname: "/shop" }}>Shop</Link>
                 </li>
                 <li>
-                  <Link to={{ pathname: "/checkout" }}>Checkout</Link>
-                </li>
-                <li>
                   <Link to={{ pathname: "/cart" }}>Cart</Link>
                 </li>
               </ul>
@@ -196,33 +225,12 @@ function Header({ categories }) {
                 ))}
               </ul>
             </li>
-            <li className="nav-item dropdown dropdown-slide">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown5"
-                role="button"
-                data-delay="350"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Account
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdown5">
-                <li>
-                  <Link to={{ pathname: "/login" }}>Login Page</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/signup" }}>SignUp Page</Link>
-                </li>
-                <li>
-                  <Link to={{ pathname: "/forgot-password" }}>
-                    Forgot Password
-                  </Link>
-                </li>
-              </ul>
-            </li>
+              {!localStorage.getItem("token")?
+              handleAccount()
+              :
+              undefined
+            }
+        
           </ul>
         </div>
         <ul

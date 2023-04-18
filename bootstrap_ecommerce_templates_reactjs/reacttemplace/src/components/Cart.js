@@ -14,7 +14,9 @@ function Cart() {
 
   const cart_url = CART_URL;
 
-  const [cart, setCarTemp] = useState([]);
+  const [checkEmpty, setCheckEmpty] = useState(true);
+
+  const [cart, setCarT] = useState([]);
 
   // LAY CART KHI CO TOKEN VA ACCOUNT NAME=============================
   useEffect(() => {
@@ -43,7 +45,10 @@ function Cart() {
       method: "GET",
     })
       .then((res) => {
-        setCarTemp(res.data);
+        setCarT(res.data);
+        if (res.data === "Fail") {
+          setCheckEmpty(false);
+        }
         localStorage.setItem("quantity", res.data.cartDetailModelList.length);
       })
       .catch((err) => {
@@ -62,9 +67,7 @@ function Cart() {
       method: "POST",
       data: temp,
     })
-      .then((res) => {
-        console.log(res.data);
-      })
+      .then((res) => {})
       .catch((err) => {
         throw err;
       });
@@ -96,7 +99,7 @@ function Cart() {
     };
   }, []);
 
-  const temp_list = [];
+  const [temp_list, setTempList] = useState([]);
 
   let Isdelete = false;
 
@@ -105,19 +108,21 @@ function Cart() {
   if (cart.length === 0) {
     return (
       <>
-        <p style={{ textAlign: "center" }}>Khong co san pham nao het</p>
+        <p style={{ textAlign: "center" }}>Ban chua dang nhap</p>
+      </>
+    );
+  } else if (checkEmpty === false) {
+    return (
+      <>
+        <p style={{ textAlign: "center" }}>Gio hang rong</p>
       </>
     );
   } else {
-    const map = (list) => {
-      for (let i = 0; i < list.cartDetailModelList.length; i++) {
-        temp_list.push(list.cartDetailModelList[i]);
-      }
-    };
+    const map = (list) => {};
 
-    const handleCheckout = () =>{
-      navigate("/checkout", {state : { temp_list, cart}});
-    }
+    const handleCheckout = () => {
+      navigate("/checkout", { state: { cart } });
+    };
 
     const totalPrice = (list) => {
       if (cart.length === 0) {
@@ -142,7 +147,10 @@ function Cart() {
                     <span>{list.totalPrice} VND</span>
                   </li>
                 </ul>
-                <button type="button" onClick={handleCheckout} className="btn btn-main btn-small"
+                <button
+                  type="button"
+                  onClick={handleCheckout}
+                  className="btn btn-main btn-small"
                 >
                   Process to checkout
                 </button>
@@ -174,9 +182,27 @@ function Cart() {
       setCursorProductCard("pointer");
     };
 
-    const handleUpdate = () => {};
+    const handleUpdate = (e) => {
+      let totalNew = 0;
+      cart.cartDetailModelList.map((c, index) => {
+        totalNew = totalNew + c.subTotal;
+        return totalNew;
+      });
+      setCarT({ ...cart, totalPrice: totalNew });
+    };
 
-    const handleChangeQuantity = () => {};
+    const handleChangeQuantity = (value, index) => {
+      const cartDetailModelListNew = cart.cartDetailModelList.map(
+        (c, indexC) => {
+          if (indexC === index) {
+            c.quantity = value;
+            c.subTotal = c.quantity * c.price;
+          }
+          return c;
+        }
+      );
+      setCarT({ ...cart, cartDetailModelList: cartDetailModelListNew });
+    };
 
     return (
       <div className="checkout-container">
@@ -205,8 +231,8 @@ function Cart() {
 
                       <tbody>
                         {map(cart)}
-                        {temp_list.map((i, index) => (
-                          <tr className="cart_item">
+                        {cart.cartDetailModelList.map((i, index) => (
+                          <tr className="cart_item" key={index}>
                             <td>
                               <a href="/product-single">
                                 <img
@@ -242,18 +268,19 @@ function Cart() {
                             </td>
                             <td>
                               <p style={{ fontSize: "20px" }}>
-                                {/* <input
-                                  style={{ fontSize: "20px" }}
-                                  value={i.quantity}
+                                <input
                                   type="number"
-                                  id="qty"
-                                  step="1"
-                                  min="0"
-                                  max="10"
-                                  title="Qty"
-                                  size="2"
-                                /> */}
-                                {i.quantity}
+                                  onKeyDown={(evt) =>
+                                    evt.key === "e" && evt.preventDefault()
+                                  }
+                                  name={index}
+                                  style={{ width: 120, textAlign: "center" }}
+                                  value={i.quantity}
+                                  a-key={index}
+                                  onChange={(e) =>
+                                    handleChangeQuantity(e.target.value, index)
+                                  }
+                                ></input>
                               </p>
                             </td>
                             <td data-title="Total">
@@ -282,6 +309,13 @@ function Cart() {
                     </table>
                   </form>
                 </div>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleUpdate}
+                >
+                  Update Cart
+                </button>
               </div>
               {totalPrice(cart)}
             </div>
