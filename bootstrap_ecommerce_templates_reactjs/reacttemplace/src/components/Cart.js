@@ -41,10 +41,12 @@ function Cart() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
+      'Access-Control-Allow-Origin': "*",
       url: `${cart_url}?account-name=${localStorage.getItem("username")}`,
       method: "GET",
     })
       .then((res) => {
+        console.log(res.data);
         setCarTemp(res.data);
         if (res.data === "Fail") {
           setCheckEmpty(false);
