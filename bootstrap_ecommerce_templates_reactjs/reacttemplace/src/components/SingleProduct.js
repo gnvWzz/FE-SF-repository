@@ -8,7 +8,7 @@ function SingleProduct() {
   const [cursor, setCursor] = useState("");
   const { package_id } = useParams();
   const [product, setProduct] = useState({});
-  const [productDetails, setProductDetails] = useState([]);
+  // const [productDetails, setProductDetails] = useState([]);
   const [productDetail, setProductDetail] = useState({})
   const [productColors, setProductColors] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
@@ -16,11 +16,11 @@ function SingleProduct() {
   const [stock, setStock] = useState();
   const [serialNumber, setSerialNumber] = useState("");
   const [price, setPrice] = useState(0);
-  const [choosingColor, setChoosingColor] = useState("");
-  const [choosingSize, setChoosingSize] = useState("");
-  const [imgList, setImgList] = useState([]);
+  // const [choosingColor, setChoosingColor] = useState("");
+  // const [choosingSize, setChoosingSize] = useState("");
+  // const [imgList, setImgList] = useState([]);
   const [imgList2, setImgList2] = useState([]);
-  const [imgListToColor, setImgListToColor] = useState({});
+  // const [imgListToColor, setImgListToColor] = useState({});
   let isStop = false;
   const url = PRODUCT_URL;
   const navigate = useNavigate();
@@ -43,14 +43,13 @@ function SingleProduct() {
             setProduct(res.data);
             generateProductColors(res.data);
             generateProductSizes(res.data);
-            setProductDetails(res.data.productSFDetailDtos);
+            // setProductDetails(res.data.productSFDetailDtos);
             setProductDetail(res.data.productSFDetailDtos[0]);
             setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
-            setPrice(res.data.productSFDetailDtos[0].price1);
             setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
             setQuantity(1);
-            setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
-            setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
+            // setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
+            // setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
             res.data.productSFDetailDtos.map((p) => {
               ((JSON.parse(p.size_color_img_quantity)).img).map((i) => {
                 const temp = {
@@ -58,14 +57,14 @@ function SingleProduct() {
                   img: ""
                 }
                 temp.color = (JSON.parse(p.size_color_img_quantity)).color;
-                temp.img = i
+                temp.img = i.url
                 let isExisted = tempList.some(item => item.img === temp.img);
                 if (!isExisted) {
                   tempList.push(temp);
                 }
               })
             })
-            setImgList(tempList)
+            // setImgList(tempList)
             tempList.map((ele) => {
               if (!tempColors.some(item => item === ele.color)) {
                 tempColors.push(ele.color);
