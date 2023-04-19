@@ -52,6 +52,7 @@ export default function SingleProduct() {
             setQuantity(1);
             setPriceList(res.data.priceListDtos);
             localStorage.setItem("productPricesList", JSON.stringify(res.data.priceListDtos));
+            localStorage.setItem("stock", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity)
             setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
             setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
             res.data.productSFDetailDtos.map((p) => {
@@ -146,7 +147,6 @@ export default function SingleProduct() {
     if (parseInt(quantity) >= stock) {
       setQuantity(stock);
     }
-    console.log(imgList2)
   }
 
   function handleCursorOver() {
@@ -167,13 +167,14 @@ export default function SingleProduct() {
       },
       url: `${url}/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`,
       method: "GET"
-    }) 
+    })
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
         localStorage.setItem("choosingColor", c);
+        localStorage.setItem("stock", JSON.parse(res.data.size_color_img_quantity).quantity)
       })
       .catch((err) => {
         console.log(err);
@@ -196,7 +197,8 @@ export default function SingleProduct() {
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
-        localStorage.setItem("choosingSize", s)
+        localStorage.setItem("choosingSize", s);
+        localStorage.setItem("stock", JSON.parse(res.data.size_color_img_quantity).quantity)
       })
       .catch((err) => {
         console.log(err);
@@ -212,7 +214,6 @@ export default function SingleProduct() {
           return ele;
         }
       })
-      console.log("imgListToChoseColor: " + JSON.stringify(imgListToChoseColor));
       const firstList = imgListToChoseColor;
       const secondList = [];
       for (var i = 1; i < imgListToChoseColor[0].img.length; i++) {
@@ -256,7 +257,7 @@ export default function SingleProduct() {
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
               </a>
-            </div>  
+            </div>
           </div>
         )
       } else {
@@ -270,11 +271,9 @@ export default function SingleProduct() {
   }
 
   const handleChangeQuantity = (event) => {
-    if (event.target.value > stock) {
+    if (parseInt(event.target.value) > stock) {
       setQuantity(stock);
-      setPrice(productDetail.price4)
     } else if (event.target.value <= stock && event.target.value >= 0) {
-      console.log(event.target.value);
       setQuantity(parseInt(event.target.value));
     } else if (event.target.value < 0) {
       setQuantity(1);
@@ -286,20 +285,93 @@ export default function SingleProduct() {
   }
 
   function showPrice() {
-    const prices = JSON.parse(localStorage.getItem("productPricesList"));
-    if (price === prices[0].price) {
+    return (
+      <h3 class="product-price">
+        {price} đ
+      </h3>
+    )
+  }
+
+  function showPriceTable() {
+    const productPrices = JSON.parse(localStorage.getItem("productPricesList"));
+    if (productPrices.length !== 1) {
       return (
-        <h3 class="product-price">
-          {price} đ
-        </h3>
+        <div className="mt-5" style={{
+
+        }}>
+          <table id="product-price-table-information">
+            <tr className="product-price-table-tr">
+              <th className="product-price-table-th" colSpan={3}>
+                PRICE CORRESPONDING TO QUANTITY RANGE
+              </th>
+            </tr>
+            <tr className="product-price-table-tr">
+              <th className="product-price-table-th">
+                Quantity from
+              </th>
+              <th className="product-price-table-th">
+                Quantity to
+              </th>
+              <th className="product-price-table-th">
+                Price
+              </th>
+            </tr>
+            {productPrices.map((ele) => (
+              <tr className="product-price-table-tr">
+                <td className="product-price-table-td">
+                  {ele.fromQuantity}
+                </td>
+                {
+                  ele.toQuantity !== Number.MAX_SAFE_INTEGER ?
+                    <td className="product-price-table-td">
+                      {ele.toQuantity}
+                    </td>
+                    :
+                    <td className="product-price-table-td">
+                      &infin;
+                    </td>
+                }
+                <td className="product-price-table-td">
+                  {ele.price}
+                </td>
+              </tr>
+            ))}
+          </table>
+        </div>
       )
     } else {
       return (
-        <h3 class="product-price">
-          <del>{prices[0].price} đ</del> {price} đ
-        </h3>
+        undefined
       )
     }
+  }
+
+  const handleChoosingQuantity = (e) => {
+    const productStock = localStorage.getItem("stock");
+    return (
+      <div>
+        <button
+          style={{ color: "black", cursor: cursor }}
+          className="btn btn-light mr-3"
+          onClick={
+            quantity > 1 ? handleDecreaseQuantity : undefined
+          }
+          onMouseOver={handleCursorOver}
+        >
+          {" "}
+          -{" "}
+        </button>
+        <input type="number" onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} style={{ width: 120, textAlign: "center" }} value={quantity} onChange={handleChangeQuantity}></input>
+        <button
+          style={{ color: "black" }}
+          className="btn btn-light ml-3"
+          onClick={handleIncreaseQuantity}
+        >
+          {" "}
+          +{" "}
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -319,15 +391,19 @@ export default function SingleProduct() {
                 </div>
 
                 <hr />
+                <div>
+                  {showPrice()}
+                </div>
+                <div>
+                  {showPriceTable()}
+                </div>
 
-                {showPrice()}
-
-                <p class="product-description my-4 ">
+                <p class="product-description my-4 mt-5 ">
                   {productDetail.briefDescription}
                 </p>
                 <div class="quantity d-flex align-items-center">
                   <div className="mr-3">
-                    <button
+                    {/* <button
                       style={{ color: "black", cursor: cursor }}
                       className="btn btn-light mr-3"
                       onClick={
@@ -346,7 +422,8 @@ export default function SingleProduct() {
                     >
                       {" "}
                       +{" "}
-                    </button>
+                    </button> */}
+                    {handleChoosingQuantity()}
                   </div>
                   <button
                     class="btn btn-main rounded-pill btn-small"
@@ -474,15 +551,13 @@ export default function SingleProduct() {
                   role="tabpanel"
                   aria-labelledby="nav-profile-tab"
                 >
-                  <table>
+                  <table id="information-table">
                     {product.manufacturer ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
                           <strong>Manufacturer</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{product.manufacturer}</td>
-                        </td>
+                        <td id="information-value">{product.manufacturer}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.weight && productDetail.weight < 1 ? (
@@ -490,9 +565,7 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>Weight</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.weight * 1000} g</td>
-                        </td>
+                        <td id="information-value">{productDetail.weight * 1000} g</td>
                       </tr>
                     ) : undefined}
                     {productDetail.weight && productDetail.weight >= 1 ? (
@@ -500,9 +573,7 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>Weight</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.weight} kg</td>
-                        </td>
+                        <td id="information-value">{productDetail.weight} kg</td>
                       </tr>
                     ) : undefined}
                     { }
@@ -511,9 +582,7 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>Material</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.material}</td>
-                        </td>
+                        <td id="information-value">{productDetail.material}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.cpu ? (
@@ -521,9 +590,7 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>CPU</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.cpu}</td>
-                        </td>
+                        <td id="information-value">{productDetail.cpu}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.gpu ? (
@@ -539,9 +606,7 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>RAM</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.ram}</td>
-                        </td>
+                        <td id="information-value">{productDetail.ram}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.storageDrive ? (
@@ -549,9 +614,7 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>Storage Drive</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.storageDrive}</td>
-                        </td>
+                        <td id="information-value">{productDetail.storageDrive}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.display ? (
@@ -559,9 +622,7 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>Display</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.display}</td>
-                        </td>
+                        <td id="information-value">{productDetail.display}</td>
                       </tr>
                     ) : undefined}
                   </table>
