@@ -258,6 +258,10 @@ export default function SingleProduct() {
           </div>
         )
       }
+    } else {
+      return (
+        undefined
+      )
     }
   }
 
@@ -276,11 +280,17 @@ export default function SingleProduct() {
   }
 
   function showPrice() {
-    return (
-      <h3 class="product-price">
-        {price} đ
-      </h3>
-    )
+    if (price) {
+      return (
+        <h3 class="product-price">
+          {price} đ
+        </h3>
+      )
+    } else {
+      return (
+        undefined
+      )
+    }
   }
 
   function showPriceTable() {
@@ -333,6 +343,22 @@ export default function SingleProduct() {
           undefined
         )
       }
+    } else {
+      return (
+        undefined
+      )
+    }
+  }
+
+  function showStock() {
+    if (stock) {
+      return (
+        <h2>{stock} left in stock</h2>
+      )
+    } else {
+      return (
+        undefined
+      )
     }
   }
 
@@ -363,6 +389,142 @@ export default function SingleProduct() {
     )
   }
 
+  function showColorsOptions() {
+    return (
+      productColors.map((color) => (
+        <li class="list-inline-item">
+          <button
+            id="product-color-option"
+            className="rounded-pill"
+            style={{ backgroundColor: color }}
+            value={color}
+            onClick={handleGetProductDetailByColorAndSize}
+          ></button>
+        </li>
+      ))
+    )
+  }
+
+  function showSizesOptions() {
+    return (
+      productSizes.map((size) => (
+        <option value={size}>{size}</option>
+      ))
+    )
+  }
+
+  function handleSizesSelecting() {
+    return (
+      productSizes.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
+        ? (
+          <div class="product-size d-flex align-items-center mt-4">
+            <span class="font-weight-bold text-capitalize product-meta-title">
+              Size:
+            </span>
+            <select onChange={handleChoosingSize} class="form-control">
+              {showSizesOptions()}
+            </select>
+          </div>
+        ) : undefined
+    )
+  }
+
+  function handleColorsSelecting() {
+    return (
+      productColors.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
+        ? (
+          <div class="color-swatches mt-4 d-flex align-items-center">
+            <span class="font-weight-bold text-capitalize product-meta-title">
+              Color:
+            </span>
+            <ul class="list-inline mb-0">
+              {showColorsOptions()}
+            </ul>
+          </div>
+        ) : undefined
+    )
+  }
+
+  function showProductInformationTable() {
+    return (
+      <table id="information-table">
+        {product.manufacturer ? (
+          <tr class="list-unstyled info-desc">
+            <th className="d-flex">
+              <strong>Manufacturer</strong>
+            </th>
+            <td id="information-value">{product.manufacturer}</td>
+          </tr>
+        ) : undefined}
+        {productDetail.weight && productDetail.weight < 1 ? (
+          <tr class="list-unstyled info-desc">
+            <th className="d-flex">
+              <strong>Weight</strong>
+            </th>
+            <td id="information-value">{productDetail.weight * 1000} g</td>
+          </tr>
+        ) : undefined}
+        {productDetail.weight && productDetail.weight >= 1 ? (
+          <tr class="list-unstyled info-desc">
+            <th className="d-flex">
+              <strong>Weight</strong>
+            </th>
+            <td id="information-value">{productDetail.weight} kg</td>
+          </tr>
+        ) : undefined}
+        { }
+        {productDetail.material ? (
+          <tr class="list-unstyled info-desc">
+            <th className="d-flex">
+              <strong>Material</strong>
+            </th>
+            <td id="information-value">{productDetail.material}</td>
+          </tr>
+        ) : undefined}
+        {productDetail.cpu ? (
+          <tr class="list-unstyled info-desc">
+            <th className="d-flex">
+              <strong>CPU</strong>
+            </th>
+            <td id="information-value">{productDetail.cpu}</td>
+          </tr>
+        ) : undefined}
+        {productDetail.gpu ? (
+          <tr class="list-unstyled info-desc">
+            <th className="d-flex">
+              <strong>GPU</strong>
+            </th>
+            <td id="information-value">{productDetail.gpu}</td>
+          </tr>
+        ) : undefined}
+        {productDetail.ram ? (
+          <tr class="list-unstyled info-desc">
+            <th className="d-flex">
+              <strong>RAM</strong>
+            </th>
+            <td id="information-value">{productDetail.ram}</td>
+          </tr>
+        ) : undefined}
+        {productDetail.storageDrive ? (
+          <tr class="list-unstyled info-desc">
+            <th className="d-flex">
+              <strong>Storage Drive</strong>
+            </th>
+            <td id="information-value">{productDetail.storageDrive}</td>
+          </tr>
+        ) : undefined}
+        {productDetail.display ? (
+          <tr class="list-unstyled info-desc">
+            <th className="d-flex">
+              <strong>Display</strong>
+            </th>
+            <td id="information-value">{productDetail.display}</td>
+          </tr>
+        ) : undefined}
+      </table>
+    )
+  }
+
   if (!product) {
     return (
       <div className="loader-container">
@@ -388,14 +550,10 @@ export default function SingleProduct() {
 
                   <hr />
                   <div>
-                    {
-                      showPrice()
-                    }
+                    {showPrice()}
                   </div>
                   <div>
-                    {
-                      showPriceTable()
-                    }
+                    {showPriceTable()}
                   </div>
 
                   <p class="product-description my-4 mt-5 ">
@@ -415,43 +573,11 @@ export default function SingleProduct() {
                   </div>
 
                   {/* Phần chọn color sản phẩm */}
-                  {productColors.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
-                    ? (
-                      <div class="color-swatches mt-4 d-flex align-items-center">
-                        <span class="font-weight-bold text-capitalize product-meta-title">
-                          Color:
-                        </span>
-                        <ul class="list-inline mb-0">
-                          {productColors.map((color) => (
-                            <li class="list-inline-item">
-                              <button
-                                id="product-color-option"
-                                className="rounded-pill"
-                                style={{ backgroundColor: color }}
-                                value={color}
-                                onClick={handleGetProductDetailByColorAndSize}
-                              ></button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : undefined}
+                  {handleColorsSelecting()}
                   {/* Hết phần chọn color sản phẩm */}
 
                   {/* Phần chọn size sản phẩm */}
-                  {productSizes.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
-                    ? (
-                      <div class="product-size d-flex align-items-center mt-4">
-                        <span class="font-weight-bold text-capitalize product-meta-title">
-                          Size:
-                        </span>
-                        <select onChange={handleChoosingSize} class="form-control">
-                          {productSizes.map((size) => (
-                            <option value={size}>{size}</option>
-                          ))}
-                        </select>
-                      </div>
-                    ) : undefined}
+                  {handleSizesSelecting()}
                   {/* Hết phần chọn size sản phẩm */}
 
                   <div class="products-meta mt-4">
@@ -465,7 +591,7 @@ export default function SingleProduct() {
 
                   <div class="products-meta mt-4">
                     <div class="product-category d-flex align-items-center">
-                      <h2>{stock} left in stock</h2>
+                      {showStock()}
                     </div>
                   </div>
                 </div>
@@ -507,7 +633,7 @@ export default function SingleProduct() {
                       aria-controls="nav-contact"
                       aria-selected="false"
                     >
-                      Reviews(2)
+                      Reviews
                     </a>
                   </div>
                 </nav>
@@ -531,81 +657,7 @@ export default function SingleProduct() {
                     role="tabpanel"
                     aria-labelledby="nav-profile-tab"
                   >
-                    <table id="information-table">
-                      {product.manufacturer ? (
-                        <tr class="list-unstyled info-desc">
-                          <th className="d-flex">
-                            <strong>Manufacturer</strong>
-                          </th>
-                          <td id="information-value">{product.manufacturer}</td>
-                        </tr>
-                      ) : undefined}
-                      {productDetail.weight && productDetail.weight < 1 ? (
-                        <tr class="list-unstyled info-desc">
-                          <th className="d-flex">
-                            <strong>Weight</strong>
-                          </th>
-                          <td id="information-value">{productDetail.weight * 1000} g</td>
-                        </tr>
-                      ) : undefined}
-                      {productDetail.weight && productDetail.weight >= 1 ? (
-                        <tr class="list-unstyled info-desc">
-                          <th className="d-flex">
-                            <strong>Weight</strong>
-                          </th>
-                          <td id="information-value">{productDetail.weight} kg</td>
-                        </tr>
-                      ) : undefined}
-                      { }
-                      {productDetail.material ? (
-                        <tr class="list-unstyled info-desc">
-                          <th className="d-flex">
-                            <strong>Material</strong>
-                          </th>
-                          <td id="information-value">{productDetail.material}</td>
-                        </tr>
-                      ) : undefined}
-                      {productDetail.cpu ? (
-                        <tr class="list-unstyled info-desc">
-                          <th className="d-flex">
-                            <strong>CPU</strong>
-                          </th>
-                          <td id="information-value">{productDetail.cpu}</td>
-                        </tr>
-                      ) : undefined}
-                      {productDetail.gpu ? (
-                        <tr class="list-unstyled info-desc">
-                          <th className="d-flex">
-                            <strong>GPU</strong>
-                          </th>
-                          <td id="information-value">{productDetail.gpu}</td>
-                        </tr>
-                      ) : undefined}
-                      {productDetail.ram ? (
-                        <tr class="list-unstyled info-desc">
-                          <th className="d-flex">
-                            <strong>RAM</strong>
-                          </th>
-                          <td id="information-value">{productDetail.ram}</td>
-                        </tr>
-                      ) : undefined}
-                      {productDetail.storageDrive ? (
-                        <tr class="list-unstyled info-desc">
-                          <th className="d-flex">
-                            <strong>Storage Drive</strong>
-                          </th>
-                          <td id="information-value">{productDetail.storageDrive}</td>
-                        </tr>
-                      ) : undefined}
-                      {productDetail.display ? (
-                        <tr class="list-unstyled info-desc">
-                          <th className="d-flex">
-                            <strong>Display</strong>
-                          </th>
-                          <td id="information-value">{productDetail.display}</td>
-                        </tr>
-                      ) : undefined}
-                    </table>
+                    {showProductInformationTable()}
                   </div>
                   <div
                     class="tab-pane fade"
