@@ -16,14 +16,6 @@ function Checkout({ provinces }) {
   const user_url = ACCOUNT_URL;
 
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    city: "",
-    street: "",
-    district: "",
-    phone: "",
-    email: "",
-    orderDetails: [],
   });
 
   useEffect(() => {
@@ -44,8 +36,10 @@ function Checkout({ provinces }) {
       .catch((err) => {
         throw err;
       });
-    const cartDetailModelListNew = state.cart.cartDetailModelList
-    setForm({...form, orderDetails : cartDetailModelListNew})
+    // console.log(state.cart.cartDetailModelList);
+   
+    // console.log(form);
+    // setForm({...form, orderDetails : state.cart.cartDetailModelList})
   }, []);
 
   const REGEX = {
@@ -87,7 +81,9 @@ function Checkout({ provinces }) {
         form.phone &&
         form.email;
       if (isFilled) {
+        // console.log(form);
         place_order(form);
+    
       } else {
         alert("Please fill out the fields");
       }
@@ -97,6 +93,7 @@ function Checkout({ provinces }) {
       if (state.cart.cartDetailModelList === 0) {
         <p>Loading</p>;
       } else {
+        form.orderDetails = state.cart.cartDetailModelList;
         await axios({
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -222,7 +219,10 @@ function Checkout({ provinces }) {
                             <div className="col-lg-12">
                               <div className="form-group mb-4">
                                 <label for="company_name">Provinces</label>
-                                <select className="form-control">
+                                <select className="form-control"
+                                name="city"
+                                onChange={handleChangeOrder}
+                                >
                                   <option value="">Select an Option</option>
                                   {provinces.map((province, index) => (
                                     <option value={province.name}>

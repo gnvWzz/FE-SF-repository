@@ -21,6 +21,8 @@ import { CART_URL } from "./components/URLS/url";
 import Profile from "./components/Profile";
 import Password from "./components/Password";
 import ThirdForm from "./components/testCreateProduct/ThirdForm";
+import OrderDetails from "./components/OrderDetail";
+import MyOrder from "./components/MyOrder";
 
 function App() {
   const [categories, setCategorise] = useState([]);
@@ -74,6 +76,8 @@ function App() {
           <Route path="/firstForm" element={<FirstForm />} />
           <Route path="/secondForm" element={<SecondForm />} />
           <Route path="/thirdForm" element={<ThirdForm />} />
+          <Route path="/orderdetails" element={<OrderDetails />} />
+          <Route path="/myorder" element={<MyOrder />} />
           <Route path="/" element={<Home />} />
         </Routes>
         <Footer></Footer>
