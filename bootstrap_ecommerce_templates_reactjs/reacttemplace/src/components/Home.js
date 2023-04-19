@@ -8,7 +8,9 @@ function Home(props) {
 
   const [products, setProducts] = useState([]);
 
-  const [oldProducts, setOldProducts] = useState([]);
+  // const [showProducts, setShowProducts] = useState([]);
+
+  const showProducts = [];
 
   const [totalPages, setTotalPages] = useState();
 
@@ -35,7 +37,6 @@ function Home(props) {
 
   const handleNavigateToProductDetails = function (e) {
     const manufacturer = e.currentTarget.getAttribute("value");
-
     navigate(`/single-product/${manufacturer}`);
   };
 
@@ -45,6 +46,8 @@ function Home(props) {
         .get(`${product_url}/get_home?offset=${offset}`)
         .then((res) => {
           setProducts(res.data.content);
+          console.log(res.data.content);
+          console.log(products)
           setTotalPages(res.data.totalPages);
         })
         .catch((err) => {
@@ -59,6 +62,10 @@ function Home(props) {
   const navigateToDetail = (e) => {
     const package_id = e.currentTarget.getAttribute("value");
     navigate(`/single-product/${package_id}`);
+  };
+
+  const handleClickContinue = (e) => {
+    setOffset(offset + 1);
   };
 
   return (
@@ -90,66 +97,6 @@ function Home(props) {
           </div>
         </div>
       </div>
-      <section className="category section pt-3 pb-0">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-4 col-sm-12 col-md-6">
-              <div className="cat-item mb-4 mb-lg-0">
-                <img
-                  src="assets/images/cat-1.jpg"
-                  alt=""
-                  className="img-fluid"
-                />
-                <div className="item-info">
-                  <p className="mb-0">Stylish Leather watch</p>
-                  <h4 className="mb-4">
-                    up to <strong>50% </strong>off
-                  </h4>
-                  <a href="#" className="read-more">
-                    Shop now
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-sm-12 col-md-6">
-              <div className="cat-item mb-4 mb-lg-0">
-                <img
-                  src="assets/images/cat-2.jpg"
-                  alt=""
-                  className="img-fluid"
-                />
-                <div className="item-info">
-                  <p className="mb-0">Ladies hand bag</p>
-                  <h4 className="mb-4">
-                    up to <strong>40% </strong>off
-                  </h4>
-                  <a href="#" className="read-more">
-                    Shop now
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-sm-12 col-md-6">
-              <div className="cat-item">
-                <img
-                  src="assets/images/cat-3.jpg"
-                  alt=""
-                  className="img-fluid"
-                />
-                <div className="item-info">
-                  <p className="mb-0">Trendy shoe</p>
-                  <h4 className="mb-4">
-                    up to <strong>50% </strong>off
-                  </h4>
-                  <a href="#" className="read-more">
-                    Shop now
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       <section className="section products-main">
         <div className="container">
           <div className="row justify-content-center">
@@ -162,7 +109,7 @@ function Home(props) {
           </div>
 
           <div className="row" id="list">
-            {products.map((product, index) => (
+            {showProducts.map((product, index) => (
               <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
                 <div className="product">
                   <div className="product-wrap">
@@ -179,7 +126,7 @@ function Home(props) {
                       />
                     </div>
                   </div>
-                  <span className="onsale">Sale</span>
+
                   <div className="product-hover-overlay">
                     <div onClick={navigateToDetail} value={product.packageId}>
                       <a href="">
@@ -199,12 +146,21 @@ function Home(props) {
                       </div>
                     </h2>
                     <span className="price">
-                      {product.productSFDetailDtos[0].price} VND
+                      {product.priceListDtos[0].price} VND
                     </span>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          <div style={{ textAlign: "center" }}>
+            <button
+              onClick={handleClickContinue}
+              class="btn btn-main btn-small"
+            >
+              Continue
+            </button>
           </div>
         </div>
       </section>
