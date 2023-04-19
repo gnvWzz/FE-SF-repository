@@ -46,8 +46,7 @@ function Home(props) {
         .get(`${product_url}/get_home?offset=${offset}`)
         .then((res) => {
           setProducts(res.data.content);
-          console.log(res.data.content);
-          console.log(products)
+
           setTotalPages(res.data.totalPages);
         })
         .catch((err) => {
@@ -65,7 +64,8 @@ function Home(props) {
   };
 
   const handleClickContinue = (e) => {
-    setOffset(offset + 1);
+    // setOffset(offset + 1);
+    navigate("/shop");
   };
 
   return (
@@ -109,12 +109,35 @@ function Home(props) {
           </div>
 
           <div className="row" id="list">
-            {showProducts.map((product, index) => (
+            {products.map((product, index) => (
               <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
                 <div className="product">
                   <div className="product-wrap">
                     <div onClick={navigateToDetail} value={product.packageId}>
-                      <img
+                      {
+                        JSON.parse(
+                          product.productSFDetailDtos[0].size_color_img_quantity
+                        ).img[0].url !== ""
+                       ? (
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src={
+                            JSON.parse(
+                              product.productSFDetailDtos[0]
+                                .size_color_img_quantity
+                            ).img[0].url
+                          }
+                          style={{ height: "350px" }}
+                          alt="product-img"
+                        />
+                      ) : (
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          style={{ height: "350px" }}
+                          alt="product-img"
+                        />
+                      )}
+                      {/* <img
                         className="img-fluid w-100 mb-3 img-first"
                         src={
                           JSON.parse(
@@ -122,8 +145,9 @@ function Home(props) {
                               .size_color_img_quantity
                           ).img[0].url
                         }
+                        style={{height : "350px"}}
                         alt="product-img"
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -133,6 +157,7 @@ function Home(props) {
                         <i className="tf-ion-android-cart"></i>
                       </a>
                     </div>
+
                     {/* <div onClick={navigateToDetail} value={product.packageId}>
                       <a href="">
                         <i className="tf-ion-ios-heart"></i>
@@ -157,7 +182,7 @@ function Home(props) {
           <div style={{ textAlign: "center" }}>
             <button
               onClick={handleClickContinue}
-              class="btn btn-main btn-small"
+              className="btn btn-main btn-small"
             >
               Continue
             </button>

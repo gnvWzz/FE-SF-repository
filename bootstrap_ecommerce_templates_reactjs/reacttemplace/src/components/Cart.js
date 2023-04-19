@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CART_URL } from "./URLS/url";
+import { data } from "jquery";
 
 function Cart() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function Cart() {
 
   const [checkEmpty, setCheckEmpty] = useState(true);
 
-  const [cart, setCarT] = useState([]);
+  const [cart, setCart] = useState([]);
 
   // LAY CART KHI CO TOKEN VA ACCOUNT NAME=============================
   useEffect(() => {
@@ -45,7 +46,7 @@ function Cart() {
       method: "GET",
     })
       .then((res) => {
-        setCarT(res.data);
+        setCart(res.data);
         if (res.data === "Fail") {
           setCheckEmpty(false);
         }
@@ -77,7 +78,7 @@ function Cart() {
     if (state !== null) {
       let temp = {
         accountName: localStorage.getItem("username"),
-        cartDetailDtos: [
+        cartDetailModelList: [
           {
             price: state.price,
             quantity: state.quantity,
@@ -203,20 +204,50 @@ function Cart() {
         totalNew = totalNew + c.subTotal;
         return totalNew;
       });
-      setCarT({ ...cart, totalPrice: totalNew });
+      setCart({ ...cart, totalPrice: totalNew });
+      updateCartByAxios();
+    };
+
+    const updateCartByAxios = async (e) => {
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        url: `${cart_url}`,
+        method: "PUT",
+        data: cart,
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          throw err;
+        });
     };
 
     const handleChangeQuantity = (value, index) => {
+      const stock = JSON.parse(
+        cart.cartDetailModelList[index].size_color_img_quantity
+      ).quantity;
       const cartDetailModelListNew = cart.cartDetailModelList.map(
         (c, indexC) => {
           if (indexC === index) {
-            c.quantity = value;
-            c.subTotal = c.quantity * c.price;
+            if (value > stock) {
+              c.quantity = stock;
+            } else if (value <= stock && value >= 0) {
+              c.quantity = parseInt(value);
+              c.subTotal = c.quantity * c.price;
+            } else if (value < 0) {
+              c.quantity = 1;
+              c.subTotal = c.quantity * c.price;
+            }
           }
           return c;
         }
       );
-      setCarT({ ...cart, cartDetailModelList: cartDetailModelListNew });
+      setCart({ ...cart, cartDetailModelList: cartDetailModelListNew });
     };
 
     return (
@@ -238,14 +269,24 @@ function Cart() {
                       <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                           <div>
-                            <img
-                              src={
-                                JSON.parse(i.size_color_img_quantity).img[0].url
-                              }
-                              class="img-fluid rounded-3"
-                              alt="Shopping item"
-                              style={{ width: "65px" }}
-                            />
+                            {JSON.parse(i.size_color_img_quantity).img[0]
+                              .url !== "" ? (
+                              <img
+                                className="img-fluid w-100 mb-3 img-first"
+                                src={
+                                  JSON.parse(i.size_color_img_quantity).img[0]
+                                    .url
+                                }
+                                style={{ height: "65px" }}
+                                alt="product-img"
+                              />
+                            ) : (
+                              <img
+                                className="img-fluid w-100 mb-3 img-first"
+                                style={{ height: "350px" }}
+                                alt="product-img"
+                              />
+                            )}
                           </div>
                         </div>
                         <div class="d-flex flex-row align-items-center">
@@ -273,7 +314,9 @@ function Cart() {
                         </div>
                         <div class="d-flex flex-row align-items-center">
                           <div style={{ width: "100px" }}>
-                            <h5 class="mb-0">{i.subTotal}VND</h5>
+                            {!isNaN(i.subTotal) ? (
+                              <h5 class="mb-0">{i.subTotal}VND</h5>
+                            ) : undefined}
                           </div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
@@ -297,6 +340,14 @@ function Cart() {
                     </div>
                   </div>
                 ))}
+                <div>
+                  <button
+                    onClick={handleUpdate}
+                    className="btn btn-main btn-small"
+                  >
+                    Update Cart
+                  </button>
+                </div>
               </div>
               {totalPrice(cart)}
             </div>
