@@ -8,7 +8,6 @@ export default function SingleProduct() {
   const [cursor, setCursor] = useState("");
   const { package_id } = useParams();
   const [product, setProduct] = useState({});
-  const [productDetails, setProductDetails] = useState([]);
   const [productDetail, setProductDetail] = useState({})
   const [productColors, setProductColors] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
@@ -19,9 +18,7 @@ export default function SingleProduct() {
   const [priceList, setPriceList] = useState([])
   const [choosingColor, setChoosingColor] = useState("");
   const [choosingSize, setChoosingSize] = useState("");
-  const [imgList, setImgList] = useState([]);
   const [imgList2, setImgList2] = useState([]);
-  const [imgListToColor, setImgListToColor] = useState({});
   let isStop = false;
   const url = PRODUCT_URL;
   const navigate = useNavigate();
@@ -55,7 +52,6 @@ export default function SingleProduct() {
         setProduct(res.data);
         generateProductColors(res.data);
         generateProductSizes(res.data);
-        setProductDetails(res.data.productSFDetailDtos);
         setProductDetail(res.data.productSFDetailDtos[0]);
         setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
         setPrice(res.data.priceListDtos[0].price);
@@ -78,7 +74,6 @@ export default function SingleProduct() {
             }
           })
         })
-        setImgList(tempList)
         tempList.map((ele) => {
           if (!tempColors.some(item => item === ele.color)) {
             tempColors.push(ele.color);
@@ -99,11 +94,6 @@ export default function SingleProduct() {
           })
         });
         setImgList2(tempList2);
-        localStorage.setItem("imgList2", JSON.stringify(tempList2))
-        localStorage.setItem("choosingColor", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
-        localStorage.setItem("choosingSize", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
-        localStorage.setItem("productPricesList", JSON.stringify(res.data.priceListDtos));
-        localStorage.setItem("stock", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
       })
       .catch((err) => {
         throw err;
@@ -111,11 +101,10 @@ export default function SingleProduct() {
   }
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem("productPricesList"))) {
-      const pricesList = JSON.parse(localStorage.getItem("productPricesList"));
-      for (let i = 0; i < pricesList.length; i++) {
-        if (quantity <= pricesList[i].toQuantity && quantity >= pricesList[i].fromQuantity) {
-          setPrice(pricesList[i].price);
+    if (priceList) {
+      for (let i = 0; i < priceList.length; i++) {
+        if (quantity <= priceList[i].toQuantity && quantity >= priceList[i].fromQuantity) {
+          setPrice(priceList[i].price);
         }
       }
     }
@@ -165,13 +154,12 @@ export default function SingleProduct() {
 
   const handleGetProductDetailByColorAndSize = async (e) => {
     const c = e.currentTarget.getAttribute("value");
-    const oldSize = localStorage.getItem("choosingSize");
     await axios({
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      url: `${url}/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`,
+      url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${package_id}`,
       method: "GET"
     })
       .then((res) => {
@@ -179,8 +167,8 @@ export default function SingleProduct() {
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
-        localStorage.setItem("choosingColor", c);
-        localStorage.setItem("stock", JSON.parse(res.data.size_color_img_quantity).quantity)
+        setChoosingColor(c);
+        setStock(JSON.parse(res.data.size_color_img_quantity).quantity)
       })
       .catch((err) => {
         console.log(err);
@@ -189,13 +177,12 @@ export default function SingleProduct() {
 
   const handleChoosingSize = async (e) => {
     const s = e.target.value;
-    const oldColor = localStorage.getItem("choosingColor");
     await axios({
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      url: `${url}/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`,
+      url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${package_id}`,
       method: "GET"
     })
       .then((res) => {
@@ -203,8 +190,8 @@ export default function SingleProduct() {
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
-        localStorage.setItem("choosingSize", s);
-        localStorage.setItem("stock", JSON.parse(res.data.size_color_img_quantity).quantity)
+        setChoosingSize(s)
+        setStock(JSON.parse(res.data.size_color_img_quantity).quantity)
       })
       .catch((err) => {
         console.log(err);
@@ -212,11 +199,9 @@ export default function SingleProduct() {
   }
 
   function showCarousel() {
-    if (localStorage.getItem("imgList2") && localStorage.getItem("choosingColor")) {
-      const imgListToPerColor = JSON.parse(localStorage.getItem("imgList2"));
-      const colorChoosing = localStorage.getItem("choosingColor");
-      const imgListToChoseColor = imgListToPerColor.filter(ele => {
-        if (ele.color === colorChoosing) {
+    if (imgList2 && choosingColor) {
+      const imgListToChoseColor = imgList2.filter(ele => {
+        if (ele.color === choosingColor) {
           return ele;
         }
       })
@@ -299,9 +284,8 @@ export default function SingleProduct() {
   }
 
   function showPriceTable() {
-    if (JSON.parse(localStorage.getItem("productPricesList"))) {
-      const productPrices = JSON.parse(localStorage.getItem("productPricesList"));
-      if (productPrices.length !== 1) {
+    if (priceList) {
+      if (priceList.length !== 1) {
         return (
           <div className="mt-5">
             <table id="product-price-table-information">
@@ -321,7 +305,7 @@ export default function SingleProduct() {
                   Price
                 </th>
               </tr>
-              {productPrices.map((ele) => (
+              {priceList.map((ele) => (
                 <tr className="product-price-table-tr">
                   <td className="product-price-table-td">
                     {ele.fromQuantity}
@@ -378,12 +362,6 @@ export default function SingleProduct() {
       </div>
     )
   }
-
-  // if (!product) {
-  //   <div className="loader-container">
-  //     <div className="spinner"></div>
-  //   </div>
-  // }
 
   if (!product) {
     return (
