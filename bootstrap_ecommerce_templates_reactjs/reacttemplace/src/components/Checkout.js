@@ -15,6 +15,7 @@ function Checkout({ provinces }) {
 
   const user_url = ACCOUNT_URL;
 
+
   const [form, setForm] = useState({});
 
   const [model, setModel] = useState({
@@ -40,9 +41,7 @@ function Checkout({ provinces }) {
       .catch((err) => {
         throw err;
       });
-    // const orderDeatailListNew = state.cart.cartDetailModelList;
-    // console.log(orderDeatailListNew);
-    // setModel({ ...model, orderDetails: orderDeatailListNew });
+
   }, []);
 
   const REGEX = {
@@ -84,7 +83,9 @@ function Checkout({ provinces }) {
         form.phone &&
         form.email;
       if (isFilled) {
+        // console.log(form);
         place_order(form);
+    
       } else {
         alert("Please fill out the fields");
       }
@@ -220,6 +221,7 @@ function Checkout({ provinces }) {
                             <div className="col-lg-12">
                               <div className="form-group mb-4">
                                 <label for="company_name">Provinces</label>
+
                                 <select
                                   name="city"
                                   className="form-control"

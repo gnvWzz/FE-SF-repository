@@ -2448,7 +2448,13 @@ body {
   text-align: center;
 }
 
+.prices-information {
+  margin-left: auto;
+  margin-right: auto
+}
+
 #product-price-table-information th,
 td {
   width: 250px;
 }
+
