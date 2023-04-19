@@ -9,14 +9,18 @@ export default function SingleProduct() {
   const { package_id } = useParams();
   const [product, setProduct] = useState({});
   const [productDetails, setProductDetails] = useState([]);
-  const [productDetail, setProductDetail] = useState({})
+  const [productDetail, setProductDetail] = useState({});
   const [productColors, setProductColors] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
-  const [categoriesNoSizesAndColors, setCategoriseNoSizesAndColors] = useState(["Computer", "Electronics", "Toys"])
+  const [categoriesNoSizesAndColors, setCategoriseNoSizesAndColors] = useState([
+    "Computer",
+    "Electronics",
+    "Toys",
+  ]);
   const [stock, setStock] = useState();
   const [serialNumber, setSerialNumber] = useState("");
   const [price, setPrice] = useState(0);
-  const [priceList, setPriceList] = useState([])
+  const [priceList, setPriceList] = useState([]);
   const [choosingColor, setChoosingColor] = useState("");
   const [choosingSize, setChoosingSize] = useState("");
   const [imgList, setImgList] = useState([]);
@@ -38,7 +42,7 @@ export default function SingleProduct() {
             "Content-Type": "application/json",
           },
           url: `${url}/package-id-product/${package_id}`,
-          method: "GET"
+          method: "GET",
         })
           .then((res) => {
             setProduct(res.data);
@@ -46,53 +50,83 @@ export default function SingleProduct() {
             generateProductSizes(res.data);
             setProductDetails(res.data.productSFDetailDtos);
             setProductDetail(res.data.productSFDetailDtos[0]);
-            setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
+            setStock(
+              JSON.parse(
+                res.data.productSFDetailDtos[0].size_color_img_quantity
+              ).quantity
+            );
             setPrice(res.data.priceListDtos[0].price);
             setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
             setQuantity(1);
             setPriceList(res.data.priceListDtos);
-            localStorage.setItem("productPricesList", JSON.stringify(res.data.priceListDtos));
-            localStorage.setItem("stock", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity)
-            setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
-            setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
+            localStorage.setItem(
+              "productPricesList",
+              JSON.stringify(res.data.priceListDtos)
+            );
+            localStorage.setItem(
+              "stock",
+              JSON.parse(
+                res.data.productSFDetailDtos[0].size_color_img_quantity
+              ).quantity
+            );
+            setChoosingColor(
+              JSON.parse(
+                res.data.productSFDetailDtos[0].size_color_img_quantity
+              ).color
+            );
+            setChoosingSize(
+              JSON.parse(
+                res.data.productSFDetailDtos[0].size_color_img_quantity
+              ).size
+            );
             res.data.productSFDetailDtos.map((p) => {
-              ((JSON.parse(p.size_color_img_quantity)).img).map((i) => {
+              JSON.parse(p.size_color_img_quantity).img.map((i) => {
                 const temp = {
                   color: "",
-                  img: ""
-                }
-                temp.color = (JSON.parse(p.size_color_img_quantity)).color;
-                temp.img = i
-                let isExisted = tempList.some(item => item.img === temp.img);
+                  img: "",
+                };
+                temp.color = JSON.parse(p.size_color_img_quantity).color;
+                temp.img = i;
+                let isExisted = tempList.some((item) => item.img === temp.img);
                 if (!isExisted) {
                   tempList.push(temp);
                 }
-              })
-            })
-            setImgList(tempList)
+              });
+            });
+            setImgList(tempList);
             tempList.map((ele) => {
-              if (!tempColors.some(item => item === ele.color)) {
+              if (!tempColors.some((item) => item === ele.color)) {
                 tempColors.push(ele.color);
               }
-            })
+            });
             tempColors.map((tempColor) => {
               const imgs_to_color = {
                 color: tempColor,
-                img: []
-              }
+                img: [],
+              };
               tempList2.push(imgs_to_color);
-            })
+            });
             tempList.map((t1) => {
               tempList2.map((t2) => {
                 if (t1.color === t2.color) {
                   t2.img.push(t1.img);
                 }
-              })
+              });
             });
             setImgList2(tempList2);
-            localStorage.setItem("imgList2", JSON.stringify(tempList2))
-            localStorage.setItem("choosingColor", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color)
-            localStorage.setItem("choosingSize", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size)
+            localStorage.setItem("imgList2", JSON.stringify(tempList2));
+            localStorage.setItem(
+              "choosingColor",
+              JSON.parse(
+                res.data.productSFDetailDtos[0].size_color_img_quantity
+              ).color
+            );
+            localStorage.setItem(
+              "choosingSize",
+              JSON.parse(
+                res.data.productSFDetailDtos[0].size_color_img_quantity
+              ).size
+            );
           })
           .catch((err) => {
             throw err;
@@ -109,31 +143,34 @@ export default function SingleProduct() {
   useEffect(() => {
     const pricesList = JSON.parse(localStorage.getItem("productPricesList"));
     for (let i = 0; i < pricesList.length; i++) {
-      if (quantity <= pricesList[i].toQuantity && quantity >= pricesList[i].fromQuantity) {
+      if (
+        quantity <= pricesList[i].toQuantity &&
+        quantity >= pricesList[i].fromQuantity
+      ) {
         setPrice(pricesList[i].price);
       }
     }
-  }, [quantity])
+  }, [quantity]);
 
   const generateProductColors = (data) => {
     let colors = [];
     data.productSFDetailDtos.map((p) => {
-      if (!colors.includes((JSON.parse(p.size_color_img_quantity)).color)) {
-        colors.push((JSON.parse(p.size_color_img_quantity)).color)
+      if (!colors.includes(JSON.parse(p.size_color_img_quantity).color)) {
+        colors.push(JSON.parse(p.size_color_img_quantity).color);
       }
-    })
+    });
     setProductColors(colors);
-  }
+  };
 
   const generateProductSizes = (data) => {
     let sizes = [];
     data.productSFDetailDtos.map((p) => {
-      if (!sizes.includes((JSON.parse(p.size_color_img_quantity)).size)) {
-        sizes.push((JSON.parse(p.size_color_img_quantity)).size)
+      if (!sizes.includes(JSON.parse(p.size_color_img_quantity).size)) {
+        sizes.push(JSON.parse(p.size_color_img_quantity).size);
       }
-    })
+    });
     setProductSizes(sizes);
-  }
+  };
 
   function handleDecreaseQuantity() {
     setQuantity(parseInt(quantity) - 1);
@@ -166,7 +203,7 @@ export default function SingleProduct() {
         "Content-Type": "application/json",
       },
       url: `${url}/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`,
-      method: "GET"
+      method: "GET",
     })
       .then((res) => {
         setProductDetail(res.data);
@@ -174,12 +211,15 @@ export default function SingleProduct() {
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
         localStorage.setItem("choosingColor", c);
-        localStorage.setItem("stock", JSON.parse(res.data.size_color_img_quantity).quantity)
+        localStorage.setItem(
+          "stock",
+          JSON.parse(res.data.size_color_img_quantity).quantity
+        );
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   const handleChoosingSize = async (e) => {
     const s = e.target.value;
@@ -190,7 +230,7 @@ export default function SingleProduct() {
         "Content-Type": "application/json",
       },
       url: `${url}/find-product-detail-by-color-and-size/${oldColor}/${s}/${package_id}`,
-      method: "GET"
+      method: "GET",
     })
       .then((res) => {
         setProductDetail(res.data);
@@ -198,22 +238,28 @@ export default function SingleProduct() {
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
         localStorage.setItem("choosingSize", s);
-        localStorage.setItem("stock", JSON.parse(res.data.size_color_img_quantity).quantity)
+        localStorage.setItem(
+          "stock",
+          JSON.parse(res.data.size_color_img_quantity).quantity
+        );
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   function showCarousel() {
-    if (localStorage.getItem("imgList2") && localStorage.getItem("choosingColor")) {
+    if (
+      localStorage.getItem("imgList2") &&
+      localStorage.getItem("choosingColor")
+    ) {
       const imgListToPerColor = JSON.parse(localStorage.getItem("imgList2"));
       const colorChoosing = localStorage.getItem("choosingColor");
-      const imgListToChoseColor = imgListToPerColor.filter(ele => {
+      const imgListToChoseColor = imgListToPerColor.filter((ele) => {
         if (ele.color === colorChoosing) {
           return ele;
         }
-      })
+      });
       const firstList = imgListToChoseColor;
       const secondList = [];
       for (var i = 1; i < imgListToChoseColor[0].img.length; i++) {
@@ -223,49 +269,79 @@ export default function SingleProduct() {
       if (imgListToChoseColor[0].img.length > 1) {
         return (
           <div class="single-product-slider">
-            <div class="carousel slide" data-ride="carousel" id="single-product-slider">
+            <div
+              class="carousel slide"
+              data-ride="carousel"
+              id="single-product-slider"
+            >
               <div class="carousel-inner">
                 <div class="carousel-item active">
                   <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
                 </div>
-                {
-                  secondList.map((i) => (
-                    <div class="carousel-item">
-                      <img src={i.url} alt="" class="img-fluid" />
-                    </div>
-                  ))}
+                {secondList.map((i) => (
+                  <div class="carousel-item">
+                    <img src={i.url} alt="" class="img-fluid" />
+                  </div>
+                ))}
               </div>
 
               <ol class="carousel-indicators">
-                <li data-target="#single-product-slider" data-slide-to="0" class="active">
+                <li
+                  data-target="#single-product-slider"
+                  data-slide-to="0"
+                  class="active"
+                >
                   <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
                 </li>
-                {
-                  secondList.map((i, index) => (
-                    <li data-target="#single-product-slider" data-slide-to={index + 1}>
-                      <img src={i.url} alt="" class="img-fluid" />
-                    </li>
-                  ))
-                }
+                {secondList.map((i, index) => (
+                  <li
+                    data-target="#single-product-slider"
+                    data-slide-to={index + 1}
+                  >
+                    <img src={i.url} alt="" class="img-fluid" />
+                  </li>
+                ))}
               </ol>
 
-              <a class="carousel-control-prev" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <a
+                class="carousel-control-prev"
+                style={{ height: "72.5%" }}
+                href="#single-product-slider"
+                role="button"
+                data-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
                 <span class="sr-only">Previous</span>
               </a>
-              <a class="carousel-control-next" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <a
+                class="carousel-control-next"
+                style={{ height: "72.5%" }}
+                href="#single-product-slider"
+                role="button"
+                data-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
                 <span class="sr-only">Next</span>
               </a>
             </div>
           </div>
-        )
+        );
       } else {
         return (
           <div className="product-preview-image">
-            <img style={{ height: "667px", width: "445px" }} src={firstList[0].img[0].url} alt="" />
+            <img
+              style={{ height: "667px", width: "445px" }}
+              src={firstList[0].img[0].url}
+              alt=""
+            />
           </div>
-        )
+        );
       }
     }
   }
@@ -278,27 +354,21 @@ export default function SingleProduct() {
     } else if (event.target.value < 0) {
       setQuantity(1);
     }
-  }
+  };
 
   function handleAddToCart() {
-    navigate("/cart", { state: { serialNumber, price, quantity } })
+    navigate("/cart", { state: { serialNumber, price, quantity } });
   }
 
   function showPrice() {
-    return (
-      <h3 class="product-price">
-        {price} đ
-      </h3>
-    )
+    return <h3 class="product-price">{price} đ</h3>;
   }
 
   function showPriceTable() {
     const productPrices = JSON.parse(localStorage.getItem("productPricesList"));
     if (productPrices.length !== 1) {
       return (
-        <div className="mt-5" style={{
-
-        }}>
+        <div className="mt-5" style={{}}>
           <table id="product-price-table-information">
             <tr className="product-price-table-tr">
               <th className="product-price-table-th" colSpan={3}>
@@ -306,43 +376,26 @@ export default function SingleProduct() {
               </th>
             </tr>
             <tr className="product-price-table-tr">
-              <th className="product-price-table-th">
-                Quantity from
-              </th>
-              <th className="product-price-table-th">
-                Quantity to
-              </th>
-              <th className="product-price-table-th">
-                Price
-              </th>
+              <th className="product-price-table-th">Quantity from</th>
+              <th className="product-price-table-th">Quantity to</th>
+              <th className="product-price-table-th">Price</th>
             </tr>
             {productPrices.map((ele) => (
               <tr className="product-price-table-tr">
-                <td className="product-price-table-td">
-                  {ele.fromQuantity}
-                </td>
-                {
-                  ele.toQuantity !== Number.MAX_SAFE_INTEGER ?
-                    <td className="product-price-table-td">
-                      {ele.toQuantity}
-                    </td>
-                    :
-                    <td className="product-price-table-td">
-                      &infin;
-                    </td>
-                }
-                <td className="product-price-table-td">
-                  {ele.price}
-                </td>
+                <td className="product-price-table-td">{ele.fromQuantity}</td>
+                {ele.toQuantity !== Number.MAX_SAFE_INTEGER ? (
+                  <td className="product-price-table-td">{ele.toQuantity}</td>
+                ) : (
+                  <td className="product-price-table-td">&infin;</td>
+                )}
+                <td className="product-price-table-td">{ele.price}</td>
               </tr>
             ))}
           </table>
         </div>
-      )
+      );
     } else {
-      return (
-        undefined
-      )
+      return undefined;
     }
   }
 
@@ -353,15 +406,19 @@ export default function SingleProduct() {
         <button
           style={{ color: "black", cursor: cursor }}
           className="btn btn-light mr-3"
-          onClick={
-            quantity > 1 ? handleDecreaseQuantity : undefined
-          }
+          onClick={quantity > 1 ? handleDecreaseQuantity : undefined}
           onMouseOver={handleCursorOver}
         >
           {" "}
           -{" "}
         </button>
-        <input type="number" onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} style={{ width: 120, textAlign: "center" }} value={quantity} onChange={handleChangeQuantity}></input>
+        <input
+          type="number"
+          onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+          style={{ width: 120, textAlign: "center" }}
+          value={quantity}
+          onChange={handleChangeQuantity}
+        ></input>
         <button
           style={{ color: "black" }}
           className="btn btn-light ml-3"
@@ -371,32 +428,27 @@ export default function SingleProduct() {
           +{" "}
         </button>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="single-product-container">
       <section class="single-product">
         <div class="container">
           <div class="row">
-            <div class="col-md-5">
-              {showCarousel()}
-            </div>
+            <div class="col-md-5">{showCarousel()}</div>
 
             <div class="col-md-7">
               <div class="single-product-details mt-5 mt-lg-0">
                 <h2>{product.name}</h2>
                 <div class="sku_wrapper mb-4">
-                  SKU: <span class="text-muted">{productDetail.serialNumber} </span>
+                  SKU:{" "}
+                  <span class="text-muted">{productDetail.serialNumber} </span>
                 </div>
 
                 <hr />
-                <div>
-                  {showPrice()}
-                </div>
-                <div>
-                  {showPriceTable()}
-                </div>
+                <div>{showPrice()}</div>
+                <div>{showPriceTable()}</div>
 
                 <p class="product-description my-4 mt-5 ">
                   {productDetail.briefDescription}
@@ -435,43 +487,43 @@ export default function SingleProduct() {
                 </div>
 
                 {/* Phần chọn color sản phẩm */}
-                {productColors.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
-                  ? (
-                    <div class="color-swatches mt-4 d-flex align-items-center">
-                      <span class="font-weight-bold text-capitalize product-meta-title">
-                        Color:
-                      </span>
-                      <ul class="list-inline mb-0">
-                        {productColors.map((color) => (
-                          <li class="list-inline-item">
-                            <button
-                              id="product-color-option"
-                              className="rounded-pill"
-                              style={{ backgroundColor: color }}
-                              value={color}
-                              onClick={handleGetProductDetailByColorAndSize}
-                            ></button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : undefined}
+                {productColors.length !== 0 &&
+                !categoriesNoSizesAndColors.includes(product.category) ? (
+                  <div class="color-swatches mt-4 d-flex align-items-center">
+                    <span class="font-weight-bold text-capitalize product-meta-title">
+                      Color:
+                    </span>
+                    <ul class="list-inline mb-0">
+                      {productColors.map((color) => (
+                        <li class="list-inline-item">
+                          <button
+                            id="product-color-option"
+                            className="rounded-pill"
+                            style={{ backgroundColor: color }}
+                            value={color}
+                            onClick={handleGetProductDetailByColorAndSize}
+                          ></button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : undefined}
                 {/* Hết phần chọn color sản phẩm */}
 
                 {/* Phần chọn size sản phẩm */}
-                {productSizes.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
-                  ? (
-                    <div class="product-size d-flex align-items-center mt-4">
-                      <span class="font-weight-bold text-capitalize product-meta-title">
-                        Size:
-                      </span>
-                      <select onChange={handleChoosingSize} class="form-control">
-                        {productSizes.map((size) => (
-                          <option value={size}>{size}</option>
-                        ))}
-                      </select>
-                    </div>
-                  ) : undefined}
+                {productSizes.length !== 0 &&
+                !categoriesNoSizesAndColors.includes(product.category) ? (
+                  <div class="product-size d-flex align-items-center mt-4">
+                    <span class="font-weight-bold text-capitalize product-meta-title">
+                      Size:
+                    </span>
+                    <select onChange={handleChoosingSize} class="form-control">
+                      {productSizes.map((size) => (
+                        <option value={size}>{size}</option>
+                      ))}
+                    </select>
+                  </div>
+                ) : undefined}
                 {/* Hết phần chọn size sản phẩm */}
 
                 <div class="products-meta mt-4">
@@ -565,7 +617,9 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>Weight</strong>
                         </th>
-                        <td id="information-value">{productDetail.weight * 1000} g</td>
+                        <td id="information-value">
+                          {productDetail.weight * 1000} g
+                        </td>
                       </tr>
                     ) : undefined}
                     {productDetail.weight && productDetail.weight >= 1 ? (
@@ -573,10 +627,12 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>Weight</strong>
                         </th>
-                        <td id="information-value">{productDetail.weight} kg</td>
+                        <td id="information-value">
+                          {productDetail.weight} kg
+                        </td>
                       </tr>
                     ) : undefined}
-                    { }
+                    {}
                     {productDetail.material ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
@@ -614,7 +670,9 @@ export default function SingleProduct() {
                         <th className="d-flex">
                           <strong>Storage Drive</strong>
                         </th>
-                        <td id="information-value">{productDetail.storageDrive}</td>
+                        <td id="information-value">
+                          {productDetail.storageDrive}
+                        </td>
                       </tr>
                     ) : undefined}
                     {productDetail.display ? (
