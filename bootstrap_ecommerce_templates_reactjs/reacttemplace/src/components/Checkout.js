@@ -15,7 +15,12 @@ function Checkout({ provinces }) {
 
   const user_url = ACCOUNT_URL;
 
-  const [form, setForm] = useState({
+
+  const [form, setForm] = useState({});
+
+  const [model, setModel] = useState({
+    form: {},
+    orderDetails: [],
   });
 
   useEffect(() => {
@@ -36,10 +41,7 @@ function Checkout({ provinces }) {
       .catch((err) => {
         throw err;
       });
-    // console.log(state.cart.cartDetailModelList);
-   
-    // console.log(form);
-    // setForm({...form, orderDetails : state.cart.cartDetailModelList})
+
   }, []);
 
   const REGEX = {
@@ -219,9 +221,11 @@ function Checkout({ provinces }) {
                             <div className="col-lg-12">
                               <div className="form-group mb-4">
                                 <label for="company_name">Provinces</label>
-                                <select className="form-control"
-                                name="city"
-                                onChange={handleChangeOrder}
+
+                                <select
+                                  name="city"
+                                  className="form-control"
+                                  onChange={handleChangeOrder}
                                 >
                                   <option value="">Select an Option</option>
                                   {provinces.map((province, index) => (
@@ -375,22 +379,28 @@ function Checkout({ provinces }) {
                             <span className="h5">{cart.totalPrice} VND</span>
                           </li>
                         </ul>
-
                         <h3 style={{ textAlign: "center" }}>DISCOUNT CODE</h3>
-
-                        <div style={{ textAlign: "center" }}>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="first_name"
-                            placeholder=""
-                          />
-                          <button
-                            onClick={handleDiscountOrder}
-                            className="mt-3 btn btn-main btn-small"
-                          >
-                            Apply
-                          </button>
+                        <div className="container">
+                          <div className="row">
+                            <div className="col-10">
+                              <div style={{ textAlign: "center" }}>
+                                <input
+                                  type="text"
+                                  className="form-control mt-1"
+                                  id="first_name"
+                                  placeholder=""
+                                />
+                              </div>
+                            </div>
+                            <div className="col-2">
+                              <button
+                                onClick={handleDiscountOrder}
+                                className="btn btn-main btn-small"
+                              >
+                                Apply
+                              </button>
+                            </div>
+                          </div>
                         </div>
 
                         <div className="info mt-4 border-top pt-4 mb-5">

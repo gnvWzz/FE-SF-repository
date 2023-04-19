@@ -27,7 +27,6 @@ export default function Product({ categories }) {
   // Long da them o day ne ================================ lay du lieu khuc nay may cai kia chua co lam
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
-      setOffset(0);
       if (!isStop) {
         axios({
           headers: {
@@ -298,6 +297,10 @@ export default function Product({ categories }) {
     );
   }
 
+  const getData = () =>{
+    
+  }
+
   const handleOnChangeSearch = function (e) {
     setFormSearch(e.target.value);
   };
@@ -305,10 +308,15 @@ export default function Product({ categories }) {
   const handleSubmit = async (e) => {
     if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
       setFormSearch(e.target.value);
-      await axios
-        .get(
-          `http://localhost:8080/api/product/${name}?offset=${offset}&sort_name=${formSeacrh}`
-        )
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        url: `${url}/getName/${name}?offset=${offset}&name=${formSeacrh}`,
+        method: "GET",
+      })
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
@@ -335,8 +343,15 @@ export default function Product({ categories }) {
   const handleChangeSortByPrice = async (e) => {
     if (e.target.value === "none") {
       setOffset(0);
-      await axios
-        .get(`http://192.168.4.182:8080/api/product/${name}?offset=${offset}`)
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        url: `${url}/${name}?offset=${offset}`,
+        method: "GET",
+      })
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
@@ -346,10 +361,16 @@ export default function Product({ categories }) {
         });
     } else {
       setSortPrice(e.target.value);
-      await axios
-        .get(
-          `http://localhost:8080/api/product/${name}?offset=${offset}&sort_price=${e.target.value}`
-        )
+      console.log(sort_price);
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        url: `${url}/${name}?offset=${offset}&sort=${e.target.value}`,
+        method: "GET",
+      })
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
@@ -417,7 +438,7 @@ export default function Product({ categories }) {
                         ></i>
                       </button>
                     </span>
-                   
+
                     <form className="ordering " method="get">
                       <select
                         name="orderby"
@@ -464,7 +485,7 @@ export default function Product({ categories }) {
                         style={{ height: 200 }}
                       />
                     </div>
-                    <span className="onsale">Sale</span>
+
                     <div className="product-hover-overlay">
                       <Link
                         to={`/single-product/${product.productSFDetailDtos[0].serialNumber}`}
@@ -488,7 +509,7 @@ export default function Product({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.productSFDetailDtos[0].price} đ
+                          {product.priceListDtos[0].price} đ
                         </h4>
                       </span>
                     </div>
