@@ -400,6 +400,7 @@ export default function SingleProduct() {
           style={{ width: 120, textAlign: "center" }}
           value={quantity}
           onChange={handleChangeQuantity}
+          onWheel={(e) => e.target.blur()}
         ></input>
         <button
           style={{ color: "black" }}
@@ -484,7 +485,7 @@ export default function SingleProduct() {
             <td id="information-value">{productDetail.weight} kg</td>
           </tr>
         ) : undefined}
-        {}
+        { }
         {productDetail.material ? (
           <tr class="list-unstyled info-desc">
             <th className="d-flex">

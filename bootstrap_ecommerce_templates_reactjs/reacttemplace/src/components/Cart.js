@@ -68,7 +68,7 @@ function Cart() {
       method: "POST",
       data: temp,
     })
-      .then((res) => {})
+      .then((res) => { })
       .catch((err) => {
         throw err;
       });
@@ -134,7 +134,7 @@ function Cart() {
       </>
     );
   } else {
-    const map = (list) => {};
+    const map = (list) => { };
 
     const handleCheckout = () => {
       navigate("/checkout", { state: { cart } });
@@ -270,6 +270,7 @@ function Cart() {
                             onChange={(e) =>
                               handleChangeQuantity(e.target.value, index)
                             }
+                            onWheel={(e) => e.target.blur()}
                           ></input>
                         </div>
                         <div class="d-flex flex-row align-items-center">
