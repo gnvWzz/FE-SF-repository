@@ -92,7 +92,7 @@ function Cart() {
       window.history.replaceState({}, document.title);
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 200);
     }
     return () => {
       isStop = true;
@@ -108,7 +108,9 @@ function Cart() {
   if (cart.length === 0) {
     return (
       <>
-        <p style={{ textAlign: "center" }}>Ban chua dang nhap</p>
+        <div className="loader-container">
+          <div className="spinner"></div>
+        </div>
       </>
     );
   } else if (checkEmpty === false || cart.cartDetailModelList.length === 0) {
@@ -122,7 +124,9 @@ function Cart() {
                 alt="bag.svg"
               />
               <h2>Your shopping cart is empty</h2>
-              <a href="/" class="btn btn-main btn-small">Back home</a>
+              <a href="/" class="btn btn-main btn-small">
+                Back home
+              </a>
             </div>
           </div>
         </div>
