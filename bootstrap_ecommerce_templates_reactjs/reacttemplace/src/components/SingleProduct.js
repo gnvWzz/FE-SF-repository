@@ -8,14 +8,18 @@ export default function SingleProduct() {
   const [cursor, setCursor] = useState("");
   const { package_id } = useParams();
   const [product, setProduct] = useState({});
-  const [productDetail, setProductDetail] = useState({})
+  const [productDetail, setProductDetail] = useState({});
   const [productColors, setProductColors] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
-  const [categoriesNoSizesAndColors, setCategoriseNoSizesAndColors] = useState(["Computer", "Electronics", "Toys"])
+  const [categoriesNoSizesAndColors, setCategoriseNoSizesAndColors] = useState([
+    "Computer",
+    "Electronics",
+    "Toys",
+  ]);
   const [stock, setStock] = useState();
   const [serialNumber, setSerialNumber] = useState("");
   const [price, setPrice] = useState(0);
-  const [priceList, setPriceList] = useState([])
+  const [priceList, setPriceList] = useState([]);
   const [choosingColor, setChoosingColor] = useState("");
   const [choosingSize, setChoosingSize] = useState("");
   const [imgList2, setImgList2] = useState([]);
@@ -46,89 +50,102 @@ export default function SingleProduct() {
         "Content-Type": "application/json",
       },
       url: `${url}/package-id-product/${package_id}`,
-      method: "GET"
+      method: "GET",
     })
       .then((res) => {
         setProduct(res.data);
         generateProductColors(res.data);
         generateProductSizes(res.data);
         setProductDetail(res.data.productSFDetailDtos[0]);
-        setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
+        setStock(
+          JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity)
+            .quantity
+        );
         setPrice(res.data.priceListDtos[0].price);
         setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
         setQuantity(1);
         setPriceList(res.data.priceListDtos);
-        setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
-        setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
+        setChoosingColor(
+          JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity)
+            .color
+        );
+        setChoosingSize(
+          JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity)
+            .size
+        );
         res.data.productSFDetailDtos.map((p) => {
-          ((JSON.parse(p.size_color_img_quantity)).img).map((i) => {
+          JSON.parse(p.size_color_img_quantity).img.map((i) => {
             const temp = {
               color: "",
-              img: ""
-            }
-            temp.color = (JSON.parse(p.size_color_img_quantity)).color;
-            temp.img = i
-            let isExisted = tempList.some(item => item.img === temp.img);
+              img: "",
+            };
+            temp.color = JSON.parse(p.size_color_img_quantity).color;
+            temp.img = i;
+            let isExisted = tempList.some((item) => item.img === temp.img);
             if (!isExisted) {
               tempList.push(temp);
             }
-          })
-        })
+          });
+        });
+
         tempList.map((ele) => {
-          if (!tempColors.some(item => item === ele.color)) {
+          if (!tempColors.some((item) => item === ele.color)) {
             tempColors.push(ele.color);
           }
-        })
+        });
         tempColors.map((tempColor) => {
           const imgs_to_color = {
             color: tempColor,
-            img: []
-          }
+            img: [],
+          };
           tempList2.push(imgs_to_color);
-        })
+        });
         tempList.map((t1) => {
           tempList2.map((t2) => {
             if (t1.color === t2.color) {
               t2.img.push(t1.img);
             }
-          })
+          });
         });
         setImgList2(tempList2);
       })
       .catch((err) => {
         throw err;
       });
-  }
+  };
 
   useEffect(() => {
     if (priceList) {
       for (let i = 0; i < priceList.length; i++) {
-        if (quantity <= priceList[i].toQuantity && quantity >= priceList[i].fromQuantity) {
+        if (
+          quantity <= priceList[i].toQuantity &&
+          quantity >= priceList[i].fromQuantity
+        ) {
           setPrice(priceList[i].price);
         }
       }
     }
-  }, [quantity])
+  }, [quantity]);
 
   const generateProductColors = (data) => {
     let colors = [];
     data.productSFDetailDtos.map((p) => {
-      if (!colors.includes((JSON.parse(p.size_color_img_quantity)).color)) {
-        colors.push((JSON.parse(p.size_color_img_quantity)).color)
+      if (!colors.includes(JSON.parse(p.size_color_img_quantity).color)) {
+        colors.push(JSON.parse(p.size_color_img_quantity).color);
       }
-    })
+    });
     setProductColors(colors);
-  }
+  };
 
   const generateProductSizes = (data) => {
     let sizes = [];
     data.productSFDetailDtos.map((p) => {
-      if (!sizes.includes((JSON.parse(p.size_color_img_quantity)).size)) {
-        sizes.push((JSON.parse(p.size_color_img_quantity)).size)
+      if (!sizes.includes(JSON.parse(p.size_color_img_quantity).size)) {
+        sizes.push(JSON.parse(p.size_color_img_quantity).size);
       }
-    })
+    });
     setProductSizes(sizes);
-  }
+  };
 
   function handleDecreaseQuantity() {
     setQuantity(parseInt(quantity) - 1);
@@ -159,21 +176,23 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
+
       url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${package_id}`,
-      method: "GET"
+      method: "GET",
     })
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
+
         setChoosingColor(c);
-        setStock(JSON.parse(res.data.size_color_img_quantity).quantity)
+        setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   const handleChoosingSize = async (e) => {
     const s = e.target.value;
@@ -182,29 +201,31 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
+
       url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${package_id}`,
-      method: "GET"
+      method: "GET",
     })
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
-        setChoosingSize(s)
-        setStock(JSON.parse(res.data.size_color_img_quantity).quantity)
+
+        setChoosingSize(s);
+        setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   function showCarousel() {
     if (imgList2 && choosingColor) {
-      const imgListToChoseColor = imgList2.filter(ele => {
+      const imgListToChoseColor = imgList2.filter((ele) => {
         if (ele.color === choosingColor) {
           return ele;
         }
-      })
+      });
       const firstList = imgListToChoseColor;
       const secondList = [];
       for (var i = 1; i < imgListToChoseColor[0].img.length; i++) {
@@ -214,54 +235,82 @@ export default function SingleProduct() {
       if (imgListToChoseColor[0].img.length > 1) {
         return (
           <div class="single-product-slider">
-            <div class="carousel slide" data-ride="carousel" id="single-product-slider">
+            <div
+              class="carousel slide"
+              data-ride="carousel"
+              id="single-product-slider"
+            >
               <div class="carousel-inner">
                 <div class="carousel-item active">
                   <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
                 </div>
-                {
-                  secondList.map((i) => (
-                    <div class="carousel-item">
-                      <img src={i.url} alt="" class="img-fluid" />
-                    </div>
-                  ))}
+                {secondList.map((i) => (
+                  <div class="carousel-item">
+                    <img src={i.url} alt="" class="img-fluid" />
+                  </div>
+                ))}
               </div>
 
               <ol class="carousel-indicators">
-                <li data-target="#single-product-slider" data-slide-to="0" class="active">
+                <li
+                  data-target="#single-product-slider"
+                  data-slide-to="0"
+                  class="active"
+                >
                   <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
                 </li>
-                {
-                  secondList.map((i, index) => (
-                    <li data-target="#single-product-slider" data-slide-to={index + 1}>
-                      <img src={i.url} alt="" class="img-fluid" />
-                    </li>
-                  ))
-                }
+                {secondList.map((i, index) => (
+                  <li
+                    data-target="#single-product-slider"
+                    data-slide-to={index + 1}
+                  >
+                    <img src={i.url} alt="" class="img-fluid" />
+                  </li>
+                ))}
               </ol>
 
-              <a class="carousel-control-prev" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <a
+                class="carousel-control-prev"
+                style={{ height: "72.5%" }}
+                href="#single-product-slider"
+                role="button"
+                data-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
                 <span class="sr-only">Previous</span>
               </a>
-              <a class="carousel-control-next" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <a
+                class="carousel-control-next"
+                style={{ height: "72.5%" }}
+                href="#single-product-slider"
+                role="button"
+                data-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
                 <span class="sr-only">Next</span>
               </a>
             </div>
           </div>
-        )
+        );
       } else {
         return (
           <div className="product-preview-image">
-            <img style={{ height: "667px", width: "445px" }} src={firstList[0].img[0].url} alt="" />
+            <img
+              style={{ height: "667px", width: "445px" }}
+              src={firstList[0].img[0].url}
+              alt=""
+            />
           </div>
-        )
+        );
       }
     } else {
-      return (
-        undefined
-      )
+      return undefined;
     }
   }
 
@@ -273,23 +322,17 @@ export default function SingleProduct() {
     } else if (event.target.value < 0) {
       setQuantity(1);
     }
-  }
+  };
 
   function handleAddToCart() {
-    navigate("/cart", { state: { serialNumber, price, quantity } })
+    navigate("/cart", { state: { serialNumber, price, quantity } });
   }
 
   function showPrice() {
     if (price) {
-      return (
-        <h3 class="product-price">
-          {price} đ
-        </h3>
-      )
+      return <h3 class="product-price">{price} đ</h3>;
     } else {
-      return (
-        undefined
-      )
+      return undefined;
     }
   }
 
@@ -305,60 +348,37 @@ export default function SingleProduct() {
                 </th>
               </tr>
               <tr className="product-price-table-tr">
-                <th className="product-price-table-th">
-                  Quantity from
-                </th>
-                <th className="product-price-table-th">
-                  Quantity to
-                </th>
-                <th className="product-price-table-th">
-                  Price
-                </th>
+                <th className="product-price-table-th">Quantity from</th>
+                <th className="product-price-table-th">Quantity to</th>
+                <th className="product-price-table-th">Price</th>
               </tr>
               {priceList.map((ele) => (
                 <tr className="product-price-table-tr">
-                  <td className="product-price-table-td">
-                    {ele.fromQuantity}
-                  </td>
-                  {
-                    ele.toQuantity !== Number.MAX_SAFE_INTEGER ?
-                      <td className="product-price-table-td">
-                        {ele.toQuantity}
-                      </td>
-                      :
-                      <td className="product-price-table-td">
-                        &infin;
-                      </td>
-                  }
-                  <td className="product-price-table-td">
-                    {ele.price}
-                  </td>
+                  <td className="product-price-table-td">{ele.fromQuantity}</td>
+                  {ele.toQuantity !== Number.MAX_SAFE_INTEGER ? (
+                    <td className="product-price-table-td">{ele.toQuantity}</td>
+                  ) : (
+                    <td className="product-price-table-td">&infin;</td>
+                  )}
+                  <td className="product-price-table-td">{ele.price}</td>
                 </tr>
               ))}
             </table>
           </div>
-        )
+        );
       } else {
-        return (
-          undefined
-        )
+        return undefined;
       }
     } else {
-      return (
-        undefined
-      )
+      return undefined;
     }
   }
 
   function showStock() {
     if (stock) {
-      return (
-        <h2>{stock} left in stock</h2>
-      )
+      return <h2>{stock} left in stock</h2>;
     } else {
-      return (
-        undefined
-      )
+      return undefined;
     }
   }
 
@@ -368,15 +388,19 @@ export default function SingleProduct() {
         <button
           style={{ color: "black", cursor: cursor }}
           className="btn btn-light mr-3"
-          onClick={
-            quantity > 1 ? handleDecreaseQuantity : undefined
-          }
+          onClick={quantity > 1 ? handleDecreaseQuantity : undefined}
           onMouseOver={handleCursorOver}
         >
           {" "}
           -{" "}
         </button>
-        <input type="number" onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} style={{ width: 120, textAlign: "center" }} value={quantity} onChange={handleChangeQuantity}></input>
+        <input
+          type="number"
+          onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+          style={{ width: 120, textAlign: "center" }}
+          value={quantity}
+          onChange={handleChangeQuantity}
+        ></input>
         <button
           style={{ color: "black" }}
           className="btn btn-light ml-3"
@@ -386,63 +410,51 @@ export default function SingleProduct() {
           +{" "}
         </button>
       </div>
-    )
-  }
+    );
+  };
 
   function showColorsOptions() {
-    return (
-      productColors.map((color) => (
-        <li class="list-inline-item">
-          <button
-            id="product-color-option"
-            className="rounded-pill"
-            style={{ backgroundColor: color }}
-            value={color}
-            onClick={handleGetProductDetailByColorAndSize}
-          ></button>
-        </li>
-      ))
-    )
+    return productColors.map((color) => (
+      <li class="list-inline-item">
+        <button
+          id="product-color-option"
+          className="rounded-pill"
+          style={{ backgroundColor: color }}
+          value={color}
+          onClick={handleGetProductDetailByColorAndSize}
+        ></button>
+      </li>
+    ));
   }
 
   function showSizesOptions() {
-    return (
-      productSizes.map((size) => (
-        <option value={size}>{size}</option>
-      ))
-    )
+    return productSizes.map((size) => <option value={size}>{size}</option>);
   }
 
   function handleSizesSelecting() {
-    return (
-      productSizes.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
-        ? (
-          <div class="product-size d-flex align-items-center mt-4">
-            <span class="font-weight-bold text-capitalize product-meta-title">
-              Size:
-            </span>
-            <select onChange={handleChoosingSize} class="form-control">
-              {showSizesOptions()}
-            </select>
-          </div>
-        ) : undefined
-    )
+    return productSizes.length !== 0 &&
+      !categoriesNoSizesAndColors.includes(product.category) ? (
+      <div class="product-size d-flex align-items-center mt-4">
+        <span class="font-weight-bold text-capitalize product-meta-title">
+          Size:
+        </span>
+        <select onChange={handleChoosingSize} class="form-control">
+          {showSizesOptions()}
+        </select>
+      </div>
+    ) : undefined;
   }
 
   function handleColorsSelecting() {
-    return (
-      productColors.length !== 0 && !categoriesNoSizesAndColors.includes(product.category)
-        ? (
-          <div class="color-swatches mt-4 d-flex align-items-center">
-            <span class="font-weight-bold text-capitalize product-meta-title">
-              Color:
-            </span>
-            <ul class="list-inline mb-0">
-              {showColorsOptions()}
-            </ul>
-          </div>
-        ) : undefined
-    )
+    return productColors.length !== 0 &&
+      !categoriesNoSizesAndColors.includes(product.category) ? (
+      <div class="color-swatches mt-4 d-flex align-items-center">
+        <span class="font-weight-bold text-capitalize product-meta-title">
+          Color:
+        </span>
+        <ul class="list-inline mb-0">{showColorsOptions()}</ul>
+      </div>
+    ) : undefined;
   }
 
   function showProductInformationTable() {
@@ -472,7 +484,7 @@ export default function SingleProduct() {
             <td id="information-value">{productDetail.weight} kg</td>
           </tr>
         ) : undefined}
-        { }
+        {}
         {productDetail.material ? (
           <tr class="list-unstyled info-desc">
             <th className="d-flex">
@@ -522,7 +534,7 @@ export default function SingleProduct() {
           </tr>
         ) : undefined}
       </table>
-    )
+    );
   }
 
   if (!product) {
@@ -530,39 +542,35 @@ export default function SingleProduct() {
       <div className="loader-container">
         <div className="spinner"></div>
       </div>
-    )
+    );
   } else {
     return (
       <div className="single-product-container">
         <section class="single-product">
           <div class="container">
             <div class="row">
-              <div class="col-md-5">
-                {showCarousel()}
-              </div>
+              <div class="col-md-5">{showCarousel()}</div>
 
               <div class="col-md-7">
                 <div class="single-product-details mt-5 mt-lg-0">
                   <h2>{product.name}</h2>
                   <div class="sku_wrapper mb-4">
-                    SKU: <span class="text-muted">{productDetail.serialNumber} </span>
+                    SKU:{" "}
+                    <span class="text-muted">
+                      {productDetail.serialNumber}{" "}
+                    </span>
                   </div>
 
                   <hr />
-                  <div>
-                    {showPrice()}
-                  </div>
-                  <div>
-                    {showPriceTable()}
-                  </div>
+
+                  <div>{showPrice()}</div>
+                  <div>{showPriceTable()}</div>
 
                   <p class="product-description my-4 mt-5 ">
                     {productDetail.briefDescription}
                   </p>
                   <div class="quantity d-flex align-items-center">
-                    <div className="mr-3">
-                      {handleChoosingQuantity()}
-                    </div>
+                    <div className="mr-3">{handleChoosingQuantity()}</div>
                     <button
                       class="btn btn-main rounded-pill btn-small"
                       type="submit"
@@ -571,13 +579,14 @@ export default function SingleProduct() {
                       Add to cart
                     </button>
                   </div>
-
                   {/* Phần chọn color sản phẩm */}
+
                   {handleColorsSelecting()}
                   {/* Hết phần chọn color sản phẩm */}
 
                   {/* Phần chọn size sản phẩm */}
                   {handleSizesSelecting()}
+
                   {/* Hết phần chọn size sản phẩm */}
 
                   <div class="products-meta mt-4">
@@ -601,7 +610,11 @@ export default function SingleProduct() {
             <div class="row">
               <div class="col-lg-12">
                 <nav class="product-info-tabs wc-tabs mt-5 mb-5">
-                  <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                  <div
+                    class="nav nav-tabs nav-fill"
+                    id="nav-tab"
+                    role="tablist"
+                  >
                     <a
                       class="nav-item nav-link active"
                       id="nav-home-tab"
@@ -698,10 +711,10 @@ export default function SingleProduct() {
                               </span>
                             </h6>
                             <p>
-                              Lorem ipsum dolor sit amet, consectetur adipisicing
-                              elit. Ipsum suscipit consequuntur in, perspiciatis
-                              laudantium ipsa fugit. Iure esse saepe error dolore
-                              quod.
+                              Lorem ipsum dolor sit amet, consectetur
+                              adipisicing elit. Ipsum suscipit consequuntur in,
+                              perspiciatis laudantium ipsa fugit. Iure esse
+                              saepe error dolore quod.
                             </p>
                           </div>
                         </div>
@@ -737,10 +750,10 @@ export default function SingleProduct() {
                               </span>
                             </h6>
                             <p>
-                              Lorem ipsum dolor sit amet, consectetur adipisicing
-                              elit. Ipsum suscipit consequuntur in, perspiciatis
-                              laudantium ipsa fugit. Iure esse saepe error dolore
-                              quod.
+                              Lorem ipsum dolor sit amet, consectetur
+                              adipisicing elit. Ipsum suscipit consequuntur in,
+                              perspiciatis laudantium ipsa fugit. Iure esse
+                              saepe error dolore quod.
                             </p>
                           </div>
                         </div>
@@ -962,5 +975,4 @@ export default function SingleProduct() {
       </div>
     );
   }
-
 }

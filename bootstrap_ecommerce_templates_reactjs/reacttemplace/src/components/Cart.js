@@ -92,7 +92,7 @@ function Cart() {
       window.history.replaceState({}, document.title);
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 200);
     }
     return () => {
       isStop = true;
@@ -108,13 +108,28 @@ function Cart() {
   if (cart.length === 0) {
     return (
       <>
-        <p style={{ textAlign: "center" }}>Ban chua dang nhap</p>
+        <div className="loader-container">
+          <div className="spinner"></div>
+        </div>
       </>
     );
-  } else if (checkEmpty === false) {
+  } else if (checkEmpty === false || cart.cartDetailModelList.length === 0) {
     return (
       <>
-        <p style={{ textAlign: "center" }}>Gio hang rong</p>
+        <div className="container">
+          <div className="row">
+            <div className="offset-lg-3 col-lg-6 col-md-12 col-12 text-center">
+              <img
+                src="https://codescandy.com/coach/rtl/assets/images/bag.svg"
+                alt="bag.svg"
+              />
+              <h2>Your shopping cart is empty</h2>
+              <a href="/" class="btn btn-main btn-small">
+                Back home
+              </a>
+            </div>
+          </div>
+        </div>
       </>
     );
   } else {
@@ -209,113 +224,79 @@ function Cart() {
         <section className="cart shopping page-wrapper">
           <div className="container">
             <div className="row">
-              <div className="col-lg-8">
-                <div className="product-list">
-                  <form className="cart-form">
-                    <table
-                      className="table shop_table shop_table_responsive cart"
-                      cellspacing="0"
-                    >
-                      <thead>
-                        <tr>
-                          <th className="product-thumbnail"> </th>
-                          <th className="product-name">Product</th>
-                          <th className="product-price">Price</th>
-                          <th>Size</th>
-                          <th>Color</th>
-                          <th className="product-quantity">Quantity</th>
-                          <th className="product-subtotal">SubTotal</th>
-                          <th className="product-remove"> </th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        {map(cart)}
-                        {cart.cartDetailModelList.map((i, index) => (
-                          <tr className="cart_item" key={index}>
-                            <td>
-                              <a href="/product-single">
-                                <img
-                                  src={
-                                    JSON.parse(i.size_color_img_quantity).img[0]
-                                  }
-                                  className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
-                                  alt=""
-                                />
-                              </a>
-                            </td>
-                            <td className="product-name" data-title="Product">
-                              <a href="#" style={{ fontSize: "20px" }}>
-                                {i.name}
-                              </a>
-                            </td>
-                            <td data-title="Total">
-                              <span className="amount">
-                                <span className="currencySymbol">
-                                  <p style={{ fontSize: "20px" }}>{i.price}</p>
-                                </span>
-                              </span>
-                            </td>
-                            <td>
-                              <p style={{ fontSize: "20px" }}>
-                                {JSON.parse(i.size_color_img_quantity).size}
-                              </p>
-                            </td>
-                            <td>
-                              <p style={{ fontSize: "20px" }}>
-                                {JSON.parse(i.size_color_img_quantity).color}
-                              </p>
-                            </td>
-                            <td>
-                              <p style={{ fontSize: "20px" }}>
-                                <input
-                                  type="number"
-                                  onKeyDown={(evt) =>
-                                    evt.key === "e" && evt.preventDefault()
-                                  }
-                                  name={index}
-                                  style={{ width: 120, textAlign: "center" }}
-                                  value={i.quantity}
-                                  a-key={index}
-                                  onChange={(e) =>
-                                    handleChangeQuantity(e.target.value, index)
-                                  }
-                                ></input>
-                              </p>
-                            </td>
-                            <td data-title="Total">
-                              <p style={{ fontSize: "20px" }}>{i.subTotal}</p>
-                            </td>
-                            <td data-title="Remove">
-                              <button
-                                value={i.serialNumber}
-                                onClick={handleDelete}
-                                type="button"
-                              >
-                                <i
-                                  id="deleteBox"
-                                  className="tf-ion-trash-b"
-                                  onMouseOver={handleCursorProductCard}
-                                  style={{
-                                    cursor: cursorProductCard,
-                                    fontSize: "20px",
-                                  }}
-                                ></i>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </form>
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleUpdate}
-                >
-                  Update Cart
-                </button>
+              <div class="col-lg-8">
+                <h5 class="mb-3">
+                  <a href="/" class="text-body">
+                    <i class="fas fa-long-arrow-alt-left me-2"></i>Continue
+                    shopping
+                  </a>
+                </h5>
+                <hr />
+                {cart.cartDetailModelList.map((i, index) => (
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <div class="d-flex flex-row align-items-center">
+                          <div>
+                            <img
+                              src={
+                                JSON.parse(i.size_color_img_quantity).img[0].url
+                              }
+                              class="img-fluid rounded-3"
+                              alt="Shopping item"
+                              style={{ width: "65px" }}
+                            />
+                          </div>
+                        </div>
+                        <div class="d-flex flex-row align-items-center">
+                          <div
+                            class="ms-3"
+                            style={{ width: "200px", fontStyle: "justify" }}
+                          >
+                            <h5>{i.name}</h5>
+                            <p class="small mb-0">{i.serialNumber}</p>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-row align-items-center">
+                          <input
+                            type="number"
+                            onKeyDown={(evt) =>
+                              evt.key === "e" && evt.preventDefault()
+                            }
+                            style={{ width: 100, textAlign: "center" }}
+                            value={i.quantity}
+                            a-key={index}
+                            onChange={(e) =>
+                              handleChangeQuantity(e.target.value, index)
+                            }
+                          ></input>
+                        </div>
+                        <div class="d-flex flex-row align-items-center">
+                          <div style={{ width: "100px" }}>
+                            <h5 class="mb-0">{i.subTotal}VND</h5>
+                          </div>
+                        </div>
+                        <div className="d-flex flex-row align-items-center">
+                          <button
+                            value={i.serialNumber}
+                            onClick={handleDelete}
+                            type="button"
+                          >
+                            <i
+                              id="deleteBox"
+                              className="tf-ion-trash-b"
+                              onMouseOver={handleCursorProductCard}
+                              style={{
+                                cursor: cursorProductCard,
+                                fontSize: "20px",
+                              }}
+                            ></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
               {totalPrice(cart)}
             </div>
