@@ -11,8 +11,6 @@ import Shop from "./components/Shop";
 import SignUp from "./components/Signup";
 import SingleProduct from "./components/SingleProduct";
 import Product from "./components/pages/Product";
-import FirstForm from "./components/testCreateProduct/FirstForm";
-import SecondForm from "./components/testCreateProduct/SecondForm";
 import axios from "axios";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
@@ -20,7 +18,6 @@ import store from "./redux/store";
 import { CART_URL } from "./components/URLS/url";
 import Profile from "./components/Profile";
 import Password from "./components/Password";
-import ThirdForm from "./components/testCreateProduct/ThirdForm";
 
 function App() {
   const [categories, setCategorise] = useState([]);
@@ -71,9 +68,6 @@ function App() {
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/password" element={<Password/>}/>
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/firstForm" element={<FirstForm />} />
-          <Route path="/secondForm" element={<SecondForm />} />
-          <Route path="/thirdForm" element={<ThirdForm />} />
           <Route path="/" element={<Home />} />
         </Routes>
         <Footer></Footer>

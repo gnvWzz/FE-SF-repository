@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PRODUCT_URL } from "./URLS/url";
 
-function SingleProduct() {
+export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
   const [cursor, setCursor] = useState("");
   const { package_id } = useParams();
@@ -16,6 +16,7 @@ function SingleProduct() {
   const [stock, setStock] = useState();
   const [serialNumber, setSerialNumber] = useState("");
   const [price, setPrice] = useState(0);
+  const [priceList, setPriceList] = useState([])
   const [choosingColor, setChoosingColor] = useState("");
   const [choosingSize, setChoosingSize] = useState("");
   const [imgList, setImgList] = useState([]);
@@ -46,9 +47,12 @@ function SingleProduct() {
             setProductDetails(res.data.productSFDetailDtos);
             setProductDetail(res.data.productSFDetailDtos[0]);
             setStock(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity);
-            setPrice(res.data.productSFDetailDtos[0].price1);
+            setPrice(res.data.priceListDtos[0].price);
             setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
             setQuantity(1);
+            setPriceList(res.data.priceListDtos);
+            localStorage.setItem("productPricesList", JSON.stringify(res.data.priceListDtos));
+            localStorage.setItem("stock", JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).quantity)
             setChoosingColor(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).color);
             setChoosingSize(JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity).size);
             res.data.productSFDetailDtos.map((p) => {
@@ -103,18 +107,11 @@ function SingleProduct() {
   }, [package_id]);
 
   useEffect(() => {
-    if (localStorage.getItem("token") !== null) {
-      if ((quantity < 100 && quantity >= 0) || Number.isNaN(quantity)) {
-        setPrice(productDetail.price1);
-      } else if (quantity >= 100 && quantity < 500) {
-        setPrice(productDetail.price2);
-      } else if (quantity >= 500 && quantity < 1000) {
-        setPrice(productDetail.price3);
-      } else if (quantity >= 1000) {
-        setPrice(productDetail.price4);
+    const pricesList = JSON.parse(localStorage.getItem("productPricesList"));
+    for (let i = 0; i < pricesList.length; i++) {
+      if (quantity <= pricesList[i].toQuantity && quantity >= pricesList[i].fromQuantity) {
+        setPrice(pricesList[i].price);
       }
-    } else {
-      navigate("/")
     }
   }, [quantity])
 
@@ -150,7 +147,6 @@ function SingleProduct() {
     if (parseInt(quantity) >= stock) {
       setQuantity(stock);
     }
-    console.log(imgList2)
   }
 
   function handleCursorOver() {
@@ -171,14 +167,14 @@ function SingleProduct() {
       },
       url: `${url}/find-product-detail-by-color-and-size/${c}/${oldSize}/${package_id}`,
       method: "GET"
-    }) 
+    })
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
-        setPrice(res.data.price1);
         setQuantity(1);
-        localStorage.setItem("choosingColor", c);
         setSerialNumber(res.data.serialNumber);
+        localStorage.setItem("choosingColor", c);
+        localStorage.setItem("stock", JSON.parse(res.data.size_color_img_quantity).quantity)
       })
       .catch((err) => {
         console.log(err);
@@ -199,10 +195,10 @@ function SingleProduct() {
       .then((res) => {
         setProductDetail(res.data);
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
-        setPrice(res.data.price1);
-        localStorage.setItem("choosingSize", s)
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
+        localStorage.setItem("choosingSize", s);
+        localStorage.setItem("stock", JSON.parse(res.data.size_color_img_quantity).quantity)
       })
       .catch((err) => {
         console.log(err);
@@ -224,54 +220,60 @@ function SingleProduct() {
         secondList.push(imgListToChoseColor[0].img[i]);
       }
 
-      return (
-        <div class="single-product-slider">
-          <div class="carousel slide" data-ride="carousel" id="single-product-slider">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
+      if (imgListToChoseColor[0].img.length > 1) {
+        return (
+          <div class="single-product-slider">
+            <div class="carousel slide" data-ride="carousel" id="single-product-slider">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
+                </div>
+                {
+                  secondList.map((i) => (
+                    <div class="carousel-item">
+                      <img src={i.url} alt="" class="img-fluid" />
+                    </div>
+                  ))}
               </div>
-              {
-                secondList.map((i) => (
-                  <div class="carousel-item">
-                    <img src={i.url} alt="" class="img-fluid" />
-                  </div>
-                ))}
+
+              <ol class="carousel-indicators">
+                <li data-target="#single-product-slider" data-slide-to="0" class="active">
+                  <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
+                </li>
+                {
+                  secondList.map((i, index) => (
+                    <li data-target="#single-product-slider" data-slide-to={index + 1}>
+                      <img src={i.url} alt="" class="img-fluid" />
+                    </li>
+                  ))
+                }
+              </ol>
+
+              <a class="carousel-control-prev" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
             </div>
-
-            <ol class="carousel-indicators">
-              <li data-target="#single-product-slider" data-slide-to="0" class="active">
-                <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
-              </li>
-              {
-                secondList.map((i, index) => (
-                  <li data-target="#single-product-slider" data-slide-to={index + 1}>
-                    <img src={i.url} alt="" class="img-fluid" />
-                  </li>
-                ))
-              }
-            </ol>
-
-            <a class="carousel-control-prev" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" style={{ height: "72.5%" }} href="#single-product-slider" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
           </div>
-        </div>
-      )
+        )
+      } else {
+        return (
+          <div className="product-preview-image">
+            <img style={{ height: "667px", width: "445px" }} src={firstList[0].img[0].url} alt="" />
+          </div>
+        )
+      }
     }
   }
 
   const handleChangeQuantity = (event) => {
-    if (event.target.value > stock) {
+    if (parseInt(event.target.value) > stock) {
       setQuantity(stock);
-      setPrice(productDetail.price4)
     } else if (event.target.value <= stock && event.target.value >= 0) {
-      console.log(event.target.value);
       setQuantity(parseInt(event.target.value));
     } else if (event.target.value < 0) {
       setQuantity(1);
@@ -280,6 +282,96 @@ function SingleProduct() {
 
   function handleAddToCart() {
     navigate("/cart", { state: { serialNumber, price, quantity } })
+  }
+
+  function showPrice() {
+    return (
+      <h3 class="product-price">
+        {price} đ
+      </h3>
+    )
+  }
+
+  function showPriceTable() {
+    const productPrices = JSON.parse(localStorage.getItem("productPricesList"));
+    if (productPrices.length !== 1) {
+      return (
+        <div className="mt-5" style={{
+
+        }}>
+          <table id="product-price-table-information">
+            <tr className="product-price-table-tr">
+              <th className="product-price-table-th" colSpan={3}>
+                PRICE CORRESPONDING TO QUANTITY RANGE
+              </th>
+            </tr>
+            <tr className="product-price-table-tr">
+              <th className="product-price-table-th">
+                Quantity from
+              </th>
+              <th className="product-price-table-th">
+                Quantity to
+              </th>
+              <th className="product-price-table-th">
+                Price
+              </th>
+            </tr>
+            {productPrices.map((ele) => (
+              <tr className="product-price-table-tr">
+                <td className="product-price-table-td">
+                  {ele.fromQuantity}
+                </td>
+                {
+                  ele.toQuantity !== Number.MAX_SAFE_INTEGER ?
+                    <td className="product-price-table-td">
+                      {ele.toQuantity}
+                    </td>
+                    :
+                    <td className="product-price-table-td">
+                      &infin;
+                    </td>
+                }
+                <td className="product-price-table-td">
+                  {ele.price}
+                </td>
+              </tr>
+            ))}
+          </table>
+        </div>
+      )
+    } else {
+      return (
+        undefined
+      )
+    }
+  }
+
+  const handleChoosingQuantity = (e) => {
+    const productStock = localStorage.getItem("stock");
+    return (
+      <div>
+        <button
+          style={{ color: "black", cursor: cursor }}
+          className="btn btn-light mr-3"
+          onClick={
+            quantity > 1 ? handleDecreaseQuantity : undefined
+          }
+          onMouseOver={handleCursorOver}
+        >
+          {" "}
+          -{" "}
+        </button>
+        <input type="number" onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} style={{ width: 120, textAlign: "center" }} value={quantity} onChange={handleChangeQuantity}></input>
+        <button
+          style={{ color: "black" }}
+          className="btn btn-light ml-3"
+          onClick={handleIncreaseQuantity}
+        >
+          {" "}
+          +{" "}
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -299,24 +391,19 @@ function SingleProduct() {
                 </div>
 
                 <hr />
+                <div>
+                  {showPrice()}
+                </div>
+                <div>
+                  {showPriceTable()}
+                </div>
 
-                {price !== productDetail.price1
-                  ?
-                  <h3 class="product-price">
-                    <del>{productDetail.price1} đ</del> {price} đ
-                  </h3>
-                  :
-                  <h3 class="product-price">
-                    {price} đ
-                  </h3>
-                }
-
-                <p class="product-description my-4 ">
+                <p class="product-description my-4 mt-5 ">
                   {productDetail.briefDescription}
                 </p>
                 <div class="quantity d-flex align-items-center">
                   <div className="mr-3">
-                    <button
+                    {/* <button
                       style={{ color: "black", cursor: cursor }}
                       className="btn btn-light mr-3"
                       onClick={
@@ -335,7 +422,8 @@ function SingleProduct() {
                     >
                       {" "}
                       +{" "}
-                    </button>
+                    </button> */}
+                    {handleChoosingQuantity()}
                   </div>
                   <button
                     class="btn btn-main rounded-pill btn-small"
@@ -463,15 +551,13 @@ function SingleProduct() {
                   role="tabpanel"
                   aria-labelledby="nav-profile-tab"
                 >
-                  <table>
+                  <table id="information-table">
                     {product.manufacturer ? (
                       <tr class="list-unstyled info-desc">
                         <th className="d-flex">
                           <strong>Manufacturer</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{product.manufacturer}</td>
-                        </td>
+                        <td id="information-value">{product.manufacturer}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.weight && productDetail.weight < 1 ? (
@@ -479,9 +565,7 @@ function SingleProduct() {
                         <th className="d-flex">
                           <strong>Weight</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.weight * 1000} g</td>
-                        </td>
+                        <td id="information-value">{productDetail.weight * 1000} g</td>
                       </tr>
                     ) : undefined}
                     {productDetail.weight && productDetail.weight >= 1 ? (
@@ -489,9 +573,7 @@ function SingleProduct() {
                         <th className="d-flex">
                           <strong>Weight</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.weight} kg</td>
-                        </td>
+                        <td id="information-value">{productDetail.weight} kg</td>
                       </tr>
                     ) : undefined}
                     { }
@@ -500,9 +582,7 @@ function SingleProduct() {
                         <th className="d-flex">
                           <strong>Material</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.material}</td>
-                        </td>
+                        <td id="information-value">{productDetail.material}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.cpu ? (
@@ -510,9 +590,7 @@ function SingleProduct() {
                         <th className="d-flex">
                           <strong>CPU</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.cpu}</td>
-                        </td>
+                        <td id="information-value">{productDetail.cpu}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.gpu ? (
@@ -528,9 +606,7 @@ function SingleProduct() {
                         <th className="d-flex">
                           <strong>RAM</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.ram}</td>
-                        </td>
+                        <td id="information-value">{productDetail.ram}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.storageDrive ? (
@@ -538,9 +614,7 @@ function SingleProduct() {
                         <th className="d-flex">
                           <strong>Storage Drive</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.storageDrive}</td>
-                        </td>
+                        <td id="information-value">{productDetail.storageDrive}</td>
                       </tr>
                     ) : undefined}
                     {productDetail.display ? (
@@ -548,9 +622,7 @@ function SingleProduct() {
                         <th className="d-flex">
                           <strong>Display</strong>
                         </th>
-                        <td>
-                          <td id="information-value">{productDetail.display}</td>
-                        </td>
+                        <td id="information-value">{productDetail.display}</td>
                       </tr>
                     ) : undefined}
                   </table>
@@ -858,4 +930,3 @@ function SingleProduct() {
     </div>
   );
 }
-export default SingleProduct;
