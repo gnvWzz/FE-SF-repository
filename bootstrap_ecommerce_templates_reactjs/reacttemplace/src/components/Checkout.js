@@ -15,13 +15,7 @@ function Checkout({ provinces }) {
 
   const user_url = ACCOUNT_URL;
 
-
   const [form, setForm] = useState({});
-
-  const [model, setModel] = useState({
-    form: {},
-    orderDetails: [],
-  });
 
   useEffect(() => {
     axios({
@@ -41,7 +35,6 @@ function Checkout({ provinces }) {
       .catch((err) => {
         throw err;
       });
-
   }, []);
 
   const REGEX = {
@@ -85,7 +78,6 @@ function Checkout({ provinces }) {
       if (isFilled) {
         // console.log(form);
         place_order(form);
-    
       } else {
         alert("Please fill out the fields");
       }
@@ -110,11 +102,19 @@ function Checkout({ provinces }) {
               alert("Place order successfully");
               navigate("/");
             } else {
-              alert("Place order fail");
+              alert("Out of stock");
             }
           })
           .catch((err) => {});
       }
+    };
+
+    const formatCurrency = (currency) => {
+      let intCurrency = currency;
+      const format = intCurrency
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return format;
     };
 
     const handleValidateOrder = async () => {
@@ -359,7 +359,8 @@ function Checkout({ provinces }) {
                             </p>
                             <div className="media-body text-right">
                               <p className="h5">
-                                {cart.quantity} x {cart.price} VND
+                                {cart.quantity} x {formatCurrency(cart.price)}{" "}
+                                VND
                               </p>
                             </div>
                           </div>
@@ -368,7 +369,9 @@ function Checkout({ provinces }) {
                         <ul className="summary-prices list-unstyled mb-4">
                           <li className="d-flex justify-content-between">
                             <span>Subtotal:</span>
-                            <span className="h5">{cart.totalPrice} VND</span>
+                            <span className="h5">
+                              {formatCurrency(cart.totalPrice)} VND
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>Shipping:</span>
@@ -376,7 +379,9 @@ function Checkout({ provinces }) {
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>Total</span>
-                            <span className="h5">{cart.totalPrice} VND</span>
+                            <span className="h5">
+                              {formatCurrency(cart.totalPrice)} VND
+                            </span>
                           </li>
                         </ul>
                         <h3 style={{ textAlign: "center" }}>DISCOUNT CODE</h3>

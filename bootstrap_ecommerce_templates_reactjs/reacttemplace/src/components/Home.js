@@ -31,6 +31,12 @@ function Home(props) {
     }
   };
 
+  const formatCurrency = (currency) => {
+    let intCurrency = currency;
+    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return format;
+  };
+
   const handleCursorProductCard = function () {
     setCursorProductCard("pointer");
   };
@@ -157,7 +163,14 @@ function Home(props) {
                     <h2 className="product-title h5 mb-0">
                       <div onClick={navigateToDetail} value={product.packageId}>
                         {product.name !== undefined ? (
-                          <a href="" onClick={() => {navigate(`/single-product/${product.packageId}`)}}>{product.name}</a>
+                          <a
+                            href=""
+                            onClick={() => {
+                              navigate(`/single-product/${product.packageId}`);
+                            }}
+                          >
+                            {product.name}
+                          </a>
                         ) : (
                           <a href="">No name</a>
                         )}
@@ -165,10 +178,16 @@ function Home(props) {
                     </h2>
                     {product.priceListDtos !== undefined ? (
                       <span className="price">
-                        {product.priceListDtos[0].price} VND
+                        <h4 style={{ color: "red", textAlign: "center" }}>
+                          {formatCurrency(product.priceListDtos[0].price)} VND
+                        </h4>
                       </span>
                     ) : (
-                      <span className="price">0 VND</span>
+                      <span className="price">
+                        <h4 style={{ color: "red", textAlign: "center" }}>
+                          0 VND
+                        </h4>
+                      </span>
                     )}
                   </div>
                 </div>
