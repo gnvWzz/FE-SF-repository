@@ -411,7 +411,7 @@ function Checkout({ provinces }) {
                         </div>
                         <button
                           onClick={handleSubmitOrder}
-                          class="btn btn-main btn-small"
+                          className="btn btn-main btn-small"
                         >
                           Place Order
                         </button>

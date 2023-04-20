@@ -14,7 +14,7 @@ export default function SingleProduct() {
   const [categoriesNoSizesAndColors, setCategoriseNoSizesAndColors] = useState([
     "Computer",
     "Electronics",
-    "Toys",
+    "Toy",
   ]);
   const [stock, setStock] = useState();
   const [serialNumber, setSerialNumber] = useState("");
@@ -234,66 +234,64 @@ export default function SingleProduct() {
 
       if (imgListToChoseColor[0].img.length > 1) {
         return (
-          <div class="single-product-slider">
+          <div className="single-product-slider">
             <div
-              class="carousel slide"
+              className="carousel slide"
               data-ride="carousel"
               id="single-product-slider"
             >
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
+              <div className="carousel-inner">
+                <div className="carousel-item active">
+                  <img src={firstList[0].img[0].url} alt="" className="img-fluid" />
                 </div>
                 {secondList.map((i) => (
-                  <div class="carousel-item">
-                    <img src={i.url} alt="" class="img-fluid" />
+                  <div className="carousel-item">
+                    <img src={i.url} alt="" className="img-fluid" />
                   </div>
                 ))}
               </div>
 
-              <ol class="carousel-indicators">
+              <ol className="carousel-indicators">
                 <li
                   data-target="#single-product-slider"
                   data-slide-to="0"
-                  class="active"
+                  className="active"
                 >
-                  <img src={firstList[0].img[0].url} alt="" class="img-fluid" />
+                  <img src={firstList[0].img[0].url} alt="" className="img-fluid" />
                 </li>
                 {secondList.map((i, index) => (
                   <li
                     data-target="#single-product-slider"
                     data-slide-to={index + 1}
                   >
-                    <img src={i.url} alt="" class="img-fluid" />
+                    <img src={i.url} alt="" className="img-fluid" />
                   </li>
                 ))}
               </ol>
 
               <a
-                class="carousel-control-prev"
-                style={{ height: "72.5%" }}
+                className="carousel-control-prev"
                 href="#single-product-slider"
                 role="button"
                 data-slide="prev"
               >
                 <span
-                  class="carousel-control-prev-icon"
+                  className="carousel-control-prev-icon"
                   aria-hidden="true"
                 ></span>
-                <span class="sr-only">Previous</span>
+                <span className="sr-only">Previous</span>
               </a>
               <a
-                class="carousel-control-next"
-                style={{ height: "72.5%" }}
+                className="carousel-control-next"
                 href="#single-product-slider"
                 role="button"
                 data-slide="next"
               >
                 <span
-                  class="carousel-control-next-icon"
+                  className="carousel-control-next-icon"
                   aria-hidden="true"
                 ></span>
-                <span class="sr-only">Next</span>
+                <span className="sr-only">Next</span>
               </a>
             </div>
           </div>
@@ -309,8 +307,88 @@ export default function SingleProduct() {
           </div>
         );
       }
-    } else {
-      return undefined;
+    }
+    else if (imgList2 && choosingColor === undefined) {
+      const listFirst = imgList2;
+      const listSecond = [];
+      for (var i = 1; i < listFirst[0].img.length; i++) {
+        listSecond.push(listFirst[0].img[i]);
+      }
+      if (imgList2[0].img.length > 1) {
+        return (
+          <div className="single-product-slider">
+            <div
+              className="carousel slide"
+              data-ride="carousel"
+              id="single-product-slider"
+            >
+              <div className="carousel-inner">
+                <div className="carousel-item active">
+                  <img src={listFirst[0].img[0].url} alt="" className="img-fluid" />
+                </div>
+                {listSecond.map((i) => (
+                  <div className="carousel-item">
+                    <img src={i.url} alt="" className="img-fluid" />
+                  </div>
+                ))}
+              </div>
+
+              <ol className="carousel-indicators">
+                <li
+                  data-target="#single-product-slider"
+                  data-slide-to="0"
+                  className="active"
+                >
+                  <img src={listFirst[0].img[0].url} alt="" className="img-fluid" />
+                </li>
+                {listSecond.map((i, index) => (
+                  <li
+                    data-target="#single-product-slider"
+                    data-slide-to={index + 1}
+                  >
+                    <img src={i.url} alt="" className="img-fluid" />
+                  </li>
+                ))}
+              </ol>
+
+              <a
+                className="carousel-control-prev"
+                href="#single-product-slider"
+                role="button"
+                data-slide="prev"
+              >
+                <span
+                  className="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="sr-only">Previous</span>
+              </a>
+              <a
+                className="carousel-control-next"
+                href="#single-product-slider"
+                role="button"
+                data-slide="next"
+              >
+                <span
+                  className="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="sr-only">Next</span>
+              </a>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div className="product-preview-image">
+            <img
+              style={{ height: "667px", width: "445px" }}
+              src={listFirst[0].img[0].url}
+              alt=""
+            />
+          </div>
+        );
+      }
     }
   }
 
@@ -330,7 +408,7 @@ export default function SingleProduct() {
 
   function showPrice() {
     if (price) {
-      return <h3 class="product-price">{price} đ</h3>;
+      return <h3 className="product-price">{formatCurrency(price)} đ</h3>;
     } else {
       return undefined;
     }
@@ -360,7 +438,7 @@ export default function SingleProduct() {
                   ) : (
                     <td className="product-price-table-td">&infin;</td>
                   )}
-                  <td className="product-price-table-td">{ele.price}</td>
+                  <td className="product-price-table-td">{formatCurrency(ele.price)}</td>
                 </tr>
               ))}
             </table>
@@ -416,7 +494,7 @@ export default function SingleProduct() {
 
   function showColorsOptions() {
     return productColors.map((color) => (
-      <li class="list-inline-item">
+      <li className="list-inline-item">
         <button
           id="product-color-option"
           className="rounded-pill"
@@ -425,7 +503,7 @@ export default function SingleProduct() {
           onClick={handleGetProductDetailByColorAndSize}
         ></button>
       </li>
-    ));
+    ))
   }
 
   function showSizesOptions() {
@@ -435,11 +513,11 @@ export default function SingleProduct() {
   function handleSizesSelecting() {
     return productSizes.length !== 0 &&
       !categoriesNoSizesAndColors.includes(product.category) ? (
-      <div class="product-size d-flex align-items-center mt-4">
-        <span class="font-weight-bold text-capitalize product-meta-title">
+      <div className="product-size d-flex align-items-center mt-4">
+        <span className="font-weight-bold text-capitalize product-meta-title">
           Size:
         </span>
-        <select onChange={handleChoosingSize} class="form-control">
+        <select onChange={handleChoosingSize} className="form-control">
           {showSizesOptions()}
         </select>
       </div>
@@ -449,11 +527,11 @@ export default function SingleProduct() {
   function handleColorsSelecting() {
     return productColors.length !== 0 &&
       !categoriesNoSizesAndColors.includes(product.category) ? (
-      <div class="color-swatches mt-4 d-flex align-items-center">
-        <span class="font-weight-bold text-capitalize product-meta-title">
+      <div className="color-swatches mt-4 d-flex align-items-center">
+        <span className="font-weight-bold text-capitalize product-meta-title">
           Color:
         </span>
-        <ul class="list-inline mb-0">{showColorsOptions()}</ul>
+        <ul className="list-inline mb-0">{showColorsOptions()}</ul>
       </div>
     ) : undefined;
   }
@@ -462,24 +540,24 @@ export default function SingleProduct() {
     return (
       <table id="information-table">
         {product.manufacturer ? (
-          <tr class="list-unstyled info-desc">
-            <th className="d-flex">
+          <tr className="list-unstyled info-desc">
+            <th className="information-key ">
               <strong>Manufacturer</strong>
             </th>
             <td id="information-value">{product.manufacturer}</td>
           </tr>
         ) : undefined}
         {productDetail.weight && productDetail.weight < 1 ? (
-          <tr class="list-unstyled info-desc">
-            <th className="d-flex">
+          <tr className="list-unstyled info-desc">
+            <th className="information-key ">
               <strong>Weight</strong>
             </th>
             <td id="information-value">{productDetail.weight * 1000} g</td>
           </tr>
         ) : undefined}
         {productDetail.weight && productDetail.weight >= 1 ? (
-          <tr class="list-unstyled info-desc">
-            <th className="d-flex">
+          <tr className="list-unstyled info-desc">
+            <th className="information-key ">
               <strong>Weight</strong>
             </th>
             <td id="information-value">{productDetail.weight} kg</td>
@@ -487,48 +565,48 @@ export default function SingleProduct() {
         ) : undefined}
         { }
         {productDetail.material ? (
-          <tr class="list-unstyled info-desc">
-            <th className="d-flex">
+          <tr className="list-unstyled info-desc">
+            <th className="information-key ">
               <strong>Material</strong>
             </th>
             <td id="information-value">{productDetail.material}</td>
           </tr>
         ) : undefined}
         {productDetail.cpu ? (
-          <tr class="list-unstyled info-desc">
-            <th className="d-flex">
+          <tr className="list-unstyled info-desc">
+            <th className="information-key ">
               <strong>CPU</strong>
             </th>
             <td id="information-value">{productDetail.cpu}</td>
           </tr>
         ) : undefined}
         {productDetail.gpu ? (
-          <tr class="list-unstyled info-desc">
-            <th className="d-flex">
+          <tr className="list-unstyled info-desc">
+            <th className="information-key ">
               <strong>GPU</strong>
             </th>
             <td id="information-value">{productDetail.gpu}</td>
           </tr>
         ) : undefined}
         {productDetail.ram ? (
-          <tr class="list-unstyled info-desc">
-            <th className="d-flex">
+          <tr className="list-unstyled info-desc">
+            <th className="information-key ">
               <strong>RAM</strong>
             </th>
             <td id="information-value">{productDetail.ram}</td>
           </tr>
         ) : undefined}
         {productDetail.storageDrive ? (
-          <tr class="list-unstyled info-desc">
-            <th className="d-flex">
+          <tr className="list-unstyled info-desc">
+            <th className="information-key ">
               <strong>Storage Drive</strong>
             </th>
             <td id="information-value">{productDetail.storageDrive}</td>
           </tr>
         ) : undefined}
         {productDetail.display ? (
-          <tr class="list-unstyled info-desc">
-            <th className="d-flex">
+          <tr className="list-unstyled info-desc">
+            <th className="information-key ">
               <strong>Display</strong>
             </th>
             <td id="information-value">{productDetail.display}</td>
@@ -537,6 +615,14 @@ export default function SingleProduct() {
       </table>
     );
   }
+
+  const formatCurrency = (currency) => {
+    let intCurrency = currency;
+    const format = intCurrency
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return format;
+  };
 
   if (!product) {
     return (
@@ -547,17 +633,17 @@ export default function SingleProduct() {
   } else {
     return (
       <div className="single-product-container">
-        <section class="single-product">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-5">{showCarousel()}</div>
+        <section className="single-product">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-5">{showCarousel()}</div>
 
-              <div class="col-md-7">
-                <div class="single-product-details mt-5 mt-lg-0">
+              <div className="col-md-7">
+                <div className="single-product-details mt-5 mt-lg-0">
                   <h2>{product.name}</h2>
-                  <div class="sku_wrapper mb-4">
+                  <div className="sku_wrapper mb-4">
                     SKU:{" "}
-                    <span class="text-muted">
+                    <span className="text-muted">
                       {productDetail.serialNumber}{" "}
                     </span>
                   </div>
@@ -567,13 +653,13 @@ export default function SingleProduct() {
                   <div>{showPrice()}</div>
                   <div>{showPriceTable()}</div>
 
-                  <p class="product-description my-4 mt-5 ">
+                  <p className="product-description my-4 mt-5 ">
                     {productDetail.briefDescription}
                   </p>
-                  <div class="quantity d-flex align-items-center">
+                  <div className="quantity d-flex align-items-center">
                     <div className="mr-3">{handleChoosingQuantity()}</div>
                     <button
-                      class="btn btn-main rounded-pill btn-small"
+                      className="btn btn-main rounded-pill btn-small"
                       type="submit"
                       onClick={handleAddToCart}
                     >
@@ -590,17 +676,17 @@ export default function SingleProduct() {
 
                   {/* Hết phần chọn size sản phẩm */}
 
-                  <div class="products-meta mt-4">
-                    <div class="product-category d-flex align-items-center">
-                      <span class="font-weight-bold text-capitalize product-meta-title">
+                  <div className="products-meta mt-4">
+                    <div className="product-category d-flex align-items-center">
+                      <span className="font-weight-bold text-capitalize product-meta-title">
                         Categories :
                       </span>
                       <a href="#">{product.category}</a>
                     </div>
                   </div>
 
-                  <div class="products-meta mt-4">
-                    <div class="product-category d-flex align-items-center">
+                  <div className="products-meta mt-4">
+                    <div className="product-category d-flex align-items-center">
                       {showStock()}
                     </div>
                   </div>
@@ -608,16 +694,16 @@ export default function SingleProduct() {
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-lg-12">
-                <nav class="product-info-tabs wc-tabs mt-5 mb-5">
+            <div className="row">
+              <div className="col-lg-12">
+                <nav className="product-info-tabs wc-tabs mt-5 mb-5">
                   <div
-                    class="nav nav-tabs nav-fill"
+                    className="nav nav-tabs nav-fill"
                     id="nav-tab"
                     role="tablist"
                   >
                     <a
-                      class="nav-item nav-link active"
+                      className="nav-item nav-link active"
                       id="nav-home-tab"
                       data-toggle="tab"
                       href="#nav-home"
@@ -628,7 +714,7 @@ export default function SingleProduct() {
                       Description
                     </a>
                     <a
-                      class="nav-item nav-link"
+                      className="nav-item nav-link"
                       id="nav-profile-tab"
                       data-toggle="tab"
                       href="#nav-profile"
@@ -639,7 +725,7 @@ export default function SingleProduct() {
                       Additional Information
                     </a>
                     <a
-                      class="nav-item nav-link"
+                      className="nav-item nav-link"
                       id="nav-contact-tab"
                       data-toggle="tab"
                       href="#nav-contact"
@@ -652,9 +738,9 @@ export default function SingleProduct() {
                   </div>
                 </nav>
 
-                <div class="tab-content" id="nav-tabContent">
+                <div className="tab-content" id="nav-tabContent">
                   <div
-                    class="tab-pane fade show active"
+                    className="tab-pane fade show active"
                     id="nav-home"
                     role="tabpanel"
                     aria-labelledby="nav-home-tab"
@@ -666,7 +752,7 @@ export default function SingleProduct() {
                     />
                   </div>
                   <div
-                    class="tab-pane fade"
+                    className="tab-pane fade"
                     id="nav-profile"
                     role="tabpanel"
                     aria-labelledby="nav-profile-tab"
@@ -674,40 +760,40 @@ export default function SingleProduct() {
                     {showProductInformationTable()}
                   </div>
                   <div
-                    class="tab-pane fade"
+                    className="tab-pane fade"
                     id="nav-contact"
                     role="tabpanel"
                     aria-labelledby="nav-contact-tab"
                   >
-                    <div class="row">
-                      <div class="col-lg-7">
-                        <div class="media review-block mb-4">
+                    <div className="row">
+                      <div className="col-lg-7">
+                        <div className="media review-block mb-4">
                           <img
                             src="assets/images/avater-1.jpg"
                             alt="reviewimg"
-                            class="img-fluid mr-4"
+                            className="img-fluid mr-4"
                           />
-                          <div class="media-body">
-                            <div class="product-review">
+                          <div className="media-body">
+                            <div className="product-review">
                               <span>
-                                <i class="tf-ion-android-star"></i>
+                                <i className="tf-ion-android-star"></i>
                               </span>
                               <span>
-                                <i class="tf-ion-android-star"></i>
+                                <i className="tf-ion-android-star"></i>
                               </span>
                               <span>
-                                <i class="tf-ion-android-star"></i>
+                                <i className="tf-ion-android-star"></i>
                               </span>
                               <span>
-                                <i class="tf-ion-android-star"></i>
+                                <i className="tf-ion-android-star"></i>
                               </span>
                               <span>
-                                <i class="tf-ion-android-star"></i>
+                                <i className="tf-ion-android-star"></i>
                               </span>
                             </div>
                             <h6>
                               Therichpost{" "}
-                              <span class="text-sm text-muted font-weight-normal ml-3">
+                              <span className="text-sm text-muted font-weight-normal ml-3">
                                 -June 23, 2019
                               </span>
                             </h6>
@@ -720,33 +806,33 @@ export default function SingleProduct() {
                           </div>
                         </div>
 
-                        <div class="media review-block">
+                        <div className="media review-block">
                           <img
                             src="assets/images/avater-2.jpg"
                             alt="reviewimg"
-                            class="img-fluid mr-4"
+                            className="img-fluid mr-4"
                           />
-                          <div class="media-body">
-                            <div class="product-review">
+                          <div className="media-body">
+                            <div className="product-review">
                               <span>
-                                <i class="tf-ion-android-star"></i>
+                                <i className="tf-ion-android-star"></i>
                               </span>
                               <span>
-                                <i class="tf-ion-android-star"></i>
+                                <i className="tf-ion-android-star"></i>
                               </span>
                               <span>
-                                <i class="tf-ion-android-star"></i>
+                                <i className="tf-ion-android-star"></i>
                               </span>
                               <span>
-                                <i class="tf-ion-android-star"></i>
+                                <i className="tf-ion-android-star"></i>
                               </span>
                               <span>
-                                <i class="tf-ion-android-star-outline"></i>
+                                <i className="tf-ion-android-star-outline"></i>
                               </span>
                             </div>
                             <h6>
                               Therichpost{" "}
-                              <span class="text-sm text-muted font-weight-normal ml-3">
+                              <span className="text-sm text-muted font-weight-normal ml-3">
                                 -June 23, 2019
                               </span>
                             </h6>
@@ -760,31 +846,31 @@ export default function SingleProduct() {
                         </div>
                       </div>
 
-                      <div class="col-lg-5">
-                        <div class="review-comment mt-5 mt-lg-0">
-                          <h4 class="mb-3">Add a Review</h4>
+                      <div className="col-lg-5">
+                        <div className="review-comment mt-5 mt-lg-0">
+                          <h4 className="mb-3">Add a Review</h4>
 
                           <form action="#">
-                            <div class="starrr"></div>
-                            <div class="form-group">
+                            <div className="starrr"></div>
+                            <div className="form-group">
                               <input
                                 type="text"
-                                class="form-control"
+                                className="form-control"
                                 placeholder="Your Name"
                               />
                             </div>
-                            <div class="form-group">
+                            <div className="form-group">
                               <input
                                 type="email"
-                                class="form-control"
+                                className="form-control"
                                 placeholder="Your Email"
                               />
                             </div>
-                            <div class="form-group">
+                            <div className="form-group">
                               <textarea
                                 name="comment"
                                 id="comment"
-                                class="form-control"
+                                className="form-control"
                                 cols="30"
                                 rows="4"
                                 placeholder="Your Review"
@@ -793,7 +879,7 @@ export default function SingleProduct() {
 
                             <a
                               routerLink="/product-single"
-                              class="btn btn-main btn-small"
+                              className="btn btn-main btn-small"
                             >
                               Submit Review
                             </a>
@@ -808,165 +894,165 @@ export default function SingleProduct() {
           </div>
         </section>
 
-        <section class="products related-products section">
-          <div class="container">
-            <div class="row justify-content-center">
-              <div class="col-lg-6">
-                <div class="title text-center">
+        <section className="products related-products section">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-lg-6">
+                <div className="title text-center">
                   <h2>You may like this</h2>
                   <p>The best Online sales to shop these weekend</p>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-lg-3 col-6">
-                <div class="product">
-                  <div class="product-wrap">
+            <div className="row">
+              <div className="col-lg-3 col-6">
+                <div className="product">
+                  <div className="product-wrap">
                     <a routerLink="/product-single">
                       <img
-                        class="img-fluid w-100 mb-3 img-first"
+                        className="img-fluid w-100 mb-3 img-first"
                         src="assets/images/322.jpg"
                         alt="product-img"
                       />
                     </a>
                     <a routerLink="/product-single">
                       <img
-                        class="img-fluid w-100 mb-3 img-second"
+                        className="img-fluid w-100 mb-3 img-second"
                         src="assets/images/444.jpg"
                         alt="product-img"
                       />
                     </a>
                   </div>
 
-                  <span class="onsale">Sale</span>
-                  <div class="product-hover-overlay">
+                  <span className="onsale">Sale</span>
+                  <div className="product-hover-overlay">
                     <a href="#">
-                      <i class="tf-ion-android-cart"></i>
+                      <i className="tf-ion-android-cart"></i>
                     </a>
                     <a href="#">
-                      <i class="tf-ion-ios-heart"></i>
+                      <i className="tf-ion-ios-heart"></i>
                     </a>
                   </div>
 
-                  <div class="product-info">
-                    <h2 class="product-title h5 mb-0">
+                  <div className="product-info">
+                    <h2 className="product-title h5 mb-0">
                       <a routerLink="/product-single">Kirby Shirt</a>
                     </h2>
-                    <span class="price">$329.10</span>
+                    <span className="price">$329.10</span>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-3 col-6">
-                <div class="product">
-                  <div class="product-wrap">
+              <div className="col-lg-3 col-6">
+                <div className="product">
+                  <div className="product-wrap">
                     <a routerLink="/product-single">
                       <img
-                        class="img-fluid w-100 mb-3 img-first"
+                        className="img-fluid w-100 mb-3 img-first"
                         src="assets/images/111.jpg"
                         alt="product-img"
                       />
                     </a>
                     <a routerLink="/product-single">
                       <img
-                        class="img-fluid w-100 mb-3 img-second"
+                        className="img-fluid w-100 mb-3 img-second"
                         src="assets/images/222.jpg"
                         alt="product-img"
                       />
                     </a>
                   </div>
 
-                  <span class="onsale">Sale</span>
-                  <div class="product-hover-overlay">
+                  <span className="onsale">Sale</span>
+                  <div className="product-hover-overlay">
                     <a href="#">
-                      <i class="tf-ion-android-cart"></i>
+                      <i className="tf-ion-android-cart"></i>
                     </a>
                     <a href="#">
-                      <i class="tf-ion-ios-heart"></i>
+                      <i className="tf-ion-ios-heart"></i>
                     </a>
                   </div>
 
-                  <div class="product-info">
-                    <h2 class="product-title h5 mb-0">
+                  <div className="product-info">
+                    <h2 className="product-title h5 mb-0">
                       <a routerLink="/product-single">Kirby Shirt</a>
                     </h2>
-                    <span class="price">$329.10</span>
+                    <span className="price">$329.10</span>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-3 col-6">
-                <div class="product">
-                  <div class="product-wrap">
+              <div className="col-lg-3 col-6">
+                <div className="product">
+                  <div className="product-wrap">
                     <a routerLink="/product-single">
                       <img
-                        class="img-fluid w-100 mb-3 img-first"
+                        className="img-fluid w-100 mb-3 img-first"
                         src="assets/images/111.jpg"
                         alt="product-img"
                       />
                     </a>
                     <a routerLink="/product-single">
                       <img
-                        class="img-fluid w-100 mb-3 img-second"
+                        className="img-fluid w-100 mb-3 img-second"
                         src="assets/images/322.jpg"
                         alt="product-img"
                       />
                     </a>
                   </div>
 
-                  <span class="onsale">Sale</span>
-                  <div class="product-hover-overlay">
+                  <span className="onsale">Sale</span>
+                  <div className="product-hover-overlay">
                     <a href="#">
-                      <i class="tf-ion-android-cart"></i>
+                      <i className="tf-ion-android-cart"></i>
                     </a>
                     <a href="#">
-                      <i class="tf-ion-ios-heart"></i>
+                      <i className="tf-ion-ios-heart"></i>
                     </a>
                   </div>
 
-                  <div class="product-info">
-                    <h2 class="product-title h5 mb-0">
+                  <div className="product-info">
+                    <h2 className="product-title h5 mb-0">
                       <a routerLink="/product-single">Kirby Shirt</a>
                     </h2>
-                    <span class="price">$329.10</span>
+                    <span className="price">$329.10</span>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-3 col-6">
-                <div class="product">
-                  <div class="product-wrap">
+              <div className="col-lg-3 col-6">
+                <div className="product">
+                  <div className="product-wrap">
                     <a routerLink="/product-single">
                       <img
-                        class="img-fluid w-100 mb-3 img-first"
+                        className="img-fluid w-100 mb-3 img-first"
                         src="assets/images/444.jpg"
                         alt="product-img"
                       />
                     </a>
                     <a routerLink="/product-single">
                       <img
-                        class="img-fluid w-100 mb-3 img-second"
+                        className="img-fluid w-100 mb-3 img-second"
                         src="assets/images/222.jpg"
                         alt="product-img"
                       />
                     </a>
                   </div>
 
-                  <span class="onsale">Sale</span>
-                  <div class="product-hover-overlay">
+                  <span className="onsale">Sale</span>
+                  <div className="product-hover-overlay">
                     <a href="#">
-                      <i class="tf-ion-android-cart"></i>
+                      <i className="tf-ion-android-cart"></i>
                     </a>
                     <a href="#">
-                      <i class="tf-ion-ios-heart"></i>
+                      <i className="tf-ion-ios-heart"></i>
                     </a>
                   </div>
 
-                  <div class="product-info">
-                    <h2 class="product-title h5 mb-0">
+                  <div className="product-info">
+                    <h2 className="product-title h5 mb-0">
                       <a routerLink="/product-single">Kirby Shirt</a>
                     </h2>
-                    <span class="price">$329.10</span>
+                    <span className="price">$329.10</span>
                   </div>
                 </div>
               </div>
