@@ -1,28 +1,29 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ORDER_URL } from "./URLS/url";
 
 export default function MyOrder(){
+
+  const url = ORDER_URL;
+  const loginName = localStorage.getItem("username");
   
-    const [listUser, setListUser] = useState([]);
+  const [listOrder, setListOrder] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = listUser.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = listOrder.slice(indexOfFirstItem, indexOfLastItem);
   const pageNumbers = [];
   let isCancelled = false;
-  const [userNameDelete, setUserNameDelete] = useState();
   const navigate = useNavigate();
-  const [isModalOn, setIsModalOn] = useState(false);
-
   useEffect(() => {
     if (!isCancelled) {
       axios
-        .get("http://localhost:8080/get-users")
+        .get(`${url}/list/${loginName}`)
         .then((res) => {
-          setListUser(res.data);
-          console.log(listUser);
+          setListOrder(res.data);
+          console.log(listOrder);
         })
         .catch((err) => {
           console.log(err);
@@ -36,7 +37,7 @@ export default function MyOrder(){
   }, [isCancelled]);
 
   const handelePageNumbers = () => {
-    for (let i = 1; i <= listUser.length / itemsPerPage + 1; i++) {
+    for (let i = 1; i <= listOrder.length / itemsPerPage + 1; i++) {
       pageNumbers.push(i);
     }
     return pageNumbers;
@@ -60,114 +61,34 @@ export default function MyOrder(){
 
   const renderPageNumbers = handelePageNumbers().map((number) => {
     return (
-      <li onClick={handleClickPage} className="page-item page-link" id={number}>
+      <li onClick={handleClickPage} className="page-item page-link" style={{height:"34px", color:"black"}} id={number}>
         {number}
       </li>
     );
   });
 
-  const handleDelete = (e) => {
-    let data = e.target.value;
-    axios
-      .delete(`http://localhost:8080/delete/${data}`)
-      .then((res) => {
-        alert(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        throw err;
-      });
-
-    setUserNameDelete("");
-    setIsModalOn(false);
-    window.location.reload();
-  };
-
-  const handleUserName = (e) => {
-    setIsModalOn(true);
-    setUserNameDelete(e.target.value);
-  };
-
-  const handleCreate  = ()=>{
-    navigate("/signup");
+  const handleView = ()=>{
+    navigate(`/orderdetails`)
   }
 
-  const renderUser = currentItems.map((user) => (
+
+  const renderOrder = currentItems.map((order,index) => (                          
     <tr>
-      <td>{user.id}</td>
-      <td>{user.username}</td>
-      <td>{user.password}</td>
-      <td>{user.phone}</td>
-      <td>{user.email}</td>
-      <td>
-        {/* <img src={user.image} class="rounded-circle user_img" alt="avatar" /> */}
-      </td>
-      <td>{user.online}</td>
+      {/* <td>{index + 1}</td> */}
+      <td>{order.dateOrder}</td>
+      <td>{order.firstName} {order.lastName}</td>
+      <td>{order.phone}</td>
+      <td>{order.email}</td>
+      <td>{order.street},{order.district},{order.city}</td>
+      <td >{order.orderCode}</td>
       <td style={{ textAlign: "center" }}>
-        <button className="btn btn-primary ">Edit</button>
-        <button
-          className="btn btn-info ml-2"
-          type="button"
-          data-toggle="modal"
-          data-target="#exampleModal"
-          value={user.username}
-          onClick={handleUserName}
-        >
-          Delete
-        </button>
+        <button  className= "button-order" onClick={handleView} >Views</button>
       </td>
     </tr>
   ));
 
   return (
-    <div>
-      {isModalOn ? (
-        <div
-          class="modal fade"
-          id="exampleModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                  Do you want to delete this user?
-                </h5>
-                <button
-                  type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  No
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  onClick={handleDelete}
-                  value={userNameDelete}
-                >
-                  Yes
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
+   <div>
       <h1 style={{ textAlign: "center", color: "black" }}>Order History</h1>
       <div className="ml-5 mb-2"  style={{width:400,textAlign:"center"}}>
         <div class="input-group">
@@ -202,19 +123,17 @@ export default function MyOrder(){
                         >
                           <thead>
                             <tr className="headerTable">
-                              <th scope="col">ID</th>
-                              <th scope="col">Username</th>
-                              <th scope="col">Password</th>
+                              {/* <th scope="col">ID</th> */}
+                              <th scope="col">Date</th>
+                              <th scope="col">Receiver</th>
                               <th scope="col">Phone</th>
                               <th scope="col">Email</th>
-                              <th scope="col">Image</th>
-                              <th scope="col">Status</th>
-                              <th scope="col" style={{ textAlign: "center" }}>
-                                Action
-                              </th>
+                              <th scope="col">Address</th>
+                              <th scope="col">Order Code</th>
+                              <th scope="col" style={{ textAlign: "center" }}>Details</th>
                             </tr>
                           </thead>
-                          <tbody>{renderUser}</tbody>
+                          <tbody>{renderOrder}</tbody>
                         </table>
                       </div>
                     </div>
@@ -226,21 +145,21 @@ export default function MyOrder(){
         </div>
       </section>
       <div className="mt-2 ml-5">
-        <nav aria-label="Page navigation example ">
+        {/* <nav aria-label="Page navigation example "> */}
           <ul className="pagination">
             <li className="page-item">
-              <a className="page-link" onClick={handlePrevious}>
+              <button className= "button-order"  onClick={handlePrevious}>
                 Trước
-              </a>
+              </button>
             </li>
             {renderPageNumbers}
             <li className="page-item">
-              <a className="page-link" onClick={handleNext}>
+              <button className= "button-order"  onClick={handleNext}>
                 Sau
-              </a>
+              </button>
             </li>
           </ul>
-        </nav>
+        {/* </nav> */}
       </div>
     </div>
   );

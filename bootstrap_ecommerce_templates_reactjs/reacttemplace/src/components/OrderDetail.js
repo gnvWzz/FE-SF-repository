@@ -3,7 +3,7 @@
 export default function OrderDetails(){
 
     return(
-        <section class="h-30 gradient-custom">
+        <section class="h-100 gradient-custom">
         <div class="container py-5 h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-lg-10 col-xl-8">
@@ -29,9 +29,7 @@ export default function OrderDetails(){
                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                           <p class="text-muted mb-0 small">White</p>
                         </div>
-                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                          <p class="text-muted mb-0 small">Capacity: 64GB</p>
-                        </div>
+                       
                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                           <p class="text-muted mb-0 small">Qty: 1</p>
                         </div>
