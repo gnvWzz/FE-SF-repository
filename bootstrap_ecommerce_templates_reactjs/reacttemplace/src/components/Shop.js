@@ -223,7 +223,6 @@ export default function Shop({ categories }) {
                             />
                           </a>
                         </div>
-                        <span className="onsale">Sale</span>
                         <div className="product-hover-overlay">
                           <a href="#">
                             <i className="tf-ion-android-cart"></i>
@@ -386,7 +385,7 @@ export default function Shop({ categories }) {
                         style={{ height: 200 }}
                       />
                     </div>
-                    <span className="onsale">Sale</span>
+                   
                     <div className="product-hover-overlay">
                       <Link
                         to={`/single-product/${product.productSFDetailDtos[0].serialNumber}`}
