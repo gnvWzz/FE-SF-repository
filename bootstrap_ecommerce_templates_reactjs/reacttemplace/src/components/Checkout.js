@@ -83,6 +83,7 @@ function Checkout({ provinces }) {
       }
     };
 
+    console.log(state.cart.cartDetailModelList);
     const place_order = async (e) => {
       if (state.cart.cartDetailModelList === 0) {
         <p>Loading</p>;
@@ -185,7 +186,7 @@ function Checkout({ provinces }) {
                                 <Field
                                   type="text"
                                   className="form-control"
-                                  name="first_name"
+                                  name="firstName"
                                   value={form.firstName || ""}
                                   placeholder="Enter Your First Name"
                                   onChange={handleChangeOrder}
@@ -208,7 +209,7 @@ function Checkout({ provinces }) {
                                 <Field
                                   type="text"
                                   className="form-control"
-                                  name="last_name"
+                                  name="lastName"
                                   value={form.lastName || ""}
                                   placeholder="Enter Your Last Name"
                                   onChange={handleChangeOrder}
@@ -241,33 +242,6 @@ function Checkout({ provinces }) {
                               <div
                                 class="form-group mb-4"
                                 className={`custom-input ${
-                                  errors.street_address
-                                    ? "form-group mb-4 custom-input-error"
-                                    : "form-group mb-4"
-                                }`}
-                              >
-                                <label for="#"> Street Address</label>
-                                <Field
-                                  type="text"
-                                  className="form-control"
-                                  name="street_address"
-                                  value={form.street || ""}
-                                  placeholder="Enter Your Street Address"
-                                  onChange={handleChangeOrder}
-                                />
-                                {errors.street_address &&
-                                touched.street_address ? (
-                                  <p className="error">
-                                    {errors.street_address}
-                                  </p>
-                                ) : null}
-                              </div>
-                            </div>
-
-                            <div className="col-lg-12">
-                              <div
-                                class="form-group mb-4"
-                                className={`custom-input ${
                                   errors.district
                                     ? "form-group mb-4 custom-input-error"
                                     : "form-group mb-4"
@@ -284,6 +258,33 @@ function Checkout({ provinces }) {
                                 />
                                 {errors.district && touched.district ? (
                                   <p className="error">{errors.district}</p>
+                                ) : null}
+                              </div>
+                            </div>
+
+                            <div className="col-lg-12">
+                              <div
+                                class="form-group mb-4"
+                                className={`custom-input ${
+                                  errors.street_address
+                                    ? "form-group mb-4 custom-input-error"
+                                    : "form-group mb-4"
+                                }`}
+                              >
+                                <label for="#"> Street Address</label>
+                                <Field
+                                  type="text"
+                                  className="form-control"
+                                  name="street"
+                                  value={form.street || ""}
+                                  placeholder="Enter Your Street Address"
+                                  onChange={handleChangeOrder}
+                                />
+                                {errors.street_address &&
+                                touched.street_address ? (
+                                  <p className="error">
+                                    {errors.street_address}
+                                  </p>
                                 ) : null}
                               </div>
                             </div>
@@ -328,6 +329,7 @@ function Checkout({ provinces }) {
                                   value={form.email || ""}
                                   placeholder="Enter Your Email"
                                   onChange={handleChangeOrder}
+                                  readOnly
                                 />
                                 {errors.email && touched.email ? (
                                   <p className="error">{errors.email}</p>

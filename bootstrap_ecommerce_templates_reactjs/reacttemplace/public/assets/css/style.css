@@ -2458,3 +2458,15 @@ td {
   width: 250px;
 }
 
+.button-order{
+  background-color: #fb5c42;
+  color: #fff;
+  border: 3px solid #ff5f5f;
+  
+}
+.button-order:hover {
+  background: #f24f21;
+  border-color:  #4b4b4b;
+  color: #fff !important;
+}
+
