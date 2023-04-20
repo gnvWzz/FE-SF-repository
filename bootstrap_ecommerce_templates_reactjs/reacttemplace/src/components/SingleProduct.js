@@ -15,6 +15,8 @@ export default function SingleProduct() {
     "Computer",
     "Electronics",
     "Toy",
+    "Watch",
+    "HandBag"
   ]);
   const [stock, setStock] = useState();
   const [serialNumber, setSerialNumber] = useState("");
@@ -667,13 +669,11 @@ export default function SingleProduct() {
                     </button>
                   </div>
                   {/* Phần chọn color sản phẩm */}
-
                   {handleColorsSelecting()}
                   {/* Hết phần chọn color sản phẩm */}
 
                   {/* Phần chọn size sản phẩm */}
                   {handleSizesSelecting()}
-
                   {/* Hết phần chọn size sản phẩm */}
 
                   <div className="products-meta mt-4">
