@@ -114,11 +114,9 @@ function Home(props) {
                 <div className="product">
                   <div className="product-wrap">
                     <div onClick={navigateToDetail} value={product.packageId}>
-                      {
-                        JSON.parse(
-                          product.productSFDetailDtos[0].size_color_img_quantity
-                        ).img[0].url !== ""
-                       ? (
+                      {JSON.parse(
+                        product.productSFDetailDtos[0].size_color_img_quantity
+                      ).img[0].url !== "" ? (
                         <img
                           className="img-fluid w-100 mb-3 img-first"
                           src={
@@ -133,21 +131,11 @@ function Home(props) {
                       ) : (
                         <img
                           className="img-fluid w-100 mb-3 img-first"
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
                           style={{ height: "350px" }}
                           alt="product-img"
                         />
                       )}
-                      {/* <img
-                        className="img-fluid w-100 mb-3 img-first"
-                        src={
-                          JSON.parse(
-                            product.productSFDetailDtos[0]
-                              .size_color_img_quantity
-                          ).img[0].url
-                        }
-                        style={{height : "350px"}}
-                        alt="product-img"
-                      /> */}
                     </div>
                   </div>
 
@@ -158,6 +146,7 @@ function Home(props) {
                       </a>
                     </div>
 
+                    {/* Wishlist */}
                     {/* <div onClick={navigateToDetail} value={product.packageId}>
                       <a href="">
                         <i className="tf-ion-ios-heart"></i>
@@ -167,12 +156,20 @@ function Home(props) {
                   <div className="product-info">
                     <h2 className="product-title h5 mb-0">
                       <div onClick={navigateToDetail} value={product.packageId}>
-                        <a href="">{product.name}</a>
+                        {product.name !== undefined ? (
+                          <a href="" onClick={() => {navigate(`/single-product/${product.packageId}`)}}>{product.name}</a>
+                        ) : (
+                          <a href="">No name</a>
+                        )}
                       </div>
                     </h2>
-                    <span className="price">
-                      {product.priceListDtos[0].price} VND
-                    </span>
+                    {product.priceListDtos !== undefined ? (
+                      <span className="price">
+                        {product.priceListDtos[0].price} VND
+                      </span>
+                    ) : (
+                      <span className="price">0 VND</span>
+                    )}
                   </div>
                 </div>
               </div>

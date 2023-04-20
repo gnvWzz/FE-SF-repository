@@ -125,7 +125,7 @@ function Cart() {
                 alt="bag.svg"
               />
               <h2>Your shopping cart is empty</h2>
-              <a href="/" class="btn btn-main btn-small">
+              <a href="/" className="btn btn-main btn-small">
                 Back home
               </a>
             </div>
@@ -152,7 +152,11 @@ function Cart() {
                 <ul className="list-unstyled mb-4">
                   <li className="d-flex justify-content-between pb-2 mb-3">
                     <h5>Subtotal</h5>
-                    <span>{list.totalPrice} VND</span>
+                    {list.totalPrice !== "" ? (
+                      <span>{list.totalPrice} VND</span>
+                    ) : (
+                      <span>No totalPrice </span>
+                    )}
                   </li>
                   <li className="d-flex justify-content-between pb-2 mb-3">
                     <h5>Shipping</h5>
@@ -160,7 +164,11 @@ function Cart() {
                   </li>
                   <li className="d-flex justify-content-between pb-2">
                     <h5>Total</h5>
-                    <span>{list.totalPrice} VND</span>
+                    {list.totalPrice !== "" ? (
+                      <span>{list.totalPrice} VND</span>
+                    ) : (
+                      <span>No totalPrice</span>
+                    )}
                   </li>
                 </ul>
                 <button
@@ -227,6 +235,8 @@ function Cart() {
         });
     };
 
+    console.log(cart.cartDetailModelList);
+
     const handleChangeQuantity = (value, index) => {
       const stock = JSON.parse(
         cart.cartDetailModelList[index].size_color_img_quantity
@@ -255,86 +265,104 @@ function Cart() {
         <section className="cart shopping page-wrapper">
           <div className="container">
             <div className="row">
-              <div class="col-lg-8">
-                <h5 class="mb-3">
-                  <a href="/" class="text-body">
-                    <i class="fas fa-long-arrow-alt-left me-2"></i>Continue
+              <div className="col-lg-8">
+                <h5 className="mb-3">
+                  <a href="/" className="text-body">
+                    <i className="fas fa-long-arrow-alt-left me-2"></i>Continue
                     shopping
                   </a>
                 </h5>
                 <hr />
                 {cart.cartDetailModelList.map((i, index) => (
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between">
-                        <div class="d-flex flex-row align-items-center">
+                  <div className="card mb-3">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between">
+                        <div className="d-flex flex-row align-items-center">
                           <div>
-                            {JSON.parse(i.size_color_img_quantity).img[0]
-                              .url !== "" ? (
+                            {JSON.parse(i.size_color_img_quantity).img
+                              .length !== 0 ? (
                               <img
                                 className="img-fluid w-100 mb-3 img-first"
                                 src={
                                   JSON.parse(i.size_color_img_quantity).img[0]
                                     .url
                                 }
-                                style={{ height: "65px" }}
+                                style={{ height: "65px", width: "50px" }}
                                 alt="product-img"
                               />
                             ) : (
                               <img
                                 className="img-fluid w-100 mb-3 img-first"
-                                style={{ height: "350px" }}
+                                src="https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
+                                style={{ height: "65px", width: "40px" }}
                                 alt="product-img"
                               />
                             )}
                           </div>
                         </div>
-                        <div class="d-flex flex-row align-items-center">
+                        <div className="d-flex flex-row align-items-center">
                           <div
-                            class="ms-3"
+                            className="ms-3"
                             style={{ width: "200px", fontStyle: "justify" }}
                           >
-                            <h5>{i.name}</h5>
-                            <p class="small mb-0">{i.serialNumber}</p>
+                            {" "}
+                            {i.name !== "" ? (
+                              <h5>{i.name}</h5>
+                            ) : (
+                              <h5>No name</h5>
+                            )}
+                            {i.serialNumber !== "" ? (
+                              <p className="small mb-0">{i.serialNumber}</p>
+                            ) : (
+                              <p className="small mb-0">No serialNumber</p>
+                            )}
                           </div>
                         </div>
-                        <div class="d-flex flex-row align-items-center">
-                          <input
-                            type="number"
-                            onKeyDown={(evt) =>
-                              evt.key === "e" && evt.preventDefault()
-                            }
-                            style={{ width: 100, textAlign: "center" }}
-                            value={i.quantity}
-                            a-key={index}
-                            onChange={(e) =>
-                              handleChangeQuantity(e.target.value, index)
-                            }
-                          ></input>
+                        <div className="d-flex flex-row align-items-center">
+                          {i.quantity !== "" ? (
+                            <input
+                              type="number"
+                              onKeyDown={(evt) =>
+                                evt.key === "e" && evt.preventDefault()
+                              }
+                              style={{ width: 100, textAlign: "center" }}
+                              value={i.quantity}
+                              a-key={index}
+                              onChange={(e) =>
+                                handleChangeQuantity(e.target.value, index)
+                              }
+                            ></input>
+                          ) : (
+                            <p>No quantity</p>
+                          )}
                         </div>
-                        <div class="d-flex flex-row align-items-center">
+                        <div className="d-flex flex-row align-items-center">
                           <div style={{ width: "100px" }}>
                             {!isNaN(i.subTotal) ? (
-                              <h5 class="mb-0">{i.subTotal}VND</h5>
+                              <h5 className="mb-0">{i.subTotal}VND</h5>
                             ) : undefined}
                           </div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                          <button
-                            value={i.serialNumber}
-                            onClick={handleDelete}
-                            type="button"
-                          >
-                            <i
-                              id="deleteBox"
-                              className="tf-ion-trash-b"
-                              onMouseOver={handleCursorProductCard}
-                              style={{
-                                cursor: cursorProductCard,
-                                fontSize: "20px",
-                              }}
-                            ></i>
-                          </button>
+                          {i.serialNumber !== "" ? (
+                            <button
+                              value={i.serialNumber}
+                              onClick={handleDelete}
+                              type="button"
+                            >
+                              <i
+                                id="deleteBox"
+                                className="tf-ion-trash-b"
+                                onMouseOver={handleCursorProductCard}
+                                style={{
+                                  cursor: cursorProductCard,
+                                  fontSize: "20px",
+                                }}
+                              ></i>
+                            </button>
+                          ) : (
+                            <p>No serialNumber</p>
+                          )}
                         </div>
                       </div>
                     </div>
