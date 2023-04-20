@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CART_URL } from "./URLS/url";
+import { data } from "jquery";
 
 function Cart() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function Cart() {
 
   const [checkEmpty, setCheckEmpty] = useState(true);
 
-  const [cart, setCarT] = useState([]);
+  const [cart, setCart] = useState([]);
 
   // LAY CART KHI CO TOKEN VA ACCOUNT NAME=============================
   useEffect(() => {
@@ -46,7 +47,7 @@ function Cart() {
       method: "GET",
     })
       .then((res) => {
-        setCarT(res.data);
+        setCart(res.data);
         if (res.data === "Fail") {
           setCheckEmpty(false);
         }
@@ -78,7 +79,7 @@ function Cart() {
     if (state !== null) {
       let temp = {
         accountName: localStorage.getItem("username"),
-        cartDetailDtos: [
+        cartDetailModelList: [
           {
             price: state.price,
             quantity: state.quantity,
@@ -125,7 +126,7 @@ function Cart() {
                 alt="bag.svg"
               />
               <h2>Your shopping cart is empty</h2>
-              <a href="/" class="btn btn-main btn-small">
+              <a href="/" className="btn btn-main btn-small">
                 Back home
               </a>
             </div>
@@ -152,7 +153,11 @@ function Cart() {
                 <ul className="list-unstyled mb-4">
                   <li className="d-flex justify-content-between pb-2 mb-3">
                     <h5>Subtotal</h5>
-                    <span>{list.totalPrice} VND</span>
+                    {list.totalPrice !== "" ? (
+                      <span>{list.totalPrice} VND</span>
+                    ) : (
+                      <span>No totalPrice </span>
+                    )}
                   </li>
                   <li className="d-flex justify-content-between pb-2 mb-3">
                     <h5>Shipping</h5>
@@ -160,7 +165,11 @@ function Cart() {
                   </li>
                   <li className="d-flex justify-content-between pb-2">
                     <h5>Total</h5>
-                    <span>{list.totalPrice} VND</span>
+                    {list.totalPrice !== "" ? (
+                      <span>{list.totalPrice} VND</span>
+                    ) : (
+                      <span>No totalPrice</span>
+                    )}
                   </li>
                 </ul>
                 <button
@@ -204,20 +213,52 @@ function Cart() {
         totalNew = totalNew + c.subTotal;
         return totalNew;
       });
-      setCarT({ ...cart, totalPrice: totalNew });
+      setCart({ ...cart, totalPrice: totalNew });
+      updateCartByAxios();
     };
 
+    const updateCartByAxios = async (e) => {
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        url: `${cart_url}`,
+        method: "PUT",
+        data: cart,
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    };
+
+    console.log(cart.cartDetailModelList);
+
     const handleChangeQuantity = (value, index) => {
+      const stock = JSON.parse(
+        cart.cartDetailModelList[index].size_color_img_quantity
+      ).quantity;
       const cartDetailModelListNew = cart.cartDetailModelList.map(
         (c, indexC) => {
           if (indexC === index) {
-            c.quantity = value;
-            c.subTotal = c.quantity * c.price;
+            if (value > stock) {
+              c.quantity = stock;
+            } else if (value <= stock && value >= 0) {
+              c.quantity = parseInt(value);
+              c.subTotal = c.quantity * c.price;
+            } else if (value < 0) {
+              c.quantity = 1;
+              c.subTotal = c.quantity * c.price;
+            }
           }
           return c;
         }
       );
-      setCarT({ ...cart, cartDetailModelList: cartDetailModelListNew });
+      setCart({ ...cart, cartDetailModelList: cartDetailModelListNew });
     };
 
     return (
@@ -225,79 +266,117 @@ function Cart() {
         <section className="cart shopping page-wrapper">
           <div className="container">
             <div className="row">
-              <div class="col-lg-8">
-                <h5 class="mb-3">
-                  <a href="/" class="text-body">
-                    <i class="fas fa-long-arrow-alt-left me-2"></i>Continue
+              <div className="col-lg-8">
+                <h5 className="mb-3">
+                  <a href="/" className="text-body">
+                    <i className="fas fa-long-arrow-alt-left me-2"></i>Continue
                     shopping
                   </a>
                 </h5>
                 <hr />
                 {cart.cartDetailModelList.map((i, index) => (
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between">
-                        <div class="d-flex flex-row align-items-center">
+                  <div className="card mb-3">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between">
+                        <div className="d-flex flex-row align-items-center">
                           <div>
-                            <img
-                              src={
-                                JSON.parse(i.size_color_img_quantity).img[0].url
-                              }
-                              class="img-fluid rounded-3"
-                              alt="Shopping item"
-                              style={{ width: "65px" }}
-                            />
-                          </div>
-                        </div>
-                        <div class="d-flex flex-row align-items-center">
-                          <div
-                            class="ms-3"
-                            style={{ width: "200px", fontStyle: "justify" }}
-                          >
-                            <h5>{i.name}</h5>
-                            <p class="small mb-0">{i.serialNumber}</p>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-row align-items-center">
-                          <input
-                            type="number"
-                            onKeyDown={(evt) =>
-                              evt.key === "e" && evt.preventDefault()
-                            }
-                            style={{ width: 100, textAlign: "center" }}
-                            value={i.quantity}
-                            a-key={index}
-                            onChange={(e) =>
-                              handleChangeQuantity(e.target.value, index)
-                            }
-                          ></input>
-                        </div>
-                        <div class="d-flex flex-row align-items-center">
-                          <div style={{ width: "100px" }}>
-                            <h5 class="mb-0">{i.subTotal}VND</h5>
+                            {JSON.parse(i.size_color_img_quantity).img
+                              .length !== 0 ? (
+                              <img
+                                className="img-fluid w-100 mb-3 img-first"
+                                src={
+                                  JSON.parse(i.size_color_img_quantity).img[0]
+                                    .url
+                                }
+                                style={{ height: "65px", width: "50px" }}
+                                alt="product-img"
+                              />
+                            ) : (
+                              <img
+                                className="img-fluid w-100 mb-3 img-first"
+                                src="https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
+                                style={{ height: "65px", width: "40px" }}
+                                alt="product-img"
+                              />
+                            )}
                           </div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                          <button
-                            value={i.serialNumber}
-                            onClick={handleDelete}
-                            type="button"
+                          <div
+                            className="ms-3"
+                            style={{ width: "200px", fontStyle: "justify" }}
                           >
-                            <i
-                              id="deleteBox"
-                              className="tf-ion-trash-b"
-                              onMouseOver={handleCursorProductCard}
-                              style={{
-                                cursor: cursorProductCard,
-                                fontSize: "20px",
-                              }}
-                            ></i>
-                          </button>
+                            {" "}
+                            {i.name !== "" ? (
+                              <h5>{i.name}</h5>
+                            ) : (
+                              <h5>No name</h5>
+                            )}
+                            {i.serialNumber !== "" ? (
+                              <p className="small mb-0">{i.serialNumber}</p>
+                            ) : (
+                              <p className="small mb-0">No serialNumber</p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="d-flex flex-row align-items-center">
+                          {i.quantity !== "" ? (
+                            <input
+                              type="number"
+                              onKeyDown={(evt) =>
+                                evt.key === "e" && evt.preventDefault()
+                              }
+                              style={{ width: 100, textAlign: "center" }}
+                              value={i.quantity}
+                              a-key={index}
+                              onChange={(e) =>
+                                handleChangeQuantity(e.target.value, index)
+                              }
+                            ></input>
+                          ) : (
+                            <p>No quantity</p>
+                          )}
+                        </div>
+                        <div className="d-flex flex-row align-items-center">
+                          <div style={{ width: "100px" }}>
+                            {!isNaN(i.subTotal) ? (
+                              <h5 className="mb-0">{i.subTotal}VND</h5>
+                            ) : undefined}
+                          </div>
+                        </div>
+                        <div className="d-flex flex-row align-items-center">
+                          {i.serialNumber !== "" ? (
+                            <button
+                              value={i.serialNumber}
+                              onClick={handleDelete}
+                              type="button"
+                            >
+                              <i
+                                id="deleteBox"
+                                className="tf-ion-trash-b"
+                                onMouseOver={handleCursorProductCard}
+                                style={{
+                                  cursor: cursorProductCard,
+                                  fontSize: "20px",
+                                }}
+                              ></i>
+                            </button>
+                          ) : (
+                            <p>No serialNumber</p>
+                          )}
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
+                <div>
+                  <button
+                    onClick={handleUpdate}
+                    className="btn btn-main btn-small"
+                  >
+                    Update Cart
+                  </button>
+                </div>
               </div>
               {totalPrice(cart)}
             </div>
