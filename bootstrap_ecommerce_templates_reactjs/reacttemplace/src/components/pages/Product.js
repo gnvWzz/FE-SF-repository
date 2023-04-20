@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
 import Pagination from "../pagination";
-import queryString from "query-string";
 import { PRODUCT_URL } from "../URLS/url";
 export default function Product({ categories }) {
   const [formSeacrh, setFormSearch] = useState();
@@ -297,9 +296,13 @@ export default function Product({ categories }) {
     );
   }
 
-  const getData = () =>{
-    
-  }
+  const getData = () => {};
+
+  const formatCurrency = (currency) => {
+    let intCurrency = currency;
+    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return format;
+  };
 
   const handleOnChangeSearch = function (e) {
     setFormSearch(e.target.value);
@@ -508,9 +511,15 @@ export default function Product({ categories }) {
                         <a>{product.name}</a>
                       </h2>
                       <span className="price">
-                        <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.priceListDtos[0].price} đ
-                        </h4>
+                        {product.priceListDtos[0].price !== "" ? (
+                          <h4 style={{ color: "red", textAlign: "left" }}>
+                            {formatCurrency(product.priceListDtos[0].price)} đ
+                          </h4>
+                        ) : (
+                          <h4 style={{ color: "red", textAlign: "left" }}>
+                            0 đ
+                          </h4>
+                        )}
                       </span>
                     </div>
                   </div>
