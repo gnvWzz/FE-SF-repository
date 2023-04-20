@@ -163,14 +163,13 @@ function Home(props) {
                     <h2 className="product-title h5 mb-0">
                       <div onClick={navigateToDetail} value={product.packageId}>
                         {product.name !== undefined ? (
-                          <a
-                            href=""
-                            onClick={() => {
-                              navigate(`/single-product/${product.packageId}`);
+                          <Link
+                            to={{
+                              pathname: `/single-product/${product.packageId}`,
                             }}
                           >
                             {product.name}
-                          </a>
+                          </Link>
                         ) : (
                           <a href="">No name</a>
                         )}

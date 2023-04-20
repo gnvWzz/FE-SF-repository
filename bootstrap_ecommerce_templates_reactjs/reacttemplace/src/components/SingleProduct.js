@@ -400,6 +400,7 @@ export default function SingleProduct() {
           style={{ width: 120, textAlign: "center" }}
           value={quantity}
           onChange={handleChangeQuantity}
+          onWheel={(e) => e.target.blur()} 
         ></input>
         <button
           style={{ color: "black" }}

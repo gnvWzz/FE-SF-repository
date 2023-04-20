@@ -363,6 +363,7 @@ function Cart() {
                               onBlur={(e) =>
                                 handleBlur(e.target.value, i.serialNumber)
                               }
+                              onWheel={(e) => e.target.blur()} 
                             ></input>
                           ) : (
                             <p>No quantity</p>
