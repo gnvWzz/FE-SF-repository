@@ -67,12 +67,13 @@ export default function MyOrder(){
     );
   });
 
-  const handleView = ()=>{
-    navigate(`/orderdetails`)
+  const handleView = (value,totalPrice )=>{
+    console.log(value);
+    navigate(`/orderdetails`, {state:{value ,totalPrice }})
   }
 
 
-  const renderOrder = currentItems.map((order,index) => (                          
+  const renderOrder = currentItems.map((order,index) => (                         
     <tr>
       {/* <td>{index + 1}</td> */}
       <td>{order.dateOrder}</td>
@@ -80,9 +81,9 @@ export default function MyOrder(){
       <td>{order.phone}</td>
       <td>{order.email}</td>
       <td>{order.street},{order.district},{order.city}</td>
-      <td >{order.orderCode}</td>
+      <td >{ order.orderCode}</td>
       <td style={{ textAlign: "center" }}>
-        <button  className= "button-order" onClick={handleView} >Views</button>
+        <button  className= "button-order" onClick={() =>handleView(order.orderCode , order.totalPrice)} >Views</button>
       </td>
     </tr>
   ));
