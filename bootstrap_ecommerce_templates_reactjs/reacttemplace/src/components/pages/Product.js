@@ -509,6 +509,7 @@ export default function Product({ categories }) {
                     type="number"
                     placeholder="min"
                     onChange={handleChangeMinPrice}
+                    onWheel={(e) => e.target.blur()} 
                   ></input>
                   <input
                     className="mt-2"
@@ -516,6 +517,7 @@ export default function Product({ categories }) {
                     type="number"
                     placeholder="max"
                     onChange={handleChangeMaxPrice}
+                    onWheel={(e) => e.target.blur()} 
                   ></input>
                   <button
                     style={{
