@@ -5,12 +5,15 @@ import { useQuery } from "react-query";
 import Pagination from "../pagination";
 import { PRODUCT_URL } from "../URLS/url";
 export default function Product({ categories }) {
-  const [formSeacrh, setFormSearch] = useState();
+  const [formSeacrh, setFormSearch] = useState("");
   const [products, setProducts] = useState([]);
   const [cursorProductCard, setCursorProductCard] = useState("");
   const [sort_price, setSortPrice] = useState("");
+  const [max_price, setMaxPrice] = useState();
+  const [min_price, setMinPrice] = useState();
   const [change, setChange] = useState(false);
   const [imageList, setImageList] = useState([]);
+  const [checkMinMaxPrice, setCheckMinMaxPrice] = useState(false);
   let isStop = false;
   let { name } = useParams();
   let navigate = useNavigate();
@@ -79,6 +82,27 @@ export default function Product({ categories }) {
       isStop = true;
     };
   }, [name]);
+
+  useEffect(() => {
+    if (formSeacrh.length === 0) {
+      axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        url: `${url}/${name}?offset=${offset}`,
+        method: "GET",
+      })
+        .then((res) => {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    }
+  }, [formSeacrh]);
 
   if (!products.length) {
     return (
@@ -310,7 +334,6 @@ export default function Product({ categories }) {
 
   const handleSubmit = async (e) => {
     if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
-      setFormSearch(e.target.value);
       await axios({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -323,6 +346,7 @@ export default function Product({ categories }) {
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
+          e.preventDefault();
         })
         .catch((err) => {
           throw err;
@@ -384,6 +408,63 @@ export default function Product({ categories }) {
     }
   };
 
+  const handleEnterSearch = async (e) => {
+    if (e.key === "Enter") {
+      if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
+        await axios({
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+          url: `${url}/getName/${name}?offset=${offset}&name=${formSeacrh}`,
+          method: "GET",
+        })
+          .then((res) => {
+            setProducts(res.data.content);
+            setTotalPages(res.data.totalPages);
+            e.preventDefault();
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
+    }
+  };
+
+  const handleChangeMinPrice = (e) => {
+    setMinPrice(parseInt(e.target.value));
+  };
+
+  const handleChangeMaxPrice = (e) => {
+    setMaxPrice(parseInt(e.target.value));
+  };
+
+  const handleSortByMinMaxPrice = async (e) => {
+    if (min_price < max_price) {
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        url: `${url}/max_min/${name}?offset=${offset}&min_price=${min_price}&max_price=${max_price}`,
+        method: "GET",
+      })
+        .then((res) => {
+          setProducts(res.data.content);
+          setTotalPages(res.data.totalPages);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    }
+  };
+
+  const handleBackToAnyPriceProducts = () => {
+    window.location.reload();
+  };
+
   return (
     <section className="products-shop section">
       <div className="container">
@@ -408,6 +489,48 @@ export default function Product({ categories }) {
                     </Link>
                   ))}
                 </div>
+                <div className="mt-5">
+                  <button
+                    style={{
+                      width: "150px",
+                      height: "50px",
+                      fontSize: "16px",
+                      textAlign: "center",
+                    }}
+                    onClick={handleBackToAnyPriceProducts}
+                    type="button"
+                    className="btn btn-main mt-2"
+                  >
+                    Any price
+                  </button>
+                  <input
+                    className="mt-2"
+                    style={{ width: "150px" }}
+                    type="number"
+                    placeholder="min"
+                    onChange={handleChangeMinPrice}
+                  ></input>
+                  <input
+                    className="mt-2"
+                    style={{ width: "150px" }}
+                    type="number"
+                    placeholder="max"
+                    onChange={handleChangeMaxPrice}
+                  ></input>
+                  <button
+                    style={{
+                      width: "150px",
+                      height: "50px",
+                      fontSize: "16px",
+                      textAlign: "center",
+                    }}
+                    onClick={handleSortByMinMaxPrice}
+                    type="button"
+                    className="btn btn-main mt-2"
+                  >
+                    Go
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -428,6 +551,7 @@ export default function Product({ categories }) {
                         className="rounded-left pl-3"
                         placeholder="Search"
                         onChange={handleOnChangeSearch}
+                        onKeyDown={handleEnterSearch}
                       ></input>
 
                       <button
@@ -548,6 +672,8 @@ export default function Product({ categories }) {
           </div>
         </div>
       </div>
+
+      {/* On top */}
     </section>
   );
 }
