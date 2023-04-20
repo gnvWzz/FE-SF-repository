@@ -102,7 +102,7 @@ function Checkout({ provinces }) {
               alert("Place order successfully");
               navigate("/");
             } else {
-              alert("Place order fail");
+              alert("Out of stock");
             }
           })
           .catch((err) => {});
