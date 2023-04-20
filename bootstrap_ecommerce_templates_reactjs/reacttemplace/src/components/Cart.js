@@ -42,6 +42,7 @@ function Cart() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
+      'Access-Control-Allow-Origin': "*",
       url: `${cart_url}?account-name=${localStorage.getItem("username")}`,
       method: "GET",
     })

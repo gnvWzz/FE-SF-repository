@@ -138,6 +138,7 @@ function Profile() {
                         name="phone"
                         value={user.phone}
                         onChange={handleChange}
+                        readOnly
                       />
                     </div>
                   </div>
@@ -146,13 +147,6 @@ function Profile() {
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <h6 class="mt-3 mb-2 text-primary">Address</h6>
                   </div>
-                  {/* <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
->>>>>>> 79b40d5c8138e86e46bd47099bffd1cd1e4cc013
-				<div class="form-group">
-					<label for="Street">Street</label>
-					<input type="name" class="form-control" id="Street" placeholder="Enter Street"/>
-				</div>
-			</div> */}
                   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                     <div class="form-group">
                       <label for="ciTy">Province</label>
