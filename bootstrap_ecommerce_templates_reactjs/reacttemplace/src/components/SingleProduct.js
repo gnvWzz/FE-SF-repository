@@ -6,8 +6,9 @@ import { PRODUCT_URL } from "./URLS/url";
 export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
   const [cursor, setCursor] = useState("");
-  const { package_id } = useParams();
+  const { product_name } = useParams();
   const [product, setProduct] = useState({});
+  const [productName, setProductName] = useState("")
   const [productDetail, setProductDetail] = useState({});
   const [productColors, setProductColors] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
@@ -32,6 +33,7 @@ export default function SingleProduct() {
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
+        setProductName(product_name.replace("%20"," "));
         getData();
       }
     } else {
@@ -40,7 +42,7 @@ export default function SingleProduct() {
     return () => {
       isStop = true;
     };
-  }, [package_id]);
+  }, [productName]);
 
   const getData = () => {
     const tempList = [];
@@ -51,7 +53,7 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      url: `${url}/package-id-product/${package_id}`,
+      url: `${url}/name-product/${productName}`,
       method: "GET",
     })
       .then((res) => {
@@ -179,7 +181,7 @@ export default function SingleProduct() {
         "Content-Type": "application/json",
       },
 
-      url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${package_id}`,
+      url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${productName}`,
       method: "GET",
     })
       .then((res) => {
@@ -204,7 +206,7 @@ export default function SingleProduct() {
         "Content-Type": "application/json",
       },
 
-      url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${package_id}`,
+      url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${productName}`,
       method: "GET",
     })
       .then((res) => {

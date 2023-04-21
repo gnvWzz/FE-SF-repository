@@ -2345,7 +2345,7 @@ input::-webkit-inner-spin-button {
 /* Css Profile */
 body {
   margin: 0;
-  padding-top: 40px;
+  /* padding-top: 40px; */
   color: #2e323c;
   background: #f5f6fa;
   position: relative;
