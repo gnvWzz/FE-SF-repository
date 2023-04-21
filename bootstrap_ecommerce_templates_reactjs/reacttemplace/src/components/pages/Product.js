@@ -14,7 +14,7 @@ export default function Product({ categories }) {
   const [change, setChange] = useState(false);
   const [imageList, setImageList] = useState([]);
   const [checkMinMaxPrice, setCheckMinMaxPrice] = useState(false);
-  const [visible, setVisible] = useState("none")
+  const [visible, setVisible] = useState("none");
   let isStop = false;
   let { name } = useParams();
   let navigate = useNavigate();
@@ -131,6 +131,7 @@ export default function Product({ categories }) {
     localStorage.removeItem("max_price");
     if (localStorage.getItem("token") !== null) {
       setOffset(0);
+      localStorage.setItem("category", name);
       if (!isStop) {
         axios({
           headers: {
@@ -351,10 +352,12 @@ export default function Product({ categories }) {
                         </div>
                         <span className="onsale">Sale</span>
                         <div className="product-hover-overlay">
-                          <a href="#">
+                          <Link
+                            to={{ pathname: `single-product/${product.name}` }}
+                          >
                             <i className="tf-ion-android-cart"></i>
-                          </a>
-                          <a href="#">
+                          </Link>
+                          <a href="">
                             <i className="tf-ion-ios-heart"></i>
                           </a>
                         </div>
@@ -393,7 +396,7 @@ export default function Product({ categories }) {
     );
   }
 
-  const getData = () => { };
+  const getData = () => {};
 
   const formatCurrency = (currency) => {
     let intCurrency = currency;
@@ -562,11 +565,10 @@ export default function Product({ categories }) {
 
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 300){
-      setVisible("inline")
-    } 
-    else if (scrolled <= 300){
-      setVisible("none")
+    if (scrolled > 300) {
+      setVisible("inline");
+    } else if (scrolled <= 300) {
+      setVisible("none");
     }
   };
 
@@ -576,7 +578,11 @@ export default function Product({ categories }) {
     <section className="products-shop section">
       <button
         className="button-go-to-top"
-        style={{ borderColor: "#fb5c42", backgroundColor: "white", display: visible }}
+        style={{
+          borderColor: "#fb5c42",
+          backgroundColor: "white",
+          display: visible,
+        }}
         onClick={handleGotoTop}
       >
         <svg
@@ -755,14 +761,9 @@ export default function Product({ categories }) {
                     </div>
 
                     <div className="product-hover-overlay">
-                      <Link
-                        to={`/single-product/${product.productSFDetailDtos[0].serialNumber}`}
-                      >
-                        <i className="tf-ion-android-cart"></i>
-                      </Link>
-                      <a href="#">
+                      {/* <a href="#">
                         <i className="tf-ion-ios-heart"></i>
-                      </a>
+                      </a> */}
                     </div>
                     <div className="product-info">
                       <h2

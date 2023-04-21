@@ -33,10 +33,12 @@ export default function SingleProduct() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
+    // Long xoa localStorage cua Long
     localStorage.removeItem("sort_price");
     localStorage.removeItem("sort_name");
     localStorage.removeItem("min_price");
     localStorage.removeItem("max_price");
+    // 
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
         setProductName(product_name.replace("%20", " "));
