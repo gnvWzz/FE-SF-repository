@@ -4,6 +4,7 @@ import "bootstrap/dist/js/bootstrap.min.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 function Header({ categories }) {
+  const [cursor, setCursor] = useState("");
   const navigate = useNavigate();
 
   const handleOut = () => {
@@ -14,10 +15,12 @@ function Header({ categories }) {
     }, 100);
   };
 
+  const handleCursorOver = () => {
+    setCursor("pointer");
+  };
 
-
-  const handleLogin = () =>{
-    return(
+  const handleLogin = () => {
+    return (
       <li className="dropdown cart-nav dropdown-slide list-inline-item">
         <a href="#">
           <i className="tf-ion-ios-person mr-3"></i>
@@ -48,8 +51,9 @@ function Header({ categories }) {
               </a>
               <a
                 onClick={handleOut}
+                onMouseOver={handleCursorOver}
                 className="btn btn-small btn-main btn-block"
-                style={{ width: "250px", height: "40px" }}
+                style={{ width: "250px", height: "40px", cursor: cursor }}
               >
                 Logout
               </a>
@@ -258,17 +262,15 @@ function Header({ categories }) {
             </a>
           </li>
 
-
           <li className="dropdown cart-nav dropdown-slide list-inline-item">
             <button
-              style={{borderRadius:"50%" , border: "none"}}
+              style={{ borderRadius: "50%", border: "none" }}
               type="button"
               className="dropdown-toggle cart-icon"
               onClick={() => navigate(`/cart`)}
             >
-              <i className="tf-ion-android-cart" ></i>
+              <i className="tf-ion-android-cart"></i>
             </button>
-
           </li>
 
           {localStorage.getItem("token") ? handleLogin() : handleLogout()}

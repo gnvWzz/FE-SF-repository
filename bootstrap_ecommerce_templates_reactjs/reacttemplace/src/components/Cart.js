@@ -20,17 +20,23 @@ function Cart() {
 
   const [cart, setCart] = useState([]);
 
-  const [checkEmptyCartItem, setCheckEmptyCartItem] = useState(false);
-
   // LAY CART KHI CO TOKEN VA ACCOUNT NAME=============================
   useEffect(() => {
     if (
       localStorage.getItem("token") !== null &&
       localStorage.getItem("username") !== null
     ) {
+      // Long xoa localStorage cua Long
+      localStorage.removeItem("sort_price");
+      localStorage.removeItem("sort_name");
+      localStorage.removeItem("min_price");
+      localStorage.removeItem("max_price");
+      //
       if (!isStop1) {
         getCart();
       }
+    } else {
+      navigate("/login");
     }
     return () => {
       isStop1 = true;
@@ -300,6 +306,14 @@ function Cart() {
       }, 200);
     };
 
+    const handleNavigateContinueShopping = (e) => {
+      if (localStorage.getItem("category") !== null) {
+        navigate(`/shop/${localStorage.getItem("category")}`);
+      } else {
+        navigate("/");
+      }
+    };
+
     return (
       <div className="checkout-container">
         <section className="cart shopping page-wrapper">
@@ -307,10 +321,13 @@ function Cart() {
             <div className="row">
               <div className="col-lg-8">
                 <h5 className="mb-3">
-                  <a href="/" className="text-body">
+                  <button
+                    onClick={handleNavigateContinueShopping}
+                    className="btn btn-main btn-small"
+                  >
                     <i className="fas fa-long-arrow-alt-left me-2"></i>Continue
                     shopping
-                  </a>
+                  </button>
                 </h5>
                 <hr />
                 {cart.cartDetailModelList.map((i, index) => (
@@ -374,7 +391,6 @@ function Cart() {
                               onBlur={(e) =>
                                 handleBlur(e.target.value, i.serialNumber)
                               }
-                              onWheel={(e) => e.target.blur()}
                             ></input>
                           ) : (
                             <p>No quantity</p>

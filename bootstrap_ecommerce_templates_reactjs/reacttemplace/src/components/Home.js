@@ -22,6 +22,8 @@ function Home(props) {
 
   let isStop = false;
 
+  const [visible, setVisible] = useState("none");
+
   const handleScroll = (e) => {
     if (
       window.innerHeight + e.target.documentElement.scrollTop + 1 >=
@@ -48,6 +50,7 @@ function Home(props) {
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
+    localStorage.removeItem("category")
     localStorage.removeItem("sort_price");
     localStorage.removeItem("sort_name");
     localStorage.removeItem("min_price");
@@ -83,11 +86,26 @@ function Home(props) {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
+  const toggleVisible = () => {
+    const scrolled = document.documentElement.scrollTop;
+    if (scrolled > 300) {
+      setVisible("inline");
+    } else if (scrolled <= 300) {
+      setVisible("none");
+    }
+  };
+
+  window.addEventListener("scroll", toggleVisible);
+
   return (
     <div className="home-container">
       <button
         className="button-go-to-top"
-        style={{ borderColor: "#fb5c42", backgroundColor : "white" }}
+        style={{
+          borderColor: "#fb5c42",
+          backgroundColor: "white",
+          display: visible,
+        }}
         onClick={handleGotoTop}
       >
         <svg
@@ -97,6 +115,7 @@ function Home(props) {
           fill="#fb5c42"
           class="bi bi-arrow-up"
           viewBox="0 0 16 16"
+          onClick={handleGotoTop}
         >
           <path
             fill-rule="evenodd"
@@ -108,20 +127,28 @@ function Home(props) {
       <div className="main-slider slider slick-initialized slick-slider">
         <div
           className="slider-item"
-          style={{backgroundImage:"url('assets/images/slideshow1-2.jpg')", backgroundPosition:"50%",backgroundRepeat:"no-repeat"}}
+          style={{
+            backgroundImage: "url('assets/images/slideshow1-2.jpg')",
+            backgroundPosition: "50%",
+            backgroundRepeat: "no-repeat",
+          }}
         >
-           <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-12 offset-lg-6 offset-md-6">
-                            <div class="slider-caption">
-                                <span class="lead">Every Day</span>
-                                <h1 class="mt-2 mb-5"><span class="text-color">Summer </span>Collection</h1>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-6 col-12 offset-lg-6 offset-md-6">
+                <div class="slider-caption">
+                  <span class="lead">Every Day</span>
+                  <h1 class="mt-2 mb-5">
+                    <span class="text-color">Summer </span>Collection
+                  </h1>
 
-                                <Link to={{pathname:"/shop"}} class="btn btn-main">Shop Now</Link>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
+                  <Link to={{ pathname: "/shop" }} class="btn btn-main">
+                    Shop Now
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <section className="section products-main">
