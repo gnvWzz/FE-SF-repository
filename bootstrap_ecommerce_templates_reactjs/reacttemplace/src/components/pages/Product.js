@@ -572,6 +572,8 @@ export default function Product({ categories }) {
     }
   };
 
+  console.log(products)
+
   window.addEventListener("scroll", toggleVisible);
 
   return (
@@ -738,7 +740,7 @@ export default function Product({ categories }) {
                     <div className="product-wrap">
                       {JSON.parse(
                         product.productSFDetailDtos[0].size_color_img_quantity
-                      ).img[0].url !== "" ? (
+                      ).img.length !== 0 ? (
                         <img
                           className="img-fluid w-100 mb-3 img-first"
                           src={
