@@ -69,7 +69,7 @@ function Cart() {
       method: "POST",
       data: temp,
     })
-      .then((res) => {})
+      .then((res) => { })
       .catch((err) => {
         throw err;
       });
@@ -135,7 +135,7 @@ function Cart() {
       </>
     );
   } else {
-    const map = (list) => {};
+    const map = (list) => { };
 
     const handleCheckout = () => {
       navigate("/checkout", { state: { cart } });

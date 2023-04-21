@@ -37,18 +37,6 @@ export default function MyOrder(){
           throw err;
         })
       }
-    //   axios
-    //     .get(`${url}/list/${loginName}`)
-    //     .then((res) => {
-    //       setListOrder(res.data);
-    //       console.log(listOrder);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //       throw err;
-    //     });
-    // }
-
     return () => {
       isCancelled = true;
     };
@@ -142,7 +130,6 @@ export default function MyOrder(){
                         >
                           <thead>
                             <tr className="headerTable">
-                              {/* <th scope="col">ID</th> */}
                               <th scope="col">Date</th>
                               <th scope="col">Receiver</th>
                               <th scope="col">Phone</th>
@@ -164,7 +151,6 @@ export default function MyOrder(){
         </div>
       </section>
       <div className="mt-2 ml-5">
-        {/* <nav aria-label="Page navigation example "> */}
           <ul className="pagination">
             <li className="page-item">
               <button className= "button-order"  onClick={handlePrevious}>
