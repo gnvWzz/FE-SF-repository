@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ORDER_URL } from "./URLS/url";
 
 export default function OrderDetails() {
+  const navigate  = useNavigate();
   const name = localStorage.getItem("username");
   let { state } = useLocation();
   const [orderDetails, setOrderDetails] = useState([]);
@@ -49,14 +50,14 @@ export default function OrderDetails() {
 
             {orderDetails.size_color_img_quantity !== null
             ?  (<img src={JSON.parse(orderDetails.size_color_img_quantity).img[0].url}
-            class="img-fluid" alt="Phone"/>)
+            class="img-fluid" alt="product-img" onClick={() => navigate(`/single-product/${orderDetails.name}`)}/>)
             : (<img src='https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg'
-            class="img-fluid" alt="Phone"/>)
+            class="img-fluid" alt="product-img"/>)
             }  
 
           </div>
           <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-            <p class="text-muted mb-0">{orderDetails.name}</p>
+            <Link to={{pathname:(`/single-product/${orderDetails.name}`)}} class="text-muted-name mb-0">{orderDetails.name}</Link>
           </div>
           <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
             <p class="text-muted mb-0 small">{formatCurrency(orderDetails.price)}</p>

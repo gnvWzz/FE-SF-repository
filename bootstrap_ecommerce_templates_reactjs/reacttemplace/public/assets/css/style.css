@@ -2475,3 +2475,8 @@ td {
   cursor: pointer;
   color: green;
 }
+
+/* css hover name Details */
+.text-muted:hover{
+  color:  #fb5c42;
+}
