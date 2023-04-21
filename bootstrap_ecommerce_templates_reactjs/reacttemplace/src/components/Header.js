@@ -23,7 +23,7 @@ function Header({ categories }) {
   const handleLogin = () =>{
     return(
       <li className="dropdown cart-nav dropdown-slide list-inline-item">
-            <a href="#">
+            <a >
               <i className="tf-ion-ios-person mr-3"></i>
             </a>
             <div className="dropdown-menu cart-dropdown">          
@@ -242,13 +242,7 @@ function Header({ categories }) {
           className="top-menu list-inline mb-0 d-none d-lg-block"
           id="top-menu"
         >
-          <li className="list-inline-item">
-            <a href="#" className="search_toggle" id="search-icon">
-              <i className="tf-ion-android-search"></i>
-            </a>
-          </li>
-
-
+        
           <li className="dropdown cart-nav dropdown-slide list-inline-item">
             <button
               style={{borderRadius:"50%" , border: "none"}}
