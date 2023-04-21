@@ -384,6 +384,7 @@ function Cart() {
                               value={i.serialNumber}
                               onClick={handleDelete}
                               type="button"
+                              style={{borderRadius:"50%" , border: "none"}}
                             >
                               <i
                                 id="deleteBox"

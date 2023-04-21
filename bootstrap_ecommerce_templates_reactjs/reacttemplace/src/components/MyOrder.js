@@ -17,6 +17,7 @@ export default function MyOrder(){
   const pageNumbers = [];
   let isCancelled = false;
   const navigate = useNavigate();
+  
   useEffect(() => {
     if (!isCancelled) {
        axios({
@@ -72,9 +73,9 @@ export default function MyOrder(){
     );
   });
 
-  const handleView = (value,totalPrice )=>{
+  const handleView = (value,totalPrice ,date)=>{
     console.log(value);
-    navigate(`/orderdetails`, {state:{value ,totalPrice }})
+    navigate(`/orderdetails`, {state:{value ,totalPrice ,date}})
   }
 
 
@@ -88,7 +89,7 @@ export default function MyOrder(){
       <td>{order.street},{order.district},{order.city}</td>
       <td >{ order.orderCode}</td>
       <td style={{ textAlign: "center" }}>
-        <button  className= "button-order" onClick={() =>handleView(order.orderCode , order.totalPrice)} >Views</button>
+        <button  className= "button-order" onClick={() =>handleView(order.orderCode , order.totalPrice , order.dateOrder)} >Views</button>
       </td>
     </tr>
   ));
@@ -129,7 +130,6 @@ export default function MyOrder(){
                         >
                           <thead>
                             <tr className="headerTable">
-                              {/* <th scope="col">ID</th> */}
                               <th scope="col">Date</th>
                               <th scope="col">Receiver</th>
                               <th scope="col">Phone</th>
@@ -151,7 +151,6 @@ export default function MyOrder(){
         </div>
       </section>
       <div className="mt-2 ml-5">
-        {/* <nav aria-label="Page navigation example "> */}
           <ul className="pagination">
             <li className="page-item">
               <button className= "button-order"  onClick={handlePrevious}>

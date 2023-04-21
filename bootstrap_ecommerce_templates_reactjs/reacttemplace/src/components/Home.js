@@ -108,28 +108,20 @@ function Home(props) {
       <div className="main-slider slider slick-initialized slick-slider">
         <div
           className="slider-item"
-          style={{
-            backgroundImage:
-              "url('https://genshin-guide.com/wp-content/uploads/shenhe-genshin-impact.png')",
-            backgroundPosition: "60%",
-            backgroundRepeat: "no-repeat",
-          }}
+          style={{backgroundImage:"url('assets/images/slideshow1-2.jpg')", backgroundPosition:"50%",backgroundRepeat:"no-repeat"}}
         >
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-6 col-12 offset-lg-8 offset-md-6">
-                <div className="slider-caption">
-                  <span className="lead">毎日</span>
-                  <h1 className="mt-2 mb-5 ml-5">
-                    <span className="text-color">買い物とは </span> 特価です。
-                  </h1>
-                  <a href="#" className="btn btn-main ml-5">
-                    Shop Now
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+           <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-12 offset-lg-6 offset-md-6">
+                            <div class="slider-caption">
+                                <span class="lead">Every Day</span>
+                                <h1 class="mt-2 mb-5"><span class="text-color">Summer </span>Collection</h1>
+
+                                <Link to={{pathname:"/shop"}} class="btn btn-main">Shop Now</Link>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
         </div>
       </div>
       <section className="section products-main">
