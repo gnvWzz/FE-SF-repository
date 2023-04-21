@@ -53,7 +53,6 @@ export default function Shop({ categories }) {
 
   function handleSubmit() {}
 
-  
   const handleGotoTop = (e) => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
@@ -65,26 +64,30 @@ export default function Shop({ categories }) {
           <div className="spinner"></div>
         </div>
         <section className="products-shop section">
-        <button
-          className="button-go-to-top"
-          style={{ borderColor: "#fb5c42", backgroundColor: "white", display: visible }}
-          onClick={handleGotoTop}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="#fb5c42"
-            class="bi bi-arrow-up"
-            viewBox="0 0 16 16"
+          <button
+            className="button-go-to-top"
+            style={{
+              borderColor: "#fb5c42",
+              backgroundColor: "white",
+              display: visible,
+            }}
             onClick={handleGotoTop}
           >
-            <path
-              fill-rule="evenodd"
-              d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="#fb5c42"
+              class="bi bi-arrow-up"
+              viewBox="0 0 16 16"
+              onClick={handleGotoTop}
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"
+              />
+            </svg>
+          </button>
           <div className="container">
             <div className="row">
               <div className="col-md-2">
@@ -308,11 +311,10 @@ export default function Shop({ categories }) {
 
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 300){
-      setVisible("inline")
-    } 
-    else if (scrolled <= 300){
-      setVisible("none")
+    if (scrolled > 300) {
+      setVisible("inline");
+    } else if (scrolled <= 300) {
+      setVisible("none");
     }
   };
 
@@ -322,25 +324,29 @@ export default function Shop({ categories }) {
   return (
     <section className="products-shop section">
       <button
-          className="button-go-to-top"
-          style={{ borderColor: "#fb5c42", backgroundColor: "white", display: visible }}
+        className="button-go-to-top"
+        style={{
+          borderColor: "#fb5c42",
+          backgroundColor: "white",
+          display: visible,
+        }}
+        onClick={handleGotoTop}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          fill="#fb5c42"
+          class="bi bi-arrow-up"
+          viewBox="0 0 16 16"
           onClick={handleGotoTop}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="#fb5c42"
-            class="bi bi-arrow-up"
-            viewBox="0 0 16 16"
-            onClick={handleGotoTop}
-          >
-            <path
-              fill-rule="evenodd"
-              d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"
-            />
-          </svg>
-        </button>
+          <path
+            fill-rule="evenodd"
+            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"
+          />
+        </svg>
+      </button>
       <div className="container">
         <div className="row">
           <div className="col-md-2">
@@ -406,17 +412,33 @@ export default function Shop({ categories }) {
                     }}
                   >
                     <div className="product-wrap">
-                      <img
-                        className="img-fluid w-100 mb-3 img-first"
-                        src={
-                          JSON.parse(
-                            product.productSFDetailDtos[0]
-                              .size_color_img_quantity
-                          ).img[0].url
-                        }
-                        alt="product-img"
-                        style={{ height: 200 }}
-                      />
+                      <div
+                        onClick={handleNavigateToProductDetails}
+                        value={product.name}
+                      >
+                        {JSON.parse(
+                          product.productSFDetailDtos[0].size_color_img_quantity
+                        ).img.length !== 0 ? (
+                          <img
+                            className="img-fluid w-100 mb-3 img-first"
+                            src={
+                              JSON.parse(
+                                product.productSFDetailDtos[0]
+                                  .size_color_img_quantity
+                              ).img[0].url
+                            }
+                            style={{ height: "250px" }}
+                            alt="product_img"
+                          />
+                        ) : (
+                          <img
+                            className="img-fluid w-100 mb-3 img-first"
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
+                            style={{ height: "250px" }}
+                            alt="product-img"
+                          />
+                        )}
+                      </div>
                     </div>
 
                     <div className="product-hover-overlay">
