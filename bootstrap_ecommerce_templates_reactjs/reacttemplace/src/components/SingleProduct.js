@@ -15,7 +15,9 @@ export default function SingleProduct() {
   const [categoriesNoSizesAndColors, setCategoriseNoSizesAndColors] = useState([
     "Computer",
     "Electronics",
-    "Toys",
+    "Toy",
+    "Watch",
+    "HandBag",
   ]);
   const [stock, setStock] = useState();
   const [serialNumber, setSerialNumber] = useState("");
@@ -29,7 +31,7 @@ export default function SingleProduct() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0});
+    window.scrollTo({ top: 0, left: 0 });
     localStorage.removeItem("sort_price");
     localStorage.removeItem("sort_name");
     localStorage.removeItem("min_price");
@@ -37,6 +39,7 @@ export default function SingleProduct() {
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
         setProductName(product_name.replace("%20", " "));
+
         getData();
       }
     } else {
@@ -45,7 +48,7 @@ export default function SingleProduct() {
     return () => {
       isStop = true;
     };
-  }, [product_name]);
+  }, [productName]);
 
   const getData = () => {
     const tempList = [];
@@ -56,7 +59,7 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      url: `${url}/package-id-product/${product_name}`,
+      url: `${url}/name-product/${productName}`,
       method: "GET",
     })
       .then((res) => {
@@ -183,8 +186,7 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-
-      url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${product_name}`,
+      url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${productName}`,
       method: "GET",
     })
       .then((res) => {
@@ -208,8 +210,7 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-
-      url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${product_name}`,
+      url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${productName}`,
       method: "GET",
     })
       .then((res) => {
@@ -286,7 +287,6 @@ export default function SingleProduct() {
 
               <a
                 className="carousel-control-prev"
-                style={{ height: "72.5%" }}
                 href="#single-product-slider"
                 role="button"
                 data-slide="prev"
@@ -299,7 +299,6 @@ export default function SingleProduct() {
               </a>
               <a
                 className="carousel-control-next"
-                style={{ height: "72.5%" }}
                 href="#single-product-slider"
                 role="button"
                 data-slide="next"
@@ -324,8 +323,95 @@ export default function SingleProduct() {
           </div>
         );
       }
-    } else {
-      return undefined;
+    } else if (imgList2 && choosingColor === undefined) {
+      const listFirst = imgList2;
+      const listSecond = [];
+      for (var i = 1; i < listFirst[0].img.length; i++) {
+        listSecond.push(listFirst[0].img[i]);
+      }
+      if (imgList2[0].img.length > 1) {
+        return (
+          <div className="single-product-slider">
+            <div
+              className="carousel slide"
+              data-ride="carousel"
+              id="single-product-slider"
+            >
+              <div className="carousel-inner">
+                <div className="carousel-item active">
+                  <img
+                    src={listFirst[0].img[0].url}
+                    alt=""
+                    className="img-fluid"
+                  />
+                </div>
+                {listSecond.map((i) => (
+                  <div className="carousel-item">
+                    <img src={i.url} alt="" className="img-fluid" />
+                  </div>
+                ))}
+              </div>
+
+              <ol className="carousel-indicators">
+                <li
+                  data-target="#single-product-slider"
+                  data-slide-to="0"
+                  className="active"
+                >
+                  <img
+                    src={listFirst[0].img[0].url}
+                    alt=""
+                    className="img-fluid"
+                  />
+                </li>
+                {listSecond.map((i, index) => (
+                  <li
+                    data-target="#single-product-slider"
+                    data-slide-to={index + 1}
+                  >
+                    <img src={i.url} alt="" className="img-fluid" />
+                  </li>
+                ))}
+              </ol>
+
+              <a
+                className="carousel-control-prev"
+                href="#single-product-slider"
+                role="button"
+                data-slide="prev"
+              >
+                <span
+                  className="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="sr-only">Previous</span>
+              </a>
+              <a
+                className="carousel-control-next"
+                href="#single-product-slider"
+                role="button"
+                data-slide="next"
+              >
+                <span
+                  className="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="sr-only">Next</span>
+              </a>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div className="product-preview-image">
+            <img
+              style={{ height: "667px", width: "445px" }}
+              src={listFirst[0].img[0].url}
+              alt=""
+            />
+          </div>
+        );
+      }
     }
   }
 
@@ -345,7 +431,7 @@ export default function SingleProduct() {
 
   function showPrice() {
     if (price) {
-      return <h3 className="product-price">{price} đ</h3>;
+      return <h3 className="product-price">{formatCurrency(price)} đ</h3>;
     } else {
       return undefined;
     }
@@ -375,7 +461,9 @@ export default function SingleProduct() {
                   ) : (
                     <td className="product-price-table-td">&infin;</td>
                   )}
-                  <td className="product-price-table-td">{ele.price}</td>
+                  <td className="product-price-table-td">
+                    {formatCurrency(ele.price)}
+                  </td>
                 </tr>
               ))}
             </table>
@@ -478,7 +566,7 @@ export default function SingleProduct() {
       <table id="information-table">
         {product.manufacturer ? (
           <tr className="list-unstyled info-desc">
-            <th className="d-flex">
+            <th className="information-key ">
               <strong>Manufacturer</strong>
             </th>
             <td id="information-value">{product.manufacturer}</td>
@@ -486,7 +574,7 @@ export default function SingleProduct() {
         ) : undefined}
         {productDetail.weight && productDetail.weight < 1 ? (
           <tr className="list-unstyled info-desc">
-            <th className="d-flex">
+            <th className="information-key ">
               <strong>Weight</strong>
             </th>
             <td id="information-value">{productDetail.weight * 1000} g</td>
@@ -494,7 +582,7 @@ export default function SingleProduct() {
         ) : undefined}
         {productDetail.weight && productDetail.weight >= 1 ? (
           <tr className="list-unstyled info-desc">
-            <th className="d-flex">
+            <th className="information-key ">
               <strong>Weight</strong>
             </th>
             <td id="information-value">{productDetail.weight} kg</td>
@@ -503,7 +591,7 @@ export default function SingleProduct() {
         {}
         {productDetail.material ? (
           <tr className="list-unstyled info-desc">
-            <th className="d-flex">
+            <th className="information-key ">
               <strong>Material</strong>
             </th>
             <td id="information-value">{productDetail.material}</td>
@@ -511,7 +599,7 @@ export default function SingleProduct() {
         ) : undefined}
         {productDetail.cpu ? (
           <tr className="list-unstyled info-desc">
-            <th className="d-flex">
+            <th className="information-key ">
               <strong>CPU</strong>
             </th>
             <td id="information-value">{productDetail.cpu}</td>
@@ -519,7 +607,7 @@ export default function SingleProduct() {
         ) : undefined}
         {productDetail.gpu ? (
           <tr className="list-unstyled info-desc">
-            <th className="d-flex">
+            <th className="information-key ">
               <strong>GPU</strong>
             </th>
             <td id="information-value">{productDetail.gpu}</td>
@@ -527,7 +615,7 @@ export default function SingleProduct() {
         ) : undefined}
         {productDetail.ram ? (
           <tr className="list-unstyled info-desc">
-            <th className="d-flex">
+            <th className="information-key ">
               <strong>RAM</strong>
             </th>
             <td id="information-value">{productDetail.ram}</td>
@@ -535,7 +623,7 @@ export default function SingleProduct() {
         ) : undefined}
         {productDetail.storageDrive ? (
           <tr className="list-unstyled info-desc">
-            <th className="d-flex">
+            <th className="information-key ">
               <strong>Storage Drive</strong>
             </th>
             <td id="information-value">{productDetail.storageDrive}</td>
@@ -543,7 +631,7 @@ export default function SingleProduct() {
         ) : undefined}
         {productDetail.display ? (
           <tr className="list-unstyled info-desc">
-            <th className="d-flex">
+            <th className="information-key ">
               <strong>Display</strong>
             </th>
             <td id="information-value">{productDetail.display}</td>
@@ -552,6 +640,12 @@ export default function SingleProduct() {
       </table>
     );
   }
+
+  const formatCurrency = (currency) => {
+    let intCurrency = currency;
+    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return format;
+  };
 
   if (!product) {
     return (
@@ -596,13 +690,11 @@ export default function SingleProduct() {
                     </button>
                   </div>
                   {/* Phần chọn color sản phẩm */}
-
                   {handleColorsSelecting()}
                   {/* Hết phần chọn color sản phẩm */}
 
                   {/* Phần chọn size sản phẩm */}
                   {handleSizesSelecting()}
-
                   {/* Hết phần chọn size sản phẩm */}
 
                   <div className="products-meta mt-4">

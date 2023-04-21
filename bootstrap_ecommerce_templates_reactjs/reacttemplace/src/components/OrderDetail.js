@@ -40,8 +40,6 @@ export default function OrderDetails() {
     };
   }, []);
 
-  console.log(orderDetails);
-
   return (
     <section class="h-100 gradient-custom">
       <div class="container py-5 h-100">
@@ -127,6 +125,7 @@ export default function OrderDetails() {
 
                 <div class="d-flex justify-content-between">
                   <p class="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
+
                   <p class="text-muted mb-0">
                     <span class="fw-bold me-4">GST 18%</span> 123
                   </p>
@@ -134,6 +133,7 @@ export default function OrderDetails() {
 
                 <div class="d-flex justify-content-between mb-5">
                   <p class="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
+
                   <p class="text-muted mb-0">
                     <span class="fw-bold me-4">Delivery Charges</span> Free
                   </p>

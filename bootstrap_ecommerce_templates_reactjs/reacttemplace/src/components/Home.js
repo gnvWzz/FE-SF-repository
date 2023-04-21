@@ -87,7 +87,7 @@ function Home(props) {
     <div className="home-container">
       <button
         className="button-go-to-top"
-        style={{ borderColor: "#fb5c42", outline :"none" }}
+        style={{ borderColor: "#fb5c42", backgroundColor : "white" }}
         onClick={handleGotoTop}
       >
         <svg
@@ -148,7 +148,7 @@ function Home(props) {
               <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
                 <div className="product">
                   <div className="product-wrap">
-                    <div onClick={navigateToDetail} value={product.packageId}>
+                    <div onClick={navigateToDetail} value={product.name}>
                       {JSON.parse(
                         product.productSFDetailDtos[0].size_color_img_quantity
                       ).img[0].url !== "" ? (
@@ -190,11 +190,11 @@ function Home(props) {
                   </div>
                   <div className="product-info">
                     <h2 className="product-title h5 mb-0">
-                      <div onClick={navigateToDetail} value={product.packageId}>
+                      <div onClick={navigateToDetail} value={product.name}>
                         {product.name !== "" ? (
                           <Link
                             to={{
-                              pathname: `/single-product/${product.packageId}`,
+                              pathname: `/single-product/${product.name}`,
                             }}
                           >
                             {product.name}
