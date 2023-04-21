@@ -6,7 +6,7 @@ import { PRODUCT_URL } from "./URLS/url";
 export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
   const [cursor, setCursor] = useState("");
-  const { product_name } = useParams();
+  const { product_name } = useParams(); 
   const [product, setProduct] = useState({});
   const [productName, setProductName] = useState("");
   const [productDetail, setProductDetail] = useState({});
@@ -965,6 +965,7 @@ export default function SingleProduct() {
               </div>
             </div>
             <div className="row">
+
               <div className="col-lg-3 col-6">
                 <div className="product">
                   <div className="product-wrap">
@@ -984,7 +985,7 @@ export default function SingleProduct() {
                     </a>
                   </div>
 
-                  <span className="onsale">Sale</span>
+                  
                   <div className="product-hover-overlay">
                     <a href="#">
                       <i className="tf-ion-android-cart"></i>
@@ -1116,6 +1117,7 @@ export default function SingleProduct() {
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </section>
