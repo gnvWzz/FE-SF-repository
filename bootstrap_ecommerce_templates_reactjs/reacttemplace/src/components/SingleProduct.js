@@ -6,8 +6,9 @@ import { PRODUCT_URL } from "./URLS/url";
 export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
   const [cursor, setCursor] = useState("");
-  const { package_id } = useParams();
+  const { product_name } = useParams();
   const [product, setProduct] = useState({});
+  const [productName, setProductName] = useState("");
   const [productDetail, setProductDetail] = useState({});
   const [productColors, setProductColors] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
@@ -28,8 +29,14 @@ export default function SingleProduct() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0});
+    localStorage.removeItem("sort_price");
+    localStorage.removeItem("sort_name");
+    localStorage.removeItem("min_price");
+    localStorage.removeItem("max_price");
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
+        setProductName(product_name.replace("%20", " "));
         getData();
       }
     } else {
@@ -38,7 +45,7 @@ export default function SingleProduct() {
     return () => {
       isStop = true;
     };
-  }, [package_id]);
+  }, [product_name]);
 
   const getData = () => {
     const tempList = [];
@@ -49,7 +56,7 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      url: `${url}/package-id-product/${package_id}`,
+      url: `${url}/package-id-product/${product_name}`,
       method: "GET",
     })
       .then((res) => {
@@ -177,7 +184,7 @@ export default function SingleProduct() {
         "Content-Type": "application/json",
       },
 
-      url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${package_id}`,
+      url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${product_name}`,
       method: "GET",
     })
       .then((res) => {
@@ -202,7 +209,7 @@ export default function SingleProduct() {
         "Content-Type": "application/json",
       },
 
-      url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${package_id}`,
+      url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${product_name}`,
       method: "GET",
     })
       .then((res) => {
@@ -242,7 +249,11 @@ export default function SingleProduct() {
             >
               <div className="carousel-inner">
                 <div className="carousel-item active">
-                  <img src={firstList[0].img[0].url} alt="" className="img-fluid" />
+                  <img
+                    src={firstList[0].img[0].url}
+                    alt=""
+                    className="img-fluid"
+                  />
                 </div>
                 {secondList.map((i) => (
                   <div className="carousel-item">
@@ -257,7 +268,11 @@ export default function SingleProduct() {
                   data-slide-to="0"
                   className="active"
                 >
-                  <img src={firstList[0].img[0].url} alt="" className="img-fluid" />
+                  <img
+                    src={firstList[0].img[0].url}
+                    alt=""
+                    className="img-fluid"
+                  />
                 </li>
                 {secondList.map((i, index) => (
                   <li
@@ -400,7 +415,7 @@ export default function SingleProduct() {
           style={{ width: 120, textAlign: "center" }}
           value={quantity}
           onChange={handleChangeQuantity}
-          onWheel={(e) => e.target.blur()} 
+          onWheel={(e) => e.target.blur()}
         ></input>
         <button
           style={{ color: "black" }}

@@ -47,6 +47,11 @@ function Home(props) {
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+    localStorage.removeItem("sort_price");
+    localStorage.removeItem("sort_name");
+    localStorage.removeItem("min_price");
+    localStorage.removeItem("max_price");
     if (!isStop) {
       axios
         .get(`${product_url}/get_home?offset=${offset}`)
@@ -74,8 +79,32 @@ function Home(props) {
     navigate("/shop");
   };
 
+  const handleGotoTop = (e) => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="home-container">
+      <button
+        className="button-go-to-top"
+        style={{ borderColor: "#fb5c42", outline :"none" }}
+        onClick={handleGotoTop}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          fill="#fb5c42"
+          class="bi bi-arrow-up"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"
+          />
+        </svg>
+      </button>
+
       <div className="main-slider slider slick-initialized slick-slider">
         <div
           className="slider-item"
@@ -132,7 +161,7 @@ function Home(props) {
                             ).img[0].url
                           }
                           style={{ height: "350px" }}
-                          alt="product-img"
+                          alt="product_img"
                         />
                       ) : (
                         <img
@@ -162,7 +191,7 @@ function Home(props) {
                   <div className="product-info">
                     <h2 className="product-title h5 mb-0">
                       <div onClick={navigateToDetail} value={product.packageId}>
-                        {product.name !== undefined ? (
+                        {product.name !== "" ? (
                           <Link
                             to={{
                               pathname: `/single-product/${product.packageId}`,
@@ -175,7 +204,7 @@ function Home(props) {
                         )}
                       </div>
                     </h2>
-                    {product.priceListDtos !== undefined ? (
+                    {product.priceListDtos.length !== 0 ? (
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "center" }}>
                           {formatCurrency(product.priceListDtos[0].price)} VND

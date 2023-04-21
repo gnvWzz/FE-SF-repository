@@ -60,7 +60,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout provinces={provinces} />} />
           <Route
-            path="/single-product/:package_id"
+            path="/single-product/:product_name"
             element={<SingleProduct />}
           />
           <Route path="/login" element={<Login />} />

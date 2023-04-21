@@ -18,6 +18,7 @@ export default function Shop({ categories }) {
   }
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
         getData();
@@ -280,7 +281,6 @@ export default function Shop({ categories }) {
   };
 
   const handleChangeSortByPrice = async (e) => {};
-
   return (
     <section className="products-shop section">
       <div className="container">
@@ -312,49 +312,24 @@ export default function Shop({ categories }) {
           <div className="col-md-10">
             <div className="row align-items-center">
               <div className="col-lg-12 mb-4 mb-lg-0">
-                <div className="section-title">
+                <div
+                  className="section-title mb-5 rounded-pill"
+                  style={{
+                    textAlign: "center",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    backgroundColor: "#fb5c42",
+                    width: "200px",
+                  }}
+                >
                   {/*  */}
-                  <h2 className="d-block text-left-sm">SHOP</h2>
+                  <h2
+                    className="d-block text-left-sm"
+                    style={{ color: "white" }}
+                  >
+                    ALL
+                  </h2>
                   {/*  */}
-                  <div className="heading d-flex justify-content-between mb-5">
-                    <span>
-                      <input
-                        id="searchBox"
-                        name="search"
-                        value={formSeacrh || ""}
-                        className="rounded-left pl-3"
-                        placeholder="Search"
-                        onChange={handleOnChangeSearch}
-                      ></input>
-
-                      <button
-                        id="searchIconBackGround"
-                        className="rounded-right"
-                        onClick={handleSubmit}
-                      >
-                        <i
-                          id="searchIcon"
-                          className="tf-ion-android-search"
-                        ></i>
-                      </button>
-                    </span>
-
-                    <form className="ordering " method="get">
-                      <select
-                        name="orderby"
-                        className="orderby form-control"
-                        aria-label="Shop order"
-                        onChange={handleChangeSortByPrice}
-                      >
-                        <option value="none" selected="selected">
-                          Default
-                        </option>
-                        <option value="asc">Sort by price: low to high</option>
-                        <option value="desc">Sort by price: high to low</option>
-                      </select>
-                      <input type="hidden" name="paged" value="1" />
-                    </form>
-                  </div>
                 </div>
               </div>
             </div>
@@ -385,7 +360,7 @@ export default function Shop({ categories }) {
                         style={{ height: 200 }}
                       />
                     </div>
-                   
+
                     <div className="product-hover-overlay">
                       <Link
                         to={`/single-product/${product.productSFDetailDtos[0].serialNumber}`}
@@ -421,6 +396,7 @@ export default function Shop({ categories }) {
                 {" "}
                 <div style={{ textAlign: "center" }}>
                   <button
+                    className="btn btn-main mr-3"
                     disabled={offset + 1 <= 1}
                     onClick={() => handlePageChange(offset - 1)}
                   >
@@ -428,6 +404,7 @@ export default function Shop({ categories }) {
                   </button>
                   <span>{offset + 1}</span> / <span>{totalPages}</span>
                   <button
+                    className="btn btn-main ml-3"
                     disabled={offset + 1 >= totalPages}
                     onClick={() => handlePageChange(offset + 1)}
                   >
