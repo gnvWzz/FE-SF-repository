@@ -179,7 +179,7 @@ function Home(props) {
                     <div onClick={navigateToDetail} value={product.name}>
                       {JSON.parse(
                         product.productSFDetailDtos[0].size_color_img_quantity
-                      ).img[0].url !== "" ? (
+                      ).img.length !== 0 ? (
                         <img
                           className="img-fluid w-100 mb-3 img-first"
                           src={
@@ -188,14 +188,14 @@ function Home(props) {
                                 .size_color_img_quantity
                             ).img[0].url
                           }
-                          style={{ height: "350px" }}
+                          style={{ height: "250px" }}
                           alt="product_img"
                         />
                       ) : (
                         <img
                           className="img-fluid w-100 mb-3 img-first"
                           src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
-                          style={{ height: "350px" }}
+                          style={{ height: "250px" }}
                           alt="product-img"
                         />
                       )}
