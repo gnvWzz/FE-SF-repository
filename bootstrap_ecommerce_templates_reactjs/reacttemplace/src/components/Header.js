@@ -6,110 +6,115 @@ import { useEffect, useState } from "react";
 function Header({ categories }) {
   const navigate = useNavigate();
 
-  const handleOut = () =>{
-   localStorage.clear();
-   navigate(`/`);
-   setTimeout(() => {
-     window.location.reload();
-   }, 100);
-    
-  }
+  const handleOut = () => {
+    localStorage.clear();
+    navigate(`/`);
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
 
-  const handleLogin = () =>{
-    return(
+  const handleLogin = () => {
+    return (
       <li className="dropdown cart-nav dropdown-slide list-inline-item">
-            <a href="#">
-              <i className="tf-ion-ios-person mr-3"></i>
-            </a>
-            <div className="dropdown-menu cart-dropdown">          
-              <div className="cart-summary">
-                <div className="text-center cart-buttons mt-3">
-                  <a
-                    href="/myorder"
-                    className="btn btn-small btn-transparent btn-block "
-                    style={{width:"250px",height:"40px"}}
-                  >
-                    My Orders
-                  </a>
-                  <a
-                    href="#"
-                    className="btn btn-small btn-transparent btn-block "
-                    style={{width:"250px",height:"40px"}}
-                  >
-                    My Favorites
-                  </a>
-                  <a
-                    href="/profile"
-                    className="btn btn-small btn-transparent btn-block "
-                    style={{width:"250px",height:"40px"}}
-                  >
-                    Profile
-                  </a>
-                  <a onClick={handleOut} className="btn btn-small btn-main btn-block" style={{width:"250px",height:"40px"}}>
-                   Logout
-                  </a>
-                </div>
-              </div>
-            </div>
-          </li>
-    )
-  }
-  const handleLogout = ()=>{
-    return(
-      <li className="dropdown cart-nav dropdown-slide list-inline-item">
-          <a href="#">
-            <i className="tf-ion-ios-person mr-3"></i>
-          </a>
-          <div className="dropdown-menu cart-dropdown">          
-            <div className="cart-summary">
-              <div className="text-center cart-buttons mt-3">
-                <a
-                  href="/login"
-                  className="btn btn-small btn-transparent btn-block "
-                  style={{width:"250px",height:"40px"}}
-                >
-                  Login
-                </a>
-                <a href="/signup" className="btn btn-small btn-main btn-block" style={{width:"250px",height:"40px"}}>
-                 SignUp
-                </a>
-              </div>
+        <a href="#">
+          <i className="tf-ion-ios-person mr-3"></i>
+        </a>
+        <div className="dropdown-menu cart-dropdown">
+          <div className="cart-summary">
+            <div className="text-center cart-buttons mt-3">
+              <a
+                href="/myorder"
+                className="btn btn-small btn-transparent btn-block "
+                style={{ width: "250px", height: "40px" }}
+              >
+                My Orders
+              </a>
+              <a
+                href="#"
+                className="btn btn-small btn-transparent btn-block "
+                style={{ width: "250px", height: "40px" }}
+              >
+                My Favorites
+              </a>
+              <a
+                href="/profile"
+                className="btn btn-small btn-transparent btn-block "
+                style={{ width: "250px", height: "40px" }}
+              >
+                Profile
+              </a>
+              <a
+                onClick={handleOut}
+                className="btn btn-small btn-main btn-block"
+                style={{ width: "250px", height: "40px" }}
+              >
+                Logout
+              </a>
             </div>
           </div>
-        </li>
-    )
-  }
-  const handleAccount = () =>{
-    return(
+        </div>
+      </li>
+    );
+  };
+  const handleLogout = () => {
+    return (
+      <li className="dropdown cart-nav dropdown-slide list-inline-item">
+        <a href="#">
+          <i className="tf-ion-ios-person mr-3"></i>
+        </a>
+        <div className="dropdown-menu cart-dropdown">
+          <div className="cart-summary">
+            <div className="text-center cart-buttons mt-3">
+              <a
+                href="/login"
+                className="btn btn-small btn-transparent btn-block "
+                style={{ width: "250px", height: "40px" }}
+              >
+                Login
+              </a>
+              <a
+                href="/signup"
+                className="btn btn-small btn-main btn-block"
+                style={{ width: "250px", height: "40px" }}
+              >
+                SignUp
+              </a>
+            </div>
+          </div>
+        </div>
+      </li>
+    );
+  };
+  const handleAccount = () => {
+    return (
       <li className="nav-item dropdown dropdown-slide">
-      <a
-        className="nav-link dropdown-toggle"
-        href="#"
-        id="navbarDropdown5"
-        role="button"
-        data-delay="350"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        Account
-      </a>
-      <ul className="dropdown-menu" aria-labelledby="navbarDropdown5">
-        <li>
-          <Link to={{ pathname: "/login" }}>Login Page</Link>
-        </li>
-        <li>
-          <Link to={{ pathname: "/signup" }}>SignUp Page</Link>
-        </li>
-        <li>
-          <Link to={{ pathname: "/forgot-password" }}>
-            Forgot Password
-          </Link>
-        </li>
-      </ul>
-    </li>
-    )
-  }
+        <a
+          className="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown5"
+          role="button"
+          data-delay="350"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Account
+        </a>
+        <ul className="dropdown-menu" aria-labelledby="navbarDropdown5">
+          <li>
+            <Link to={{ pathname: "/login" }}>Login Page</Link>
+          </li>
+          <li>
+            <Link to={{ pathname: "/signup" }}>SignUp Page</Link>
+          </li>
+          <li>
+            <Link to={{ pathname: "/forgot-password" }}>Forgot Password</Link>
+          </li>
+        </ul>
+      </li>
+    );
+  };
 
   return (
     <nav
@@ -117,8 +122,21 @@ function Header({ categories }) {
       id="navbar"
     >
       <div className="container">
-        <Link className="navbar-brand font-weight-bold" to={{ pathname: "/" }}>
-          E-Shop
+        <Link
+          className="navbar-brand font-weight-bold"
+          style={{ color: "#fb5c42" }}
+          to={{ pathname: "/" }}
+        >
+          <img
+            src="..\assets\images\OIG.jpg"
+            alt=""
+            style={{
+              width: "100px",
+              height: "100px",
+              backgroundColor: "white",
+            }}
+          />
+          E-SHOP
         </Link>
         <button
           className="navbar-toggler"
@@ -225,12 +243,7 @@ function Header({ categories }) {
                 ))}
               </ul>
             </li>
-              {!localStorage.getItem("token")?
-              handleAccount()
-              :
-              undefined
-            }
-        
+            {!localStorage.getItem("token") ? handleAccount() : undefined}
           </ul>
         </div>
         <ul
@@ -307,13 +320,8 @@ function Header({ categories }) {
               </div>
             </div>
           </li>
-          
-          {localStorage.getItem("token")?
-            handleLogin()
-          :
-          handleLogout()
-          }
-        
+
+          {localStorage.getItem("token") ? handleLogin() : handleLogout()}
         </ul>
       </div>
     </nav>
