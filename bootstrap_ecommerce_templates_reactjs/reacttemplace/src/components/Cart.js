@@ -42,7 +42,7 @@ function Cart() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      'Access-Control-Allow-Origin': "*",
+      "Access-Control-Allow-Origin": "*",
       url: `${cart_url}?account-name=${localStorage.getItem("username")}`,
       method: "GET",
     })
@@ -94,7 +94,7 @@ function Cart() {
       window.history.replaceState({}, document.title);
       setTimeout(() => {
         window.location.reload();
-      }, 200);
+      }, 300);
     }
     return () => {
       isStop = true;
@@ -141,7 +141,15 @@ function Cart() {
       navigate("/checkout", { state: { cart } });
     };
 
-    const totalPrice = (list) => {
+    const formatCurrency = (currency) => {
+      let intCurrency = currency;
+      const format = intCurrency
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return format;
+    };
+
+    const totalPrice = () => {
       if (cart.length === 0) {
         <p>Loading</p>;
       } else {
@@ -153,8 +161,8 @@ function Cart() {
                 <ul className="list-unstyled mb-4">
                   <li className="d-flex justify-content-between pb-2 mb-3">
                     <h5>Subtotal</h5>
-                    {list.totalPrice !== "" ? (
-                      <span>{list.totalPrice} VND</span>
+                    {cart.totalPrice !== "" ? (
+                      <span>{formatCurrency(cart.totalPrice)} VND</span>
                     ) : (
                       <span>No totalPrice </span>
                     )}
@@ -165,8 +173,8 @@ function Cart() {
                   </li>
                   <li className="d-flex justify-content-between pb-2">
                     <h5>Total</h5>
-                    {list.totalPrice !== "" ? (
-                      <span>{list.totalPrice} VND</span>
+                    {cart.totalPrice !== "" ? (
+                      <span>{formatCurrency(cart.totalPrice)} VND</span>
                     ) : (
                       <span>No totalPrice</span>
                     )}
@@ -186,6 +194,8 @@ function Cart() {
       }
     };
 
+    console.log(cart);
+
     const handleDelete = async (e) => {
       const json = {
         accountName: localStorage.getItem("username"),
@@ -200,7 +210,9 @@ function Cart() {
         method: "DELETE",
         data: json,
       });
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
     };
 
     const handleCursorProductCard = function () {
@@ -236,8 +248,6 @@ function Cart() {
         });
     };
 
-    console.log(cart.cartDetailModelList);
-
     const handleChangeQuantity = (value, index) => {
       const stock = JSON.parse(
         cart.cartDetailModelList[index].size_color_img_quantity
@@ -249,16 +259,34 @@ function Cart() {
               c.quantity = stock;
             } else if (value <= stock && value >= 0) {
               c.quantity = parseInt(value);
-              c.subTotal = c.quantity * c.price;
             } else if (value < 0) {
               c.quantity = 1;
-              c.subTotal = c.quantity * c.price;
             }
           }
           return c;
         }
       );
       setCart({ ...cart, cartDetailModelList: cartDetailModelListNew });
+    };
+
+    const handleBlur = async () => {
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        url: `${cart_url}`,
+        method: "PUT",
+        data: cart,
+      })
+        .then((res) => {})
+        .catch((err) => {
+          throw err;
+        });
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
     };
 
     return (
@@ -288,14 +316,14 @@ function Cart() {
                                   JSON.parse(i.size_color_img_quantity).img[0]
                                     .url
                                 }
-                                style={{ height: "65px", width: "50px" }}
+                                style={{ height: "65px", width: "100px" }}
                                 alt="product-img"
                               />
                             ) : (
                               <img
                                 className="img-fluid w-100 mb-3 img-first"
                                 src="https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
-                                style={{ height: "65px", width: "40px" }}
+                                style={{ height: "65px", width: "100px" }}
                                 alt="product-img"
                               />
                             )}
@@ -304,7 +332,7 @@ function Cart() {
                         <div className="d-flex flex-row align-items-center">
                           <div
                             className="ms-3"
-                            style={{ width: "200px", fontStyle: "justify" }}
+                            style={{ width: "130px", fontStyle: "justify" }}
                           >
                             {" "}
                             {i.name !== "" ? (
@@ -332,15 +360,21 @@ function Cart() {
                               onChange={(e) =>
                                 handleChangeQuantity(e.target.value, index)
                               }
+                              onBlur={(e) =>
+                                handleBlur(e.target.value, i.serialNumber)
+                              }
+                              onWheel={(e) => e.target.blur()} 
                             ></input>
                           ) : (
                             <p>No quantity</p>
                           )}
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                          <div style={{ width: "100px" }}>
+                          <div style={{ width: "150px" }}>
                             {!isNaN(i.subTotal) ? (
-                              <h5 className="mb-0">{i.subTotal}VND</h5>
+                              <h5 className="mb-0">
+                                {formatCurrency(i.subTotal)}VND
+                              </h5>
                             ) : undefined}
                           </div>
                         </div>
@@ -369,16 +403,8 @@ function Cart() {
                     </div>
                   </div>
                 ))}
-                <div>
-                  <button
-                    onClick={handleUpdate}
-                    className="btn btn-main btn-small"
-                  >
-                    Update Cart
-                  </button>
-                </div>
               </div>
-              {totalPrice(cart)}
+              {totalPrice()}
             </div>
           </div>
         </section>

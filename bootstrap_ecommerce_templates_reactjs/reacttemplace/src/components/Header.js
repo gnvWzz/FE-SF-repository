@@ -25,7 +25,7 @@ function Header({ categories }) {
               <div className="cart-summary">
                 <div className="text-center cart-buttons mt-3">
                   <a
-                    href="#"
+                    href="/myorder"
                     className="btn btn-small btn-transparent btn-block "
                     style={{width:"250px",height:"40px"}}
                   >

@@ -15,13 +15,7 @@ function Checkout({ provinces }) {
 
   const user_url = ACCOUNT_URL;
 
-
   const [form, setForm] = useState({});
-
-  const [model, setModel] = useState({
-    form: {},
-    orderDetails: [],
-  });
 
   useEffect(() => {
     axios({
@@ -41,7 +35,6 @@ function Checkout({ provinces }) {
       .catch((err) => {
         throw err;
       });
-
   }, []);
 
   const REGEX = {
@@ -85,12 +78,12 @@ function Checkout({ provinces }) {
       if (isFilled) {
         // console.log(form);
         place_order(form);
-    
       } else {
         alert("Please fill out the fields");
       }
     };
 
+    console.log(state.cart.cartDetailModelList);
     const place_order = async (e) => {
       if (state.cart.cartDetailModelList === 0) {
         <p>Loading</p>;
@@ -110,11 +103,19 @@ function Checkout({ provinces }) {
               alert("Place order successfully");
               navigate("/");
             } else {
-              alert("Place order fail");
+              alert("Out of stock");
             }
           })
           .catch((err) => {});
       }
+    };
+
+    const formatCurrency = (currency) => {
+      let intCurrency = currency;
+      const format = intCurrency
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return format;
     };
 
     const handleValidateOrder = async () => {
@@ -185,7 +186,7 @@ function Checkout({ provinces }) {
                                 <Field
                                   type="text"
                                   className="form-control"
-                                  name="first_name"
+                                  name="firstName"
                                   value={form.firstName || ""}
                                   placeholder="Enter Your First Name"
                                   onChange={handleChangeOrder}
@@ -208,7 +209,7 @@ function Checkout({ provinces }) {
                                 <Field
                                   type="text"
                                   className="form-control"
-                                  name="last_name"
+                                  name="lastName"
                                   value={form.lastName || ""}
                                   placeholder="Enter Your Last Name"
                                   onChange={handleChangeOrder}
@@ -241,33 +242,6 @@ function Checkout({ provinces }) {
                               <div
                                 class="form-group mb-4"
                                 className={`custom-input ${
-                                  errors.street_address
-                                    ? "form-group mb-4 custom-input-error"
-                                    : "form-group mb-4"
-                                }`}
-                              >
-                                <label for="#"> Street Address</label>
-                                <Field
-                                  type="text"
-                                  className="form-control"
-                                  name="street_address"
-                                  value={form.street || ""}
-                                  placeholder="Enter Your Street Address"
-                                  onChange={handleChangeOrder}
-                                />
-                                {errors.street_address &&
-                                touched.street_address ? (
-                                  <p className="error">
-                                    {errors.street_address}
-                                  </p>
-                                ) : null}
-                              </div>
-                            </div>
-
-                            <div className="col-lg-12">
-                              <div
-                                class="form-group mb-4"
-                                className={`custom-input ${
                                   errors.district
                                     ? "form-group mb-4 custom-input-error"
                                     : "form-group mb-4"
@@ -284,6 +258,33 @@ function Checkout({ provinces }) {
                                 />
                                 {errors.district && touched.district ? (
                                   <p className="error">{errors.district}</p>
+                                ) : null}
+                              </div>
+                            </div>
+
+                            <div className="col-lg-12">
+                              <div
+                                class="form-group mb-4"
+                                className={`custom-input ${
+                                  errors.street_address
+                                    ? "form-group mb-4 custom-input-error"
+                                    : "form-group mb-4"
+                                }`}
+                              >
+                                <label for="#"> Street Address</label>
+                                <Field
+                                  type="text"
+                                  className="form-control"
+                                  name="street"
+                                  value={form.street || ""}
+                                  placeholder="Enter Your Street Address"
+                                  onChange={handleChangeOrder}
+                                />
+                                {errors.street_address &&
+                                touched.street_address ? (
+                                  <p className="error">
+                                    {errors.street_address}
+                                  </p>
                                 ) : null}
                               </div>
                             </div>
@@ -328,6 +329,7 @@ function Checkout({ provinces }) {
                                   value={form.email || ""}
                                   placeholder="Enter Your Email"
                                   onChange={handleChangeOrder}
+                                  readOnly
                                 />
                                 {errors.email && touched.email ? (
                                   <p className="error">{errors.email}</p>
@@ -359,7 +361,8 @@ function Checkout({ provinces }) {
                             </p>
                             <div className="media-body text-right">
                               <p className="h5">
-                                {cart.quantity} x {cart.price} VND
+                                {cart.quantity} x {formatCurrency(cart.price)}{" "}
+                                VND
                               </p>
                             </div>
                           </div>
@@ -368,7 +371,9 @@ function Checkout({ provinces }) {
                         <ul className="summary-prices list-unstyled mb-4">
                           <li className="d-flex justify-content-between">
                             <span>Subtotal:</span>
-                            <span className="h5">{cart.totalPrice} VND</span>
+                            <span className="h5">
+                              {formatCurrency(cart.totalPrice)} VND
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>Shipping:</span>
@@ -376,7 +381,9 @@ function Checkout({ provinces }) {
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>Total</span>
-                            <span className="h5">{cart.totalPrice} VND</span>
+                            <span className="h5">
+                              {formatCurrency(cart.totalPrice)} VND
+                            </span>
                           </li>
                         </ul>
                         <h3 style={{ textAlign: "center" }}>DISCOUNT CODE</h3>
