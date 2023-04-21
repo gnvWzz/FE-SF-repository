@@ -4,6 +4,7 @@ import "bootstrap/dist/js/bootstrap.min.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 function Header({ categories }) {
+  const [cursor, setCursor] = useState("");
   const navigate = useNavigate();
 
   const handleOut = () =>{
@@ -15,6 +16,9 @@ function Header({ categories }) {
     
   }
 
+  const handleCursorOver = () => {
+    setCursor("pointer")
+  }
 
   const handleLogin = () =>{
     return(
@@ -46,7 +50,7 @@ function Header({ categories }) {
                   >
                     Profile
                   </a>
-                  <a onClick={handleOut} className="btn btn-small btn-main btn-block" style={{width:"250px",height:"40px"}}>
+                  <a onClick={handleOut} onMouseOver={handleCursorOver} className="btn btn-small btn-main btn-block" style={{width:"250px",height:"40px", cursor: cursor}}>
                    Logout
                   </a>
                 </div>

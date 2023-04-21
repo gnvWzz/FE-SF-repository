@@ -13,6 +13,7 @@ export default function Shop({ categories }) {
   let isStop = false;
   const [offset, setOffset] = useState(0);
   const product_url = PRODUCT_URL;
+  const [visible, setVisible] = useState("none");
   function handleOnChangeSearch(e) {
     setFormSearch(e.target.value);
   }
@@ -52,6 +53,11 @@ export default function Shop({ categories }) {
 
   function handleSubmit() {}
 
+  
+  const handleGotoTop = (e) => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
+
   if (!products.length) {
     return (
       <>
@@ -59,6 +65,26 @@ export default function Shop({ categories }) {
           <div className="spinner"></div>
         </div>
         <section className="products-shop section">
+        <button
+          className="button-go-to-top"
+          style={{ borderColor: "#fb5c42", backgroundColor: "white", display: visible }}
+          onClick={handleGotoTop}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            fill="#fb5c42"
+            class="bi bi-arrow-up"
+            viewBox="0 0 16 16"
+            onClick={handleGotoTop}
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"
+            />
+          </svg>
+        </button>
           <div className="container">
             <div className="row">
               <div className="col-md-2">
@@ -280,9 +306,41 @@ export default function Shop({ categories }) {
     setOffset(newPage);
   };
 
+  const toggleVisible = () => {
+    const scrolled = document.documentElement.scrollTop;
+    if (scrolled > 300){
+      setVisible("inline")
+    } 
+    else if (scrolled <= 300){
+      setVisible("none")
+    }
+  };
+
+  window.addEventListener("scroll", toggleVisible);
+
   const handleChangeSortByPrice = async (e) => {};
   return (
     <section className="products-shop section">
+      <button
+          className="button-go-to-top"
+          style={{ borderColor: "#fb5c42", backgroundColor: "white", display: visible }}
+          onClick={handleGotoTop}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            fill="#fb5c42"
+            class="bi bi-arrow-up"
+            viewBox="0 0 16 16"
+            onClick={handleGotoTop}
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"
+            />
+          </svg>
+        </button>
       <div className="container">
         <div className="row">
           <div className="col-md-2">
