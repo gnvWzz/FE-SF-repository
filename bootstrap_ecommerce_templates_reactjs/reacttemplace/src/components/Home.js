@@ -5,7 +5,7 @@ import { PRODUCT_URL } from "./URLS/url";
 
 function Home(props) {
   const [offset, setOffset] = useState(0);
-
+  const [cursor, setCursor] = useState("")
   const [products, setProducts] = useState([]);
 
   // const [showProducts, setShowProducts] = useState([]);
@@ -87,21 +87,25 @@ function Home(props) {
 
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 300){
+    if (scrolled > 300) {
       setVisible("inline")
-    } 
-    else if (scrolled <= 300){
+    }
+    else if (scrolled <= 300) {
       setVisible("none")
     }
   };
 
   window.addEventListener("scroll", toggleVisible);
 
+  function handleCursorOver() {
+    setCursor("pointer")
+  }
+
   return (
     <div className="home-container">
       <button
         className="button-go-to-top"
-        style={{ borderColor: "#fb5c42", backgroundColor : "white", display: visible }}
+        style={{ borderColor: "#fb5c42", backgroundColor: "white", display: visible }}
         onClick={handleGotoTop}
       >
         <svg
@@ -123,20 +127,20 @@ function Home(props) {
       <div className="main-slider slider slick-initialized slick-slider">
         <div
           className="slider-item"
-          style={{backgroundImage:"url('assets/images/slideshow1-2.jpg')", backgroundPosition:"50%",backgroundRepeat:"no-repeat"}}
+          style={{ backgroundImage: "url('assets/images/slideshow1-2.jpg')", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }}
         >
-           <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-12 offset-lg-6 offset-md-6">
-                            <div class="slider-caption">
-                                <span class="lead">Every Day</span>
-                                <h1 class="mt-2 mb-5"><span class="text-color">Summer </span>Collection</h1>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-6 col-12 offset-lg-6 offset-md-6">
+                <div class="slider-caption">
+                  <span class="lead">Every Day</span>
+                  <h1 class="mt-2 mb-5"><span class="text-color">Summer </span>Collection</h1>
 
-                                <Link to={{pathname:"/shop"}} class="btn btn-main">Shop Now</Link>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
+                  <Link to={{ pathname: "/shop" }} class="btn btn-main">Shop Now</Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <section className="section products-main">
@@ -153,7 +157,7 @@ function Home(props) {
           <div className="row" id="list">
             {products.map((product, index) => (
               <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
-                <div className="product">
+                <div className="product" onMouseOver={handleCursorOver} style={{ cursor: cursor }}>
                   <div className="product-wrap">
                     <div onClick={navigateToDetail} value={product.name}>
                       {JSON.parse(
