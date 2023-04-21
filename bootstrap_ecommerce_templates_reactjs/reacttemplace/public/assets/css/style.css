@@ -2476,7 +2476,15 @@ td {
   color: green;
 }
 
-/* css hover name Details */
-.text-muted:hover{
-  color:  #fb5c42;
+.product-name-navigate {
+  background-color: white;
+  border: none;
+}
+
+.product-name-navigate:hover {
+  color: #fb5c42;
+}
+
+.customer-name {
+  color: #fb5c42;
 }

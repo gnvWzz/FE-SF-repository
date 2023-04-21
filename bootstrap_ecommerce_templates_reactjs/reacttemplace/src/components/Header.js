@@ -23,7 +23,7 @@ function Header({ categories }) {
   const handleLogin = () =>{
     return(
       <li className="dropdown cart-nav dropdown-slide list-inline-item">
-            <a href="#">
+            <a >
               <i className="tf-ion-ios-person mr-3"></i>
             </a>
             <div className="dropdown-menu cart-dropdown">          
