@@ -87,22 +87,14 @@ export default function OrderDetails(){
                     ))}
                  
                   </div>
-                 
-      
-
-
-                  <div class="d-flex justify-content-between pt-2">
-                    <p class="fw-bold mb-0">Order Details</p>
-                    <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> $898.00</p>
-                  </div>
-      
+ 
                   <div class="d-flex justify-content-between pt-2">
                     <p class="text-muted mb-0">Invoice Number : 788152</p>
                     <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p>
                   </div>
       
                   <div class="d-flex justify-content-between">
-                    <p class="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
+                    <p class="text-muted mb-0">Invoice Date : {state.date}</p>
                     <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p>
                   </div>
       
