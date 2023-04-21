@@ -19,18 +19,23 @@ export default function MyOrder(){
   const navigate = useNavigate();
   useEffect(() => {
     if (!isCancelled) {
-      axios
-        .get(`${url}/list/${loginName}`)
+       axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        url: `${url}/list/${loginName}`,
+        method: "GET",
+      })
         .then((res) => {
           setListOrder(res.data);
           console.log(listOrder);
         })
         .catch((err) => {
-          console.log(err);
           throw err;
-        });
-    }
-
+        })
+      }
     return () => {
       isCancelled = true;
     };
