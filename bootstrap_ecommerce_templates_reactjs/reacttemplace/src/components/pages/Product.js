@@ -30,22 +30,80 @@ export default function Product({ categories }) {
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
-        axios({
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-          },
-          url: `${url}/${name}?offset=${offset}`,
-          method: "GET",
-        })
-          .then((res) => {
-            setProducts(res.data.content);
-            setTotalPages(res.data.totalPages);
+        if (localStorage.getItem("sort_price") !== null) {
+          console.log("sort_price " + offset);
+          axios({
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+            url: `${url}/${name}?offset=${offset}&sort=${sort_price}`,
+            method: "GET",
           })
-          .catch((err) => {
-            throw err;
-          });
+            .then((res) => {
+              setProducts(res.data.content);
+              setTotalPages(res.data.totalPages);
+            })
+            .catch((err) => {
+              throw err;
+            });
+        } else if (localStorage.getItem("sort_name") !== null) {
+          axios({
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+            url: `${url}/getName/${name}?offset=${offset}&name=${formSeacrh}`,
+            method: "GET",
+          })
+            .then((res) => {
+              setProducts(res.data.content);
+              setTotalPages(res.data.totalPages);
+            })
+            .catch((err) => {
+              throw err;
+            });
+          console.log("sort_name " + offset);
+        } else if (
+          localStorage.getItem("min_price") !== null &&
+          localStorage.getItem("max_price") !== null
+        ) {
+          axios({
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+            url: `${url}/max_min/${name}?offset=${offset}&min_price=${min_price}&max_price=${max_price}`,
+            method: "GET",
+          })
+            .then((res) => {
+              setProducts(res.data.content);
+              setTotalPages(res.data.totalPages);
+            })
+            .catch((err) => {
+              throw err;
+            });
+        } else {
+          axios({
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+            url: `${url}/${name}?offset=${offset}`,
+            method: "GET",
+          })
+            .then((res) => {
+              setProducts(res.data.content);
+              setTotalPages(res.data.totalPages);
+            })
+            .catch((err) => {
+              throw err;
+            });
+        }
       }
     } else {
       navigate("/login");
@@ -56,6 +114,22 @@ export default function Product({ categories }) {
   }, [offset]);
 
   useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      window.scrollTo({ top: 0, left: 0 });
+      localStorage.removeItem("sort_price");
+      localStorage.removeItem("sort_name");
+      localStorage.removeItem("min_price");
+      localStorage.removeItem("max_price");
+    } else {
+      navigate("/login");
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.removeItem("sort_price");
+    localStorage.removeItem("sort_name");
+    localStorage.removeItem("min_price");
+    localStorage.removeItem("max_price");
     if (localStorage.getItem("token") !== null) {
       setOffset(0);
       if (!isStop) {
@@ -334,6 +408,8 @@ export default function Product({ categories }) {
 
   const handleSubmit = async (e) => {
     if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
+      localStorage.removeItem("sort_price");
+      localStorage.setItem("sort_name", formSeacrh);
       await axios({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -370,6 +446,10 @@ export default function Product({ categories }) {
   const handleChangeSortByPrice = async (e) => {
     if (e.target.value === "none") {
       setOffset(0);
+      localStorage.removeItem("sort_price");
+      localStorage.removeItem("sort_name");
+      localStorage.removeItem("min_price");
+      localStorage.removeItem("max_price");
       await axios({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -388,7 +468,10 @@ export default function Product({ categories }) {
         });
     } else {
       setSortPrice(e.target.value);
-      console.log(sort_price);
+      localStorage.removeItem("sort_name");
+      localStorage.removeItem("min_price");
+      localStorage.removeItem("max_price");
+      localStorage.setItem("sort_price", e.target.value);
       await axios({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -411,6 +494,11 @@ export default function Product({ categories }) {
   const handleEnterSearch = async (e) => {
     if (e.key === "Enter") {
       if (formSeacrh.length >= 2 && formSeacrh.length <= 30) {
+        localStorage.removeItem("sort_price");
+        localStorage.removeItem("sort_name");
+        localStorage.removeItem("min_price");
+        localStorage.removeItem("max_price");
+        localStorage.setItem("sort_name", formSeacrh);
         await axios({
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -441,7 +529,11 @@ export default function Product({ categories }) {
   };
 
   const handleSortByMinMaxPrice = async (e) => {
-    if (min_price < max_price) {
+    if (min_price <= max_price) {
+      localStorage.removeItem("sort_name");
+      localStorage.removeItem("sort_price");
+      localStorage.setItem("min_price", min_price);
+      localStorage.setItem("max_price", max_price);
       await axios({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -509,7 +601,7 @@ export default function Product({ categories }) {
                     type="number"
                     placeholder="min"
                     onChange={handleChangeMinPrice}
-                    onWheel={(e) => e.target.blur()} 
+                    onWheel={(e) => e.target.blur()}
                   ></input>
                   <input
                     className="mt-2"
@@ -517,7 +609,7 @@ export default function Product({ categories }) {
                     type="number"
                     placeholder="max"
                     onChange={handleChangeMaxPrice}
-                    onWheel={(e) => e.target.blur()} 
+                    onWheel={(e) => e.target.blur()}
                   ></input>
                   <button
                     style={{
@@ -570,6 +662,7 @@ export default function Product({ categories }) {
 
                     <form className="ordering " method="get">
                       <select
+                        id="sort_price"
                         name="orderby"
                         className="orderby form-control"
                         aria-label="Shop order"
@@ -602,17 +695,28 @@ export default function Product({ categories }) {
                     }}
                   >
                     <div className="product-wrap">
-                      <img
-                        className="img-fluid w-100 mb-3 img-first"
-                        src={
-                          JSON.parse(
-                            product.productSFDetailDtos[0]
-                              .size_color_img_quantity
-                          ).img[0].url
-                        }
-                        alt="product-img"
-                        style={{ height: 200 }}
-                      />
+                      {JSON.parse(
+                        product.productSFDetailDtos[0].size_color_img_quantity
+                      ).img[0].url !== "" ? (
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src={
+                            JSON.parse(
+                              product.productSFDetailDtos[0]
+                                .size_color_img_quantity
+                            ).img[0].url
+                          }
+                          alt="product-img"
+                          style={{ height: 200 }}
+                        />
+                      ) : (
+                        <img
+                          className="img-fluid w-100 mb-3 img-first"
+                          src="https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
+                          alt="product-img"
+                          style={{ height: 200 }}
+                        />
+                      )}
                     </div>
 
                     <div className="product-hover-overlay">
@@ -652,10 +756,12 @@ export default function Product({ categories }) {
                 </div>
               ))}
 
+              {/* Chuyen trang */}
               <div className="col-12">
                 {" "}
                 <div style={{ textAlign: "center" }}>
                   <button
+                    className="btn btn-main mr-3"
                     disabled={offset + 1 <= 1}
                     onClick={() => handlePageChange(offset - 1)}
                   >
@@ -663,6 +769,7 @@ export default function Product({ categories }) {
                   </button>
                   <span>{offset + 1}</span> / <span>{totalPages}</span>
                   <button
+                    className="btn btn-main ml-3"
                     disabled={offset + 1 >= totalPages}
                     onClick={() => handlePageChange(offset + 1)}
                   >

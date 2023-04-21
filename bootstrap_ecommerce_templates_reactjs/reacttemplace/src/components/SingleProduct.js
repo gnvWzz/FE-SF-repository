@@ -8,7 +8,7 @@ export default function SingleProduct() {
   const [cursor, setCursor] = useState("");
   const { product_name } = useParams();
   const [product, setProduct] = useState({});
-  const [productName, setProductName] = useState("")
+  const [productName, setProductName] = useState("");
   const [productDetail, setProductDetail] = useState({});
   const [productColors, setProductColors] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
@@ -17,7 +17,7 @@ export default function SingleProduct() {
     "Electronics",
     "Toy",
     "Watch",
-    "HandBag"
+    "HandBag",
   ]);
   const [stock, setStock] = useState();
   const [serialNumber, setSerialNumber] = useState("");
@@ -31,9 +31,15 @@ export default function SingleProduct() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+    localStorage.removeItem("sort_price");
+    localStorage.removeItem("sort_name");
+    localStorage.removeItem("min_price");
+    localStorage.removeItem("max_price");
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
-        setProductName(product_name.replace("%20"," "));
+        setProductName(product_name.replace("%20", " "));
+
         getData();
       }
     } else {
@@ -180,7 +186,6 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-
       url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${productName}`,
       method: "GET",
     })
@@ -205,7 +210,6 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-
       url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${productName}`,
       method: "GET",
     })
@@ -246,7 +250,11 @@ export default function SingleProduct() {
             >
               <div className="carousel-inner">
                 <div className="carousel-item active">
-                  <img src={firstList[0].img[0].url} alt="" className="img-fluid" />
+                  <img
+                    src={firstList[0].img[0].url}
+                    alt=""
+                    className="img-fluid"
+                  />
                 </div>
                 {secondList.map((i) => (
                   <div className="carousel-item">
@@ -261,7 +269,11 @@ export default function SingleProduct() {
                   data-slide-to="0"
                   className="active"
                 >
-                  <img src={firstList[0].img[0].url} alt="" className="img-fluid" />
+                  <img
+                    src={firstList[0].img[0].url}
+                    alt=""
+                    className="img-fluid"
+                  />
                 </li>
                 {secondList.map((i, index) => (
                   <li
@@ -311,8 +323,7 @@ export default function SingleProduct() {
           </div>
         );
       }
-    }
-    else if (imgList2 && choosingColor === undefined) {
+    } else if (imgList2 && choosingColor === undefined) {
       const listFirst = imgList2;
       const listSecond = [];
       for (var i = 1; i < listFirst[0].img.length; i++) {
@@ -328,7 +339,11 @@ export default function SingleProduct() {
             >
               <div className="carousel-inner">
                 <div className="carousel-item active">
-                  <img src={listFirst[0].img[0].url} alt="" className="img-fluid" />
+                  <img
+                    src={listFirst[0].img[0].url}
+                    alt=""
+                    className="img-fluid"
+                  />
                 </div>
                 {listSecond.map((i) => (
                   <div className="carousel-item">
@@ -343,7 +358,11 @@ export default function SingleProduct() {
                   data-slide-to="0"
                   className="active"
                 >
-                  <img src={listFirst[0].img[0].url} alt="" className="img-fluid" />
+                  <img
+                    src={listFirst[0].img[0].url}
+                    alt=""
+                    className="img-fluid"
+                  />
                 </li>
                 {listSecond.map((i, index) => (
                   <li
@@ -442,7 +461,9 @@ export default function SingleProduct() {
                   ) : (
                     <td className="product-price-table-td">&infin;</td>
                   )}
-                  <td className="product-price-table-td">{formatCurrency(ele.price)}</td>
+                  <td className="product-price-table-td">
+                    {formatCurrency(ele.price)}
+                  </td>
                 </tr>
               ))}
             </table>
@@ -482,7 +503,7 @@ export default function SingleProduct() {
           style={{ width: 120, textAlign: "center" }}
           value={quantity}
           onChange={handleChangeQuantity}
-          onWheel={(e) => e.target.blur()} 
+          onWheel={(e) => e.target.blur()}
         ></input>
         <button
           style={{ color: "black" }}
@@ -507,7 +528,7 @@ export default function SingleProduct() {
           onClick={handleGetProductDetailByColorAndSize}
         ></button>
       </li>
-    ))
+    ));
   }
 
   function showSizesOptions() {
@@ -567,7 +588,7 @@ export default function SingleProduct() {
             <td id="information-value">{productDetail.weight} kg</td>
           </tr>
         ) : undefined}
-        { }
+        {}
         {productDetail.material ? (
           <tr className="list-unstyled info-desc">
             <th className="information-key ">
@@ -622,9 +643,7 @@ export default function SingleProduct() {
 
   const formatCurrency = (currency) => {
     let intCurrency = currency;
-    const format = intCurrency
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return format;
   };
 
