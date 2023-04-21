@@ -22,47 +22,43 @@ function Header({ categories }) {
   const handleLogin = () => {
     return (
       <li className="dropdown cart-nav dropdown-slide list-inline-item">
-        <a href="#">
-          <i className="tf-ion-ios-person mr-3"></i>
-        </a>
-        <div className="dropdown-menu cart-dropdown">
-          <div className="cart-summary">
-            <div className="text-center cart-buttons mt-3">
-              <a
-                href="/myorder"
-                className="btn btn-small btn-transparent btn-block "
-                style={{ width: "250px", height: "40px" }}
-              >
-                My Orders
-              </a>
-              <a
-                href="#"
-                className="btn btn-small btn-transparent btn-block "
-                style={{ width: "250px", height: "40px" }}
-              >
-                My Favorites
-              </a>
-              <a
-                href="/profile"
-                className="btn btn-small btn-transparent btn-block "
-                style={{ width: "250px", height: "40px" }}
-              >
-                Profile
-              </a>
-              <a
-                onClick={handleOut}
-                onMouseOver={handleCursorOver}
-                className="btn btn-small btn-main btn-block"
-                style={{ width: "250px", height: "40px", cursor: cursor }}
-              >
-                Logout
-              </a>
+
+            <a >
+              <i className="tf-ion-ios-person mr-3"></i>
+            </a>
+            <div className="dropdown-menu cart-dropdown">          
+              <div className="cart-summary">
+                <div className="text-center cart-buttons mt-3">
+                  <a
+                    href="/myorder"
+                    className="btn btn-small btn-transparent btn-block "
+                    style={{width:"250px",height:"40px"}}
+                  >
+                    My Orders
+                  </a>
+                  <a
+                    href="#"
+                    className="btn btn-small btn-transparent btn-block "
+                    style={{width:"250px",height:"40px"}}
+                  >
+                    My Favorites
+                  </a>
+                  <a
+                    href="/profile"
+                    className="btn btn-small btn-transparent btn-block "
+                    style={{width:"250px",height:"40px"}}
+                  >
+                    Profile
+                  </a>
+                  <a onClick={handleOut} onMouseOver={handleCursorOver} className="btn btn-small btn-main btn-block" style={{width:"250px",height:"40px", cursor: cursor}}>
+                   Logout
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </li>
-    );
-  };
+          </li>
+    )
+  }
   const handleLogout = () => {
     return (
       <li className="dropdown cart-nav dropdown-slide list-inline-item">
@@ -256,12 +252,6 @@ function Header({ categories }) {
           className="top-menu list-inline mb-0 d-none d-lg-block"
           id="top-menu"
         >
-          <li className="list-inline-item">
-            <a href="#" className="search_toggle" id="search-icon">
-              <i className="tf-ion-android-search"></i>
-            </a>
-          </li>
-
           <li className="dropdown cart-nav dropdown-slide list-inline-item">
             <button
               style={{ borderRadius: "50%", border: "none" }}

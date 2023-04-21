@@ -73,8 +73,8 @@ function Home(props) {
   }, [offset]);
 
   const navigateToDetail = (e) => {
-    const package_id = e.currentTarget.getAttribute("value");
-    navigate(`/single-product/${package_id}`);
+    const product_name = e.currentTarget.getAttribute("value");
+    navigate(`/single-product/${product_name}`);
   };
 
   const handleClickContinue = (e) => {
@@ -194,7 +194,7 @@ function Home(props) {
                   </div>
 
                   <div className="product-hover-overlay">
-                    <div onClick={navigateToDetail} value={product.packageId}>
+                    <div onClick={navigateToDetail} value={product.name}>
                       <a href="">
                         <i className="tf-ion-android-cart"></i>
                       </a>
