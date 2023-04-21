@@ -44,7 +44,42 @@ export default function OrderDetails(){
     };
 
   },[])
+  console.log(orderDetails);
 
+  const handleDetails = () =>{
+    return(
+      orderDetails.map((orderDetails) =>(
+        <div class="card-body">
+        <div class="row">
+          <div class="col-md-2">
+
+            {orderDetails.size_color_img_quantity !== null
+            ?  (<img src={JSON.parse(orderDetails.size_color_img_quantity).img[0].url}
+            class="img-fluid" alt="Phone"/>)
+            : (<img src='https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg'
+            class="img-fluid" alt="Phone"/>)
+            }  
+
+          </div>
+          <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+            <p class="text-muted mb-0">{orderDetails.name}</p>
+          </div>
+          <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+            <p class="text-muted mb-0 small">{formatCurrency(orderDetails.price)}</p>
+          </div>
+         
+          <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+            <p class="text-muted mb-0 small">Qty:{orderDetails.quantity}</p>
+          </div>
+          <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+            <p class="text-muted mb-0 small">{formatCurrency(orderDetails.subTotal)}</p>
+          </div>
+        </div>
+        <hr class="mb-4" style={{backgroundColor:"#e0e0e0", opacity: "1"}}/>
+      </div>
+     ))
+    ) 
+  }
 
     return(
         <section class="h-100 gradient-custom">
@@ -60,32 +95,7 @@ export default function OrderDetails(){
                     <p class="lead fw-normal mb-0" style={{color: "#a8729a"}}>Receipt</p>
                   </div>
                   <div class="card shadow-0 border mb-4">
-
-                    {orderDetails.map((orderDetails) =>(
-                       <div class="card-body">
-                       <div class="row">
-                         <div class="col-md-2">
-                           <img src={JSON.parse(orderDetails.size_color_img_quantity).img[0].url}
-                             class="img-fluid" alt="Phone"/>
-                         </div>
-                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                           <p class="text-muted mb-0">{orderDetails.name}</p>
-                         </div>
-                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                           <p class="text-muted mb-0 small">{formatCurrency(orderDetails.price)}</p>
-                         </div>
-                        
-                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                           <p class="text-muted mb-0 small">Qty:{orderDetails.quantity}</p>
-                         </div>
-                         <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                           <p class="text-muted mb-0 small">{formatCurrency(orderDetails.subTotal)}</p>
-                         </div>
-                       </div>
-                       <hr class="mb-4" style={{backgroundColor:"#e0e0e0", opacity: "1"}}/>
-                     </div>
-                    ))}
-                 
+                  {  handleDetails() }
                   </div>
  
                   <div class="d-flex justify-content-between pt-2">

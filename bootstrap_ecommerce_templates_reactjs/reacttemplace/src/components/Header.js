@@ -243,14 +243,16 @@ function Header({ categories }) {
               <i className="tf-ion-android-search"></i>
             </a>
           </li>
+
+
           <li className="dropdown cart-nav dropdown-slide list-inline-item">
             <button
-              style={{borderRadius:"50%" }}
+              style={{borderRadius:"50%" , border: "none"}}
+              type="button"
               className="dropdown-toggle cart-icon"
-              data-toggle="dropdown"
-              data-hover="dropdown"
+              onClick={() => navigate(`/cart`)}
             >
-              <i className="tf-ion-android-cart"></i>
+              <i className="tf-ion-android-cart" ></i>
             </button>
 
           </li>
