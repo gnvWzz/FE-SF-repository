@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CART_URL } from "./URLS/url";
 import { data } from "jquery";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 function Cart() {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ function Cart() {
   const [checkEmpty, setCheckEmpty] = useState(true);
 
   const [cart, setCart] = useState([]);
+
+  const [checkEmptyCartItem, setCheckEmptyCartItem] = useState(false);
 
   // LAY CART KHI CO TOKEN VA ACCOUNT NAME=============================
   useEffect(() => {
@@ -69,7 +72,7 @@ function Cart() {
       method: "POST",
       data: temp,
     })
-      .then((res) => { })
+      .then((res) => {})
       .catch((err) => {
         throw err;
       });
@@ -135,10 +138,20 @@ function Cart() {
       </>
     );
   } else {
-    const map = (list) => { };
+    const map = (list) => {};
 
     const handleCheckout = () => {
-      navigate("/checkout", { state: { cart } });
+      let check = false;
+      cart.cartDetailModelList.map((i, index) => {
+        if (i.quantity === 0) {
+          check = true;
+        }
+      });
+      if (check === true) {
+        alert("Cart item quantity can not equal to 0");
+      } else {
+        navigate("/checkout", { state: { cart } });
+      }
     };
 
     const formatCurrency = (currency) => {
@@ -193,8 +206,6 @@ function Cart() {
         );
       }
     };
-
-    console.log(cart);
 
     const handleDelete = async (e) => {
       const json = {
@@ -363,7 +374,7 @@ function Cart() {
                               onBlur={(e) =>
                                 handleBlur(e.target.value, i.serialNumber)
                               }
-                              onWheel={(e) => e.target.blur()} 
+                              onWheel={(e) => e.target.blur()}
                             ></input>
                           ) : (
                             <p>No quantity</p>
@@ -384,7 +395,7 @@ function Cart() {
                               value={i.serialNumber}
                               onClick={handleDelete}
                               type="button"
-                              style={{borderRadius:"50%" , border: "none"}}
+                              style={{ borderRadius: "50%", border: "none" }}
                             >
                               <i
                                 id="deleteBox"
