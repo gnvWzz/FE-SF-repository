@@ -22,6 +22,8 @@ function Home(props) {
 
   let isStop = false;
 
+  const [visible, setVisible] = useState("none");
+
   const handleScroll = (e) => {
     if (
       window.innerHeight + e.target.documentElement.scrollTop + 1 >=
@@ -83,11 +85,23 @@ function Home(props) {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
+  const toggleVisible = () => {
+    const scrolled = document.documentElement.scrollTop;
+    if (scrolled > 300){
+      setVisible("inline")
+    } 
+    else if (scrolled <= 300){
+      setVisible("none")
+    }
+  };
+
+  window.addEventListener("scroll", toggleVisible);
+
   return (
     <div className="home-container">
       <button
         className="button-go-to-top"
-        style={{ borderColor: "#fb5c42", backgroundColor : "white" }}
+        style={{ borderColor: "#fb5c42", backgroundColor : "white", display: visible }}
         onClick={handleGotoTop}
       >
         <svg
@@ -97,6 +111,7 @@ function Home(props) {
           fill="#fb5c42"
           class="bi bi-arrow-up"
           viewBox="0 0 16 16"
+          onClick={handleGotoTop}
         >
           <path
             fill-rule="evenodd"
