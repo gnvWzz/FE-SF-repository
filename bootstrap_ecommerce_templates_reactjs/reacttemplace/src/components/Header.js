@@ -138,7 +138,7 @@ function Header({ categories }) {
               backgroundColor: "white",
             }}
           />
-          E-SHOP
+          VOILA!
         </Link>
         <button
           className="navbar-toggler"

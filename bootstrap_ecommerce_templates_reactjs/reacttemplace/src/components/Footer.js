@@ -13,7 +13,7 @@ function Footer() {
 
                 <div className="">
                   <p className="mb-0">
-                    <strong>Location : </strong>North Punjab ,INDIA
+                    <strong>Location : </strong>Vietnam
                   </p>
                   <p>
                     <strong>Support Email : </strong> support@email.com
