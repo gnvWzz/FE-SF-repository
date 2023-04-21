@@ -420,14 +420,14 @@ export default function Shop({ categories }) {
                     </div>
 
                     <div className="product-hover-overlay">
-                      <Link
+                      {/* <Link
                         to={`/single-product/${product.productSFDetailDtos[0].serialNumber}`}
                       >
                         <i className="tf-ion-android-cart"></i>
                       </Link>
                       <a href="#">
                         <i className="tf-ion-ios-heart"></i>
-                      </a>
+                      </a> */}
                     </div>
                     <div className="product-info">
                       <h2

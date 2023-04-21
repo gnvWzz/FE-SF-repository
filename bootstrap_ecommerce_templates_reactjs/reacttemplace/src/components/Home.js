@@ -5,7 +5,7 @@ import { PRODUCT_URL } from "./URLS/url";
 
 function Home(props) {
   const [offset, setOffset] = useState(0);
-
+  const [cursor, setCursor] = useState("");
   const [products, setProducts] = useState([]);
 
   // const [showProducts, setShowProducts] = useState([]);
@@ -50,7 +50,7 @@ function Home(props) {
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
-    localStorage.removeItem("category")
+    localStorage.removeItem("category");
     localStorage.removeItem("sort_price");
     localStorage.removeItem("sort_name");
     localStorage.removeItem("min_price");
@@ -97,6 +97,10 @@ function Home(props) {
 
   window.addEventListener("scroll", toggleVisible);
 
+  function handleCursorOver() {
+    setCursor("pointer");
+  }
+
   return (
     <div className="home-container">
       <button
@@ -138,6 +142,7 @@ function Home(props) {
               <div class="col-lg-6 col-12 offset-lg-6 offset-md-6">
                 <div class="slider-caption">
                   <span class="lead">Every Day</span>
+
                   <h1 class="mt-2 mb-5">
                     <span class="text-color">Summer </span>Collection
                   </h1>
@@ -165,7 +170,11 @@ function Home(props) {
           <div className="row" id="list">
             {products.map((product, index) => (
               <div className="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
-                <div className="product">
+                <div
+                  className="product"
+                  onMouseOver={handleCursorOver}
+                  style={{ cursor: cursor }}
+                >
                   <div className="product-wrap">
                     <div onClick={navigateToDetail} value={product.name}>
                       {JSON.parse(
@@ -194,11 +203,11 @@ function Home(props) {
                   </div>
 
                   <div className="product-hover-overlay">
-                    <div onClick={navigateToDetail} value={product.name}>
+                    {/* <div onClick={navigateToDetail} value={product.name}>
                       <a href="">
                         <i className="tf-ion-android-cart"></i>
                       </a>
-                    </div>
+                    </div> */}
 
                     {/* Wishlist */}
                     {/* <div onClick={navigateToDetail} value={product.packageId}>

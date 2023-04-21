@@ -761,9 +761,9 @@ export default function Product({ categories }) {
                     </div>
 
                     <div className="product-hover-overlay">
-                      <a href="#">
+                      {/* <a href="#">
                         <i className="tf-ion-ios-heart"></i>
-                      </a>
+                      </a> */}
                     </div>
                     <div className="product-info">
                       <h2
