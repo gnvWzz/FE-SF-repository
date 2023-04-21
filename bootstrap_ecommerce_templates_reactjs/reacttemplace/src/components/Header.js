@@ -15,6 +15,7 @@ function Header({ categories }) {
     
   }
 
+
   const handleLogin = () =>{
     return(
       <li className="dropdown cart-nav dropdown-slide list-inline-item">
@@ -242,70 +243,18 @@ function Header({ categories }) {
               <i className="tf-ion-android-search"></i>
             </a>
           </li>
+
+
           <li className="dropdown cart-nav dropdown-slide list-inline-item">
-            <a
-              href="#"
+            <button
+              style={{borderRadius:"50%" , border: "none"}}
+              type="button"
               className="dropdown-toggle cart-icon"
-              data-toggle="dropdown"
-              data-hover="dropdown"
+              onClick={() => navigate(`/cart`)}
             >
-              <i className="tf-ion-android-cart"></i>
-            </a>
-            <div className="dropdown-menu cart-dropdown">
-              <div className="media">
-                <a href="/product-single">
-                  <img
-                    className="media-object img- mr-3"
-                    src="assets/images/cart-1.jpg"
-                    alt="image"
-                  />
-                </a>
-                <div className="media-body">
-                  <h6>Ladies Bag</h6>
-                  <div className="cart-price">
-                    <span>1 x</span>
-                    <span>1250.00</span>
-                  </div>
-                </div>
-                <a href="#" className="remove">
-                  <i className="tf-ion-close"></i>
-                </a>
-              </div>
-              <div className="media">
-                <a href="/product-single">
-                  <img
-                    className="media-object img-fluid mr-3"
-                    src="assets/images/cart-2.jpg"
-                    alt="image"
-                  />
-                </a>
-                <div className="media-body">
-                  <h6>Skinny Jeans</h6>
-                  <div className="cart-price">
-                    <span>1 x</span>
-                    <span>1250.00</span>
-                  </div>
-                </div>
-                <a href="#" className="remove">
-                  <i className="tf-ion-close"></i>
-                </a>
-              </div>
-              <div className="cart-summary">
-                <span className="h6">Total</span>
-                <span className="total-price h6">$1799.00</span>
-                <div className="text-center cart-buttons mt-3">
-                  <a
-                    href="#"
-                    className="btn btn-small btn-transparent btn-block"
-                  >
-                    View Cart
-                  </a>
-                  <a href="#" className="btn btn-small btn-main btn-block">
-                    Checkout
-                  </a>
-                </div>
-              </div>
-            </div>
+              <i className="tf-ion-android-cart" ></i>
+            </button>
+
           </li>
           
           {localStorage.getItem("token")?
