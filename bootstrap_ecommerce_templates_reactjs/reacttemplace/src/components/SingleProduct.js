@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { PRODUCT_URL } from "./URLS/url";
+import { PRODUCT_URL, STORE_URL } from "./URLS/url";
 
 export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
@@ -27,8 +27,14 @@ export default function SingleProduct() {
   const [choosingColor, setChoosingColor] = useState("");
   const [choosingSize, setChoosingSize] = useState("");
   const [imgList2, setImgList2] = useState([]);
+  const [cursorStoreImage, setCursorStoreImage] = useState("")
+  const [shop, setShop] = useState({
+    name: "",
+    img: ""
+  })
   let isStop = false;
   const url = PRODUCT_URL;
+  const url2 = STORE_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,8 +48,8 @@ export default function SingleProduct() {
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
         setProductName(product_name.replace("%20", " "));
-
         getData();
+        // getShop();
       }
     } else {
       navigate("/login");
@@ -67,6 +73,11 @@ export default function SingleProduct() {
     })
       .then((res) => {
         setProduct(res.data);
+        setShop({
+          ...shop,
+          name: res.data.storeName,
+          img: res.data.storeImage
+        })
         generateProductColors(res.data);
         generateProductSizes(res.data);
         setProductDetail(res.data.productSFDetailDtos[0]);
@@ -666,6 +677,47 @@ export default function SingleProduct() {
 
   window.addEventListener("scroll", toggleVisible);
 
+  const handleChatWithThisStore = (e) => {
+    //navigate to chat with this store
+  }
+
+  const handleNavigateToStoreDetail = (e) => {
+    //navigate to store details
+  }
+
+  const handleChangeCursorStoreImage = (e) => {
+    setCursorStoreImage("pointer")
+  }
+
+  const showStoreInformation = () => {
+    if (shop.name && shop.img) {
+      return (
+        <table>
+          <tr>
+            <td rowSpan={2}>
+              <img onClick={handleNavigateToStoreDetail} onMouseOver={handleChangeCursorStoreImage} className="ml-0" src={shop.img} style={{ width: "150px", height: "150px", cursor: cursorStoreImage }}></img>
+            </td>
+            <td style={{ textAlign: "center" }} colSpan={2}>
+              <h3>{shop.name}</h3>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button className="btn btn-main" style={{ width: "200px", height: "50px", fontSize: "15px" }} onClick={handleChatWithThisStore}>Chat Now</button>
+            </td>
+            <td>
+              <button className="btn btn-secondary" style={{ width: "200px", height: "50px", fontSize: "15px" }} onClick={handleNavigateToStoreDetail}>Visit This Store</button>
+            </td>
+          </tr>
+        </table>
+      )
+    } else {
+      return (
+        undefined
+      )
+    }
+  }
+
   if (!product) {
     return (
       <div className="loader-container">
@@ -751,6 +803,15 @@ export default function SingleProduct() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div className="row mt-5" style={{ border: "1px solid lightgrey", width: "100%", marginLeft: "1px" }}>
+              <div className="col-md-5">
+                {showStoreInformation()}
+              </div>
+              <div className="col-md-7">
+
               </div>
             </div>
 
