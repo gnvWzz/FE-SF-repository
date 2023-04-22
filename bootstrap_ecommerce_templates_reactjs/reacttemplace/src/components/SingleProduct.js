@@ -6,7 +6,8 @@ import { PRODUCT_URL, STORE_URL } from "./URLS/url";
 export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
   const [cursor, setCursor] = useState("");
-  const { product_name } = useParams();
+  const { product_name } = useParams(); 
+  const[productYouLikeThis, setProductYouLikeThis] = useState([]);
   const [product, setProduct] = useState({});
   const [productName, setProductName] = useState("");
   const [productDetail, setProductDetail] = useState({});
@@ -49,7 +50,7 @@ export default function SingleProduct() {
       if (!isStop) {
         setProductName(product_name.replace("%20", " "));
         getData();
-        // getShop();
+        getproductYouLikeThis();
       }
     } else {
       navigate("/login");
@@ -138,6 +139,27 @@ export default function SingleProduct() {
       });
   };
 
+  const getproductYouLikeThis = () =>{
+    axios({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+      url: `${url}/random-single-product/${product_name}`,
+      method: "GET",
+    })
+      .then((res) => {
+       if(res.status === 200){
+        setProductYouLikeThis(res.data);
+        console.log(res.data);
+       }
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
   useEffect(() => {
     if (priceList) {
       for (let i = 0; i < priceList.length; i++) {
@@ -150,6 +172,8 @@ export default function SingleProduct() {
       }
     }
   }, [quantity]);
+
+
 
   const generateProductColors = (data) => {
     let colors = [];
@@ -192,6 +216,10 @@ export default function SingleProduct() {
       setCursor("not-allowed");
     }
   }
+
+  const handleCursorOverYouLikeThis = (e) => {
+    setCursor("pointer");
+  };
 
   const handleGetProductDetailByColorAndSize = async (e) => {
     const c = e.currentTarget.getAttribute("value");
@@ -718,6 +746,47 @@ export default function SingleProduct() {
     }
   }
 
+  const handleYouLikeThis = (e) =>{
+    navigate(`/single-product/${e.currentTarget.getAttribute("value")}`)
+    setTimeout(() => {
+      window.location.reload();
+    }, 200);
+  }
+
+  const showProductRandomYouLikeThis = () =>{
+    return(
+      productYouLikeThis.map((product) =>(
+        <div className="col-lg-3 col-6">
+        <div className="product">
+          <div className="product-wrap">
+            <a routerLink="/product-single">
+              <img
+                className="img-fluid w-100 mb-3 img-first"
+                src={JSON.parse(product.productSFDetailDtos[0].size_color_img_quantity).img[0].url}
+                alt="product-img"
+                onClick={handleYouLikeThis}
+                style={{ cursor: cursor }}
+                onMouseOver={handleCursorOverYouLikeThis}
+                value = {product.name}
+              />
+            </a>
+          </div>
+          
+          <div className="product-info">
+            <h2 className=" h5 mb-0">
+            <button class="product-you-like-this mb-0" onClick={handleYouLikeThis} value={product.name}>{product.name}</button>
+            </h2>
+            <span className="price">{formatCurrency(product.priceListDtos[0].price)}</span>
+          </div>
+        </div>
+      </div>
+      ))
+
+     
+    )
+   
+  }
+
   if (!product) {
     return (
       <div className="loader-container">
@@ -1026,157 +1095,7 @@ export default function SingleProduct() {
               </div>
             </div>
             <div className="row">
-              <div className="col-lg-3 col-6">
-                <div className="product">
-                  <div className="product-wrap">
-                    <a routerLink="/product-single">
-                      <img
-                        className="img-fluid w-100 mb-3 img-first"
-                        src="assets/images/322.jpg"
-                        alt="product-img"
-                      />
-                    </a>
-                    <a routerLink="/product-single">
-                      <img
-                        className="img-fluid w-100 mb-3 img-second"
-                        src="assets/images/444.jpg"
-                        alt="product-img"
-                      />
-                    </a>
-                  </div>
-
-                  <span className="onsale">Sale</span>
-                  <div className="product-hover-overlay">
-                    <a href="#">
-                      <i className="tf-ion-android-cart"></i>
-                    </a>
-                    <a href="#">
-                      <i className="tf-ion-ios-heart"></i>
-                    </a>
-                  </div>
-
-                  <div className="product-info">
-                    <h2 className="product-title h5 mb-0">
-                      <a routerLink="/product-single">Kirby Shirt</a>
-                    </h2>
-                    <span className="price">$329.10</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-lg-3 col-6">
-                <div className="product">
-                  <div className="product-wrap">
-                    <a routerLink="/product-single">
-                      <img
-                        className="img-fluid w-100 mb-3 img-first"
-                        src="assets/images/111.jpg"
-                        alt="product-img"
-                      />
-                    </a>
-                    <a routerLink="/product-single">
-                      <img
-                        className="img-fluid w-100 mb-3 img-second"
-                        src="assets/images/222.jpg"
-                        alt="product-img"
-                      />
-                    </a>
-                  </div>
-
-                  <span className="onsale">Sale</span>
-                  <div className="product-hover-overlay">
-                    <a href="#">
-                      <i className="tf-ion-android-cart"></i>
-                    </a>
-                    <a href="#">
-                      <i className="tf-ion-ios-heart"></i>
-                    </a>
-                  </div>
-
-                  <div className="product-info">
-                    <h2 className="product-title h5 mb-0">
-                      <a routerLink="/product-single">Kirby Shirt</a>
-                    </h2>
-                    <span className="price">$329.10</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-lg-3 col-6">
-                <div className="product">
-                  <div className="product-wrap">
-                    <a routerLink="/product-single">
-                      <img
-                        className="img-fluid w-100 mb-3 img-first"
-                        src="assets/images/111.jpg"
-                        alt="product-img"
-                      />
-                    </a>
-                    <a routerLink="/product-single">
-                      <img
-                        className="img-fluid w-100 mb-3 img-second"
-                        src="assets/images/322.jpg"
-                        alt="product-img"
-                      />
-                    </a>
-                  </div>
-
-                  <span className="onsale">Sale</span>
-                  <div className="product-hover-overlay">
-                    <a href="#">
-                      <i className="tf-ion-android-cart"></i>
-                    </a>
-                    <a href="#">
-                      <i className="tf-ion-ios-heart"></i>
-                    </a>
-                  </div>
-
-                  <div className="product-info">
-                    <h2 className="product-title h5 mb-0">
-                      <a routerLink="/product-single">Kirby Shirt</a>
-                    </h2>
-                    <span className="price">$329.10</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-lg-3 col-6">
-                <div className="product">
-                  <div className="product-wrap">
-                    <a routerLink="/product-single">
-                      <img
-                        className="img-fluid w-100 mb-3 img-first"
-                        src="assets/images/444.jpg"
-                        alt="product-img"
-                      />
-                    </a>
-                    <a routerLink="/product-single">
-                      <img
-                        className="img-fluid w-100 mb-3 img-second"
-                        src="assets/images/222.jpg"
-                        alt="product-img"
-                      />
-                    </a>
-                  </div>
-
-                  <span className="onsale">Sale</span>
-                  <div className="product-hover-overlay">
-                    <a href="#">
-                      <i className="tf-ion-android-cart"></i>
-                    </a>
-                    <a href="#">
-                      <i className="tf-ion-ios-heart"></i>
-                    </a>
-                  </div>
-
-                  <div className="product-info">
-                    <h2 className="product-title h5 mb-0">
-                      <a routerLink="/product-single">Kirby Shirt</a>
-                    </h2>
-                    <span className="price">$329.10</span>
-                  </div>
-                </div>
-              </div>
+              {showProductRandomYouLikeThis()}          
             </div>
           </div>
         </section>

@@ -2485,6 +2485,17 @@ td {
   color: #fb5c42;
 }
 
+
+.product-you-like-this {
+  background-color: #f5f6fa;
+  border: none;
+}
+
+.product-you-like-this:hover {
+  color: #fb5c42;
+}
+
+
 .customer-name {
   color: #fb5c42;
 }
