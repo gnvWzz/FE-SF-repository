@@ -27,10 +27,10 @@ export default function Product({ categories }) {
 
   // Long da them o day ne ================================ lay du lieu khuc nay may cai kia chua co lam
   useEffect(() => {
+    localStorage.removeItem("have_error");
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
         if (localStorage.getItem("sort_price") !== null) {
-          console.log("sort_price " + offset);
           axios({
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -45,7 +45,8 @@ export default function Product({ categories }) {
               setTotalPages(res.data.totalPages);
             })
             .catch((err) => {
-              throw err;
+              localStorage.setItem("have_error", err);
+              navigate("/error");
             });
         } else if (localStorage.getItem("sort_name") !== null) {
           axios({
@@ -62,9 +63,9 @@ export default function Product({ categories }) {
               setTotalPages(res.data.totalPages);
             })
             .catch((err) => {
-              throw err;
+              localStorage.setItem("have_error", err);
+              navigate("/error");
             });
-          console.log("sort_name " + offset);
         } else if (
           localStorage.getItem("min_price") !== null &&
           localStorage.getItem("max_price") !== null
@@ -83,7 +84,8 @@ export default function Product({ categories }) {
               setTotalPages(res.data.totalPages);
             })
             .catch((err) => {
-              throw err;
+              localStorage.setItem("have_error", err);
+              navigate("/error");
             });
         } else {
           axios({
@@ -100,7 +102,8 @@ export default function Product({ categories }) {
               setTotalPages(res.data.totalPages);
             })
             .catch((err) => {
-              throw err;
+              localStorage.setItem("have_error", err);
+              navigate("/error");
             });
         }
       }
@@ -115,6 +118,7 @@ export default function Product({ categories }) {
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       window.scrollTo({ top: 0, left: 0 });
+      localStorage.removeItem("have_error");
       localStorage.removeItem("sort_price");
       localStorage.removeItem("sort_name");
       localStorage.removeItem("min_price");
@@ -125,6 +129,7 @@ export default function Product({ categories }) {
   }, []);
 
   useEffect(() => {
+    localStorage.removeItem("have_error");
     localStorage.removeItem("sort_price");
     localStorage.removeItem("sort_name");
     localStorage.removeItem("min_price");
@@ -146,7 +151,8 @@ export default function Product({ categories }) {
             setTotalPages(res.data.totalPages);
           })
           .catch((err) => {
-            throw err;
+            localStorage.setItem("have_error", err);
+            navigate("/error");
           });
       }
     } else {
@@ -158,6 +164,7 @@ export default function Product({ categories }) {
   }, [name]);
 
   useEffect(() => {
+    localStorage.removeItem("have_error");
     if (formSeacrh.length === 0) {
       axios({
         headers: {
@@ -173,7 +180,8 @@ export default function Product({ categories }) {
           setTotalPages(res.data.totalPages);
         })
         .catch((err) => {
-          throw err;
+          localStorage.setItem("have_error", err);
+          navigate("/error");
         });
     }
   }, [formSeacrh]);
@@ -427,7 +435,8 @@ export default function Product({ categories }) {
           e.preventDefault();
         })
         .catch((err) => {
-          throw err;
+          localStorage.setItem("have_error", err);
+          navigate("/error");
         });
     }
   };
@@ -466,7 +475,8 @@ export default function Product({ categories }) {
           setTotalPages(res.data.totalPages);
         })
         .catch((err) => {
-          throw err;
+          localStorage.setItem("have_error", err);
+          navigate("/error");
         });
     } else {
       setSortPrice(e.target.value);
@@ -488,7 +498,8 @@ export default function Product({ categories }) {
           setTotalPages(res.data.totalPages);
         })
         .catch((err) => {
-          throw err;
+          localStorage.setItem("have_error", err);
+          navigate("/error");
         });
     }
   };
@@ -516,7 +527,8 @@ export default function Product({ categories }) {
             e.preventDefault();
           })
           .catch((err) => {
-            throw err;
+            localStorage.setItem("have_error", err);
+            navigate("/error");
           });
       }
     }
@@ -550,7 +562,8 @@ export default function Product({ categories }) {
           setTotalPages(res.data.totalPages);
         })
         .catch((err) => {
-          throw err;
+          localStorage.setItem("have_error", err);
+          navigate("/error");
         });
     }
   };
@@ -572,8 +585,6 @@ export default function Product({ categories }) {
     }
   };
 
-  console.log(products)
-
   window.addEventListener("scroll", toggleVisible);
 
   return (
@@ -592,7 +603,7 @@ export default function Product({ categories }) {
           width="30"
           height="30"
           fill="#fb5c42"
-          class="bi bi-arrow-up"
+          className="bi bi-arrow-up"
           viewBox="0 0 16 16"
           onClick={handleGotoTop}
         >
@@ -779,7 +790,7 @@ export default function Product({ categories }) {
                         <a>{product.name}</a>
                       </h2>
                       <span className="price">
-                        {product.priceListDtos[0].price !== "" ? (
+                        {product.priceListDtos.length !== 0 ? (
                           <h4 style={{ color: "red", textAlign: "left" }}>
                             {formatCurrency(product.priceListDtos[0].price)} đ
                           </h4>

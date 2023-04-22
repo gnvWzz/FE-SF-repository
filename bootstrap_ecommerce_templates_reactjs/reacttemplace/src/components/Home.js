@@ -50,6 +50,7 @@ function Home(props) {
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
+    localStorage.removeItem("have_error");
     localStorage.removeItem("category");
     localStorage.removeItem("sort_price");
     localStorage.removeItem("sort_name");

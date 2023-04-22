@@ -20,6 +20,7 @@ export default function Shop({ categories }) {
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
+    localStorage.removeItem("have_error");
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
         getData();
@@ -47,7 +48,8 @@ export default function Shop({ categories }) {
         setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
-        throw err;
+        localStorage.setItem("have_error", err);
+        navigate("/error");
       });
   };
 
@@ -320,7 +322,6 @@ export default function Shop({ categories }) {
 
   window.addEventListener("scroll", toggleVisible);
 
-  const handleChangeSortByPrice = async (e) => {};
   return (
     <section className="products-shop section">
       <button
@@ -452,20 +453,40 @@ export default function Shop({ categories }) {
                       </a> */}
                     </div>
                     <div className="product-info">
-                      <h2
-                        className="product-title h5 mb-0"
-                        style={{
-                          height: 80,
-                          textAlign: "left",
-                          fontSize: "15px",
-                        }}
-                      >
-                        <a>{product.name}</a>
-                      </h2>
+                      {product.name !== "" ? (
+                        <h2
+                          className="product-title h5 mb-0"
+                          style={{
+                            height: 80,
+                            textAlign: "left",
+                            fontSize: "15px",
+                          }}
+                        >
+                          <a>{product.name}</a>
+                        </h2>
+                      ) : (
+                        <h2
+                          className="product-title h5 mb-0"
+                          style={{
+                            height: 80,
+                            textAlign: "left",
+                            fontSize: "15px",
+                          }}
+                        >
+                          <a>No name </a>
+                        </h2>
+                      )}
+
                       <span className="price">
-                        <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.priceListDtos[0].price} đ
-                        </h4>
+                        {product.priceListDtos.length !== 0 ? (
+                          <h4 style={{ color: "red", textAlign: "left" }}>
+                            {product.priceListDtos[0].price} đ
+                          </h4>
+                        ) : (
+                          <h4 style={{ color: "red", textAlign: "left" }}>
+                            0 đ
+                          </h4>
+                        )}
                       </span>
                     </div>
                   </div>
