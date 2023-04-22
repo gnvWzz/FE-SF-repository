@@ -18,6 +18,13 @@ export default function Shop({ categories }) {
     setFormSearch(e.target.value);
   }
 
+  
+  const formatCurrency = (currency) => {
+    let intCurrency = currency;
+    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return format;
+  };
+
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
     if (localStorage.getItem("token") !== null) {
@@ -265,7 +272,7 @@ export default function Shop({ categories }) {
                           <h2 className="product-title h5 mb-0">
                             <a>{product.name}</a>
                           </h2>
-                          <span className="price">{product.price} đ</span>
+                          <span className="price">{formatCurrency(product.price)} đ</span>
                         </div>
                       </div>
                     </div>
@@ -464,7 +471,7 @@ export default function Shop({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {product.priceListDtos[0].price} đ
+                          {formatCurrency(product.priceListDtos[0].price) } đ
                         </h4>
                       </span>
                     </div>

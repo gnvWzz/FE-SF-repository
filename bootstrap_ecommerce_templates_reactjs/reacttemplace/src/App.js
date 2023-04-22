@@ -17,6 +17,7 @@ import Profile from "./components/Profile";
 import Password from "./components/Password";
 import OrderDetails from "./components/OrderDetail";
 import MyOrder from "./components/MyOrder";
+import ShopStore from "./components/ShopStore";
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/orderdetails" element={<OrderDetails />} />
           <Route path="/myorder" element={<MyOrder />} />
+          <Route path="/shopstore" element={<ShopStore categories={categories} />} />
           <Route path="/" element={<Home />} />
         </Routes>
         <Footer></Footer>
