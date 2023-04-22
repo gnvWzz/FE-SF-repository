@@ -19,6 +19,7 @@ export default function SingleProduct() {
     "Toy",
     "Watch",
     "HandBag",
+    "Accessory"
   ]);
   const [visible, setVisible] = useState("none");
   const [stock, setStock] = useState();
