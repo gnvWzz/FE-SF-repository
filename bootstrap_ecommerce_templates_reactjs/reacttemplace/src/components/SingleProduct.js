@@ -710,7 +710,10 @@ export default function SingleProduct() {
   }
 
   const handleNavigateToStoreDetail = (e) => {
-    //navigate to store details
+    const productName =  product_name ;
+    const storeName = shop.name;
+    const storeImg = shop.img;
+    navigate(`/shopstore`, {state :{productName,storeName,storeImg}})
   }
 
   const handleChangeCursorStoreImage = (e) => {
