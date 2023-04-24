@@ -224,26 +224,45 @@ export default function SingleProduct() {
 
   const handleGetProductDetailByColorAndSize = async (e) => {
     const c = e.currentTarget.getAttribute("value");
-    await axios({
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${productName}`,
-      method: "GET",
-    })
-      .then((res) => {
-        setProductDetail(res.data);
-        setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
-        setQuantity(1);
-        setSerialNumber(res.data.serialNumber);
-
-        setChoosingColor(c);
-        setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
+    if (choosingSize !== undefined) {
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${productName}`,
+        method: "GET",
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          setProductDetail(res.data);
+          setQuantity(1);
+          setSerialNumber(res.data.serialNumber);
+          setChoosingColor(c);
+          setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        url: `${url}/find-product-detail-by-color/${c}/${productName}`,
+        method: "GET",
+      })
+        .then((res) => {
+          setProductDetail(res.data);
+          setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
+          setQuantity(1);
+          setSerialNumber(res.data.serialNumber);
+          setChoosingColor(c);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handleChoosingSize = async (e) => {
@@ -261,9 +280,7 @@ export default function SingleProduct() {
         setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
         setQuantity(1);
         setSerialNumber(res.data.serialNumber);
-
         setChoosingSize(s);
-        setStock(JSON.parse(res.data.size_color_img_quantity).quantity);
       })
       .catch((err) => {
         console.log(err);
@@ -785,10 +802,7 @@ export default function SingleProduct() {
           </div>
         </div>
       ))
-
-
     )
-
   }
 
   if (!product) {
