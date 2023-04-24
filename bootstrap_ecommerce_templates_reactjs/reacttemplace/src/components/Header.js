@@ -158,45 +158,6 @@ function Header({ categories }) {
                 Home
               </Link>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">
-                About Us
-              </a>
-            </li>
-            <li className="nav-item dropdown dropdown-slide">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown4"
-                role="button"
-                data-delay="350"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Pages
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdown4">
-                <li>
-                  <a href="#">About Us</a>
-                </li>
-                <li>
-                  <a href="#">Blog</a>
-                </li>
-                <li>
-                  <a href="#">Blog Single</a>
-                </li>
-                <li>
-                  <a href="#">Contact</a>
-                </li>
-                <li>
-                  <a href="#">404 Page</a>
-                </li>
-                <li>
-                  <a href="#">FAQ</a>
-                </li>
-              </ul>
-            </li>
             <li className="nav-item dropdown dropdown-slide">
               <a
                 className="nav-link dropdown-toggle"

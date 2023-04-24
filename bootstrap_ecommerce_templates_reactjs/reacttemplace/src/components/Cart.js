@@ -27,6 +27,7 @@ function Cart() {
       localStorage.getItem("username") !== null
     ) {
       // Long xoa localStorage cua Long
+      localStorage.removeItem("have_error");
       localStorage.removeItem("sort_price");
       localStorage.removeItem("sort_name");
       localStorage.removeItem("min_price");
@@ -56,17 +57,22 @@ function Cart() {
       method: "GET",
     })
       .then((res) => {
-        setCart(res.data);
-        if (res.data === "Fail") {
-          setCheckEmpty(false);
+        console.log(res.data);
+        if (res.data === "Empty") {
+          renderEmptyCart();
+        } else {
+          setCart(res.data);
+          localStorage.setItem("quantity", res.data.cartDetailModelList.length);
         }
-        localStorage.setItem("quantity", res.data.cartDetailModelList.length);
       })
       .catch((err) => {
-        console.log("Khong co du lieu");
+        localStorage.setItem("have_error", err);
+        navigate("/error");
       });
   };
   // ===============================================
+
+  console.log(cart);
 
   const add_to_cart = async (temp) => {
     await axios({
@@ -80,8 +86,30 @@ function Cart() {
     })
       .then((res) => {})
       .catch((err) => {
-        throw err;
+        localStorage.setItem("have_error", err);
+        navigate("/error");
       });
+  };
+
+  const renderEmptyCart = (e) => {
+    return (
+      <>
+        <div className="container">
+          <div className="row">
+            <div className="offset-lg-3 col-lg-6 col-md-12 col-12 text-center">
+              <img
+                src="https://codescandy.com/coach/rtl/assets/images/bag.svg"
+                alt="bag.svg"
+              />
+              <h2>Your shopping cart is empty</h2>
+              <a href="/" className="btn btn-main btn-small">
+                Back home
+              </a>
+            </div>
+          </div>
+        </div>
+      </>
+    );
   };
 
   useEffect(() => {
@@ -164,7 +192,7 @@ function Cart() {
       let intCurrency = currency;
       const format = intCurrency
         .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       return format;
     };
 
