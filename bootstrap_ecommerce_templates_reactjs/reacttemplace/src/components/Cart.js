@@ -53,7 +53,7 @@ function Cart() {
         "Content-Type": "application/json",
       },
       "Access-Control-Allow-Origin": "*",
-      url: `${cart_url}?account-name=${localStorage.getItem("username")}`,
+      url: `${cart_url}/?account-name=${localStorage.getItem("username")}`,
       method: "GET",
     })
       .then((res) => {
@@ -321,7 +321,7 @@ function Cart() {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
         },
-        url: `${cart_url}`,
+        url: `${cart_url}/`,
         method: "PUT",
         data: cart,
       })
