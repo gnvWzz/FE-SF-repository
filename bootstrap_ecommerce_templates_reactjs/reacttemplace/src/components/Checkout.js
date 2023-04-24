@@ -108,7 +108,7 @@ function Checkout({ provinces }) {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
               "Content-Type": "application/json",
             },
-            url: `${Order_url}?username=${localStorage.getItem("username")}`,
+            url: `${Order_url}/?username=${localStorage.getItem("username")}`,
             method: "POST",
             data: form,
           })
@@ -130,7 +130,7 @@ function Checkout({ provinces }) {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
               "Content-Type": "application/json",
             },
-            url: `${Order_url}?username=${localStorage.getItem("username")}`,
+            url: `${Order_url}/?username=${localStorage.getItem("username")}`,
             method: "POST",
             data: form,
           })
