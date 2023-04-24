@@ -6,8 +6,8 @@ import { PRODUCT_URL, STORE_URL } from "./URLS/url";
 export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
   const [cursor, setCursor] = useState("");
-  const { product_name } = useParams(); 
-  const[productYouLikeThis, setProductYouLikeThis] = useState([]);
+  const { product_name } = useParams();
+  const [productYouLikeThis, setProductYouLikeThis] = useState([]);
   const [product, setProduct] = useState({});
   const [productName, setProductName] = useState("");
   const [productDetail, setProductDetail] = useState({});
@@ -140,7 +140,7 @@ export default function SingleProduct() {
       });
   };
 
-  const getproductYouLikeThis = () =>{
+  const getproductYouLikeThis = () => {
     axios({
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -151,10 +151,10 @@ export default function SingleProduct() {
       method: "GET",
     })
       .then((res) => {
-       if(res.status === 200){
-        setProductYouLikeThis(res.data);
-        console.log(res.data);
-       }
+        if (res.status === 200) {
+          setProductYouLikeThis(res.data);
+          console.log(res.data);
+        }
       })
       .catch((err) => {
         throw err;
@@ -711,10 +711,10 @@ export default function SingleProduct() {
   }
 
   const handleNavigateToStoreDetail = (e) => {
-    const productName =  product_name ;
+    const productName = product_name;
     const storeName = shop.name;
     const storeImg = shop.img;
-    navigate(`/shopstore`, {state :{productName,storeName,storeImg}})
+    navigate(`/shopstore`, { state: { productName, storeName, storeImg } })
   }
 
   const handleChangeCursorStoreImage = (e) => {
@@ -750,45 +750,45 @@ export default function SingleProduct() {
     }
   }
 
-  const handleYouLikeThis = (e) =>{
+  const handleYouLikeThis = (e) => {
     navigate(`/single-product/${e.currentTarget.getAttribute("value")}`)
     setTimeout(() => {
       window.location.reload();
     }, 200);
   }
 
-  const showProductRandomYouLikeThis = () =>{
-    return(
-      productYouLikeThis.map((product) =>(
+  const showProductRandomYouLikeThis = () => {
+    return (
+      productYouLikeThis.map((product) => (
         <div className="col-lg-3 col-6">
-        <div className="product">
-          <div className="product-wrap">
-            <a routerLink="/product-single">
-              <img
-                className="img-fluid w-100 mb-3 img-first"
-                src={JSON.parse(product.productSFDetailDtos[0].size_color_img_quantity).img[0].url}
-                alt="product-img"
-                onClick={handleYouLikeThis}
-                style={{ cursor: cursor }}
-                onMouseOver={handleCursorOverYouLikeThis}
-                value = {product.name}
-              />
-            </a>
-          </div>
-          
-          <div className="product-info">
-            <h2 className=" h5 mb-0">
-            <button class="product-you-like-this mb-0" onClick={handleYouLikeThis} value={product.name}>{product.name}</button>
-            </h2>
-            <span className="price">{formatCurrency(product.priceListDtos[0].price)}</span>
+          <div className="product">
+            <div className="product-wrap">
+              <a routerLink="/product-single">
+                <img
+                  className="img-fluid w-100 mb-3 img-first"
+                  src={JSON.parse(product.productSFDetailDtos[0].size_color_img_quantity).img[0].url}
+                  alt="product-img"
+                  onClick={handleYouLikeThis}
+                  style={{ cursor: cursor }}
+                  onMouseOver={handleCursorOverYouLikeThis}
+                  value={product.name}
+                />
+              </a>
+            </div>
+
+            <div className="product-info">
+              <h2 className=" h5 mb-0">
+                <button class="product-you-like-this mb-0" onClick={handleYouLikeThis} value={product.name}>{product.name}</button>
+              </h2>
+              <span className="price">{formatCurrency(product.priceListDtos[0].price)}</span>
+            </div>
           </div>
         </div>
-      </div>
       ))
 
-     
+
     )
-   
+
   }
 
   if (!product) {
@@ -1099,7 +1099,7 @@ export default function SingleProduct() {
               </div>
             </div>
             <div className="row">
-              {showProductRandomYouLikeThis()}          
+              {showProductRandomYouLikeThis()}
             </div>
           </div>
         </section>
