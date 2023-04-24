@@ -35,7 +35,7 @@ function Home(props) {
 
   const formatCurrency = (currency) => {
     let intCurrency = currency;
-    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return format;
   };
 

@@ -19,8 +19,12 @@ export default function Shop({ categories }) {
   }
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 });
     localStorage.removeItem("have_error");
+    localStorage.removeItem("sort_price");
+    localStorage.removeItem("sort_name");
+    localStorage.removeItem("min_price");
+    localStorage.removeItem("max_price");
+    window.scrollTo({ top: 0, left: 0 });
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
         getData();
@@ -32,6 +36,12 @@ export default function Shop({ categories }) {
       isStop = true;
     };
   }, [offset]);
+
+  const formatCurrency = (currency) => {
+    let intCurrency = currency;
+    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return format;
+  };
 
   const getData = async (e) => {
     await axios({
@@ -480,7 +490,7 @@ export default function Shop({ categories }) {
                       <span className="price">
                         {product.priceListDtos.length !== 0 ? (
                           <h4 style={{ color: "red", textAlign: "left" }}>
-                            {product.priceListDtos[0].price} đ
+                            {formatCurrency(product.priceListDtos[0].price)} đ
                           </h4>
                         ) : (
                           <h4 style={{ color: "red", textAlign: "left" }}>

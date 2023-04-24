@@ -17,7 +17,15 @@ function Checkout({ provinces }) {
 
   const [form, setForm] = useState({});
 
+  const [promo, setPromo] = useState("");
+
+  let new_price = 0;
+  let old_price = form.totalPrice;
+
+  let have_promo = false;
+
   useEffect(() => {
+    localStorage.removeItem("have_promo");
     axios({
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -36,6 +44,9 @@ function Checkout({ provinces }) {
         throw err;
       });
   }, []);
+
+  // UseEffect dung de hien gia moi
+  useEffect(() => {}, [have_promo]);
 
   const REGEX = {
     //email tuân theo RFC 2822
@@ -60,6 +71,9 @@ function Checkout({ provinces }) {
 
     const cart = state.cart;
 
+    form.orderDetails = cart.cartDetailModelList;
+    form.totalPrice = cart.totalPrice;
+
     const handleChangeOrder = (e) => {
       setForm({
         ...form,
@@ -83,30 +97,53 @@ function Checkout({ provinces }) {
       }
     };
 
-    console.log(state.cart.cartDetailModelList);
     const place_order = async (e) => {
       if (state.cart.cartDetailModelList === 0) {
         <p>Loading</p>;
       } else {
-        form.orderDetails = state.cart.cartDetailModelList;
-        await axios({
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          url: `${Order_url}?username=${localStorage.getItem("username")}`,
-          method: "POST",
-          data: form,
-        })
-          .then((res) => {
-            if (res.status === 200) {
-              alert("Place order successfully");
-              navigate("/");
-            } 
+        if (localStorage.getItem("new_price") !== null) {
+          form.totalPrice = localStorage.getItem("new_price");
+          await axios({
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+            url: `${Order_url}?username=${localStorage.getItem("username")}`,
+            method: "POST",
+            data: form,
           })
-          .catch((err) => {
-            alert("Out of stock of "  + err.response.data)
-          });
+            .then((res) => {
+              if (res.status === 200) {
+                alert("Place order successfully");
+                navigate("/");
+              }
+            })
+            .catch((err) => {
+              alert("Out of stock of " + err.response.data);
+            });
+          localStorage.removeItem("new_price");
+        } else {
+          form.orderDetails = state.cart.cartDetailModelList;
+          form.totalPrice = state.cart.totalPrice;
+          await axios({
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+            url: `${Order_url}?username=${localStorage.getItem("username")}`,
+            method: "POST",
+            data: form,
+          })
+            .then((res) => {
+              if (res.status === 200) {
+                alert("Place order successfully");
+                navigate("/");
+              }
+            })
+            .catch((err) => {
+              alert("Out of stock of " + err.response.data);
+            });
+        }
       }
     };
 
@@ -114,7 +151,7 @@ function Checkout({ provinces }) {
       let intCurrency = currency;
       const format = intCurrency
         .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       return format;
     };
 
@@ -156,7 +193,34 @@ function Checkout({ provinces }) {
     };
 
     const handleDiscountOrder = (e) => {
-      alert("OK");
+      form.orderDetails = state.cart.cartDetailModelList;
+      form.promo_code = promo;
+      form.totalPrice = cart.totalPrice;
+      handleGetPromo();
+    };
+
+    const handleGetPromo = async (e) => {
+      await axios({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        url: `${Order_url}/getPromo`,
+        method: "POST",
+        data: form,
+      })
+        .then((res) => {
+          localStorage.setItem("new_price", res.data.totalPrice);
+          alert("Apply successful");
+          window.location.reload();
+        })
+        .catch((err) => {
+          alert(err.response.data);
+        });
+    };
+
+    const handleChangPromo = (e) => {
+      setPromo(e.target.value);
     };
 
     return (
@@ -230,7 +294,10 @@ function Checkout({ provinces }) {
                                 >
                                   <option value="">Select an Option</option>
                                   {provinces.map((province, index) => (
-                                    <option value={province.name}>
+                                    <option
+                                      key={province}
+                                      value={province.name}
+                                    >
                                       {province.name}
                                     </option>
                                   ))}
@@ -354,7 +421,7 @@ function Checkout({ provinces }) {
                           </div>
                         </div>
 
-                        {cart.cartDetailModelList.map((cart, index) => (
+                        {form.orderDetails.map((cart, index) => (
                           <div className="media product-card">
                             <p>
                               {cart.name} {cart.serialNumber}
@@ -369,10 +436,13 @@ function Checkout({ provinces }) {
                         ))}
 
                         <ul className="summary-prices list-unstyled mb-4">
-                          <li className="d-flex justify-content-between">
+                          <li
+                            key={cart}
+                            className="d-flex justify-content-between"
+                          >
                             <span>Subtotal:</span>
                             <span className="h5">
-                              {formatCurrency(cart.totalPrice)} VND
+                              {formatCurrency(form.totalPrice)} VND
                             </span>
                           </li>
                           <li className="d-flex justify-content-between">
@@ -382,9 +452,22 @@ function Checkout({ provinces }) {
                           <li className="d-flex justify-content-between">
                             <span>Total</span>
                             <span className="h5">
-                              {formatCurrency(cart.totalPrice)} VND
+                              {formatCurrency(form.totalPrice)} VND
                             </span>
                           </li>
+                          {localStorage.getItem("new_price") !== null ? (
+                            <li className="d-flex justify-content-between">
+                              <span>New Price</span>
+                              <span className="h5">
+                                {formatCurrency(
+                                  localStorage.getItem("new_price")
+                                )}{" "}
+                                VND
+                              </span>
+                            </li>
+                          ) : (
+                            <></>
+                          )}
                         </ul>
                         <h3 style={{ textAlign: "center" }}>DISCOUNT CODE</h3>
                         <div className="container">
@@ -393,6 +476,7 @@ function Checkout({ provinces }) {
                               <div style={{ textAlign: "center" }}>
                                 <input
                                   type="text"
+                                  onChange={handleChangPromo}
                                   className="form-control mt-1"
                                   id="first_name"
                                   placeholder=""
