@@ -165,24 +165,28 @@ export default function Product({ categories }) {
 
   useEffect(() => {
     localStorage.removeItem("have_error");
-    if (formSeacrh.length === 0) {
-      axios({
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-        url: `${url}/${name}?offset=${offset}`,
-        method: "GET",
-      })
-        .then((res) => {
-          setProducts(res.data.content);
-          setTotalPages(res.data.totalPages);
+    if (localStorage.getItem("token") !== null) {
+      if (formSeacrh.length === 0) {
+        axios({
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+          url: `${url}/${name}?offset=${offset}`,
+          method: "GET",
         })
-        .catch((err) => {
-          localStorage.setItem("have_error", err);
-          navigate("/error");
-        });
+          .then((res) => {
+            setProducts(res.data.content);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => {
+            localStorage.setItem("have_error", err);
+            navigate("/error");
+          });
+      }
+    } else {
+      navigate("/login");
     }
   }, [formSeacrh]);
 
