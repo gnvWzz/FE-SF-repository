@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PRODUCT_URL } from "./URLS/url";
 
-export default function Shop({ categories }) {
+export default function ShopStore({ categories }) {
   let navigate = useNavigate();
+  let {state} = useLocation();
+
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState();
@@ -46,11 +48,12 @@ export default function Shop({ categories }) {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
       },
-      url: `${product_url}/get-home?offset=${offset}`,
+      url: `${product_url}/get-shop?offset=${offset}&productname=${state.productName}`,
       method: "GET",
     })
       .then((res) => {
         setProducts(res.data.content);
+        console.log(res.data.content);
         setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
@@ -383,24 +386,27 @@ export default function Shop({ categories }) {
           <div className="col-md-10">
             <div className="row align-items-center">
               <div className="col-lg-12 mb-4 mb-lg-0">
+         
                 <div
                   className="section-title mb-5 rounded-pill"
                   style={{
                     textAlign: "center",
                     marginLeft: "auto",
                     marginRight: "auto",
-                    backgroundColor: "#fb5c42",
                     width: "200px",
                   }}
                 >
-                  {/*  */}
-                  <h2
-                    className="d-block text-left-sm"
-                    style={{ color: "white" }}
-                  >
-                    ALL
-                  </h2>
-                  {/*  */}
+                   <table>
+          <tr>
+            <td rowSpan={2}>
+              <img  className="ml-0" src={state.storeImg} style={{  borderRadius: "50%", width:"100%" }}></img>
+            </td>
+            <td style={{ textAlign: "center" }} colSpan={2}>
+              <h3>{state.storeName}</h3>
+            </td>
+          </tr>
+        </table>
+                
                 </div>
               </div>
             </div>
