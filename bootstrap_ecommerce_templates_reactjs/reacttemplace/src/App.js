@@ -18,7 +18,7 @@ import Password from "./components/Password";
 import OrderDetails from "./components/OrderDetail";
 import MyOrder from "./components/MyOrder";
 import ErrorPage from "./components/pages/ErrorPage";
-
+import ShopStore from "./components/ShopStore";
 function App() {
   const [categories, setCategorise] = useState([]);
   const [provinces, setProvinces] = useState([]);
@@ -73,6 +73,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/orderdetails" element={<OrderDetails />} />
           <Route path="/myorder" element={<MyOrder />} />
+          <Route path="/shopstore" element={<ShopStore categories={categories} />} />
           <Route path="/" element={<Home />} />
           <Route path="/error" element={<ErrorPage />} />
         </Routes>

@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PRODUCT_URL } from "./URLS/url";
 
-export default function Shop({ categories }) {
+export default function ShopStore({ categories }) {
   let navigate = useNavigate();
+  let {state} = useLocation();
+
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState();
@@ -18,12 +20,14 @@ export default function Shop({ categories }) {
     setFormSearch(e.target.value);
   }
 
+  
+  const formatCurrency = (currency) => {
+    let intCurrency = currency;
+    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return format;
+  };
+
   useEffect(() => {
-    localStorage.removeItem("have_error");
-    localStorage.removeItem("sort_price");
-    localStorage.removeItem("sort_name");
-    localStorage.removeItem("min_price");
-    localStorage.removeItem("max_price");
     window.scrollTo({ top: 0, left: 0 });
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
@@ -37,12 +41,6 @@ export default function Shop({ categories }) {
     };
   }, [offset]);
 
-  const formatCurrency = (currency) => {
-    let intCurrency = currency;
-    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    return format;
-  };
-
   const getData = async (e) => {
     await axios({
       headers: {
@@ -50,16 +48,16 @@ export default function Shop({ categories }) {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
       },
-      url: `${product_url}/get-home?offset=${offset}`,
+      url: `${product_url}/get-shop?offset=${offset}&productname=${state.productName}`,
       method: "GET",
     })
       .then((res) => {
         setProducts(res.data.content);
+        console.log(res.data.content);
         setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
-        localStorage.setItem("have_error", err);
-        navigate("/error");
+        throw err;
       });
   };
 
@@ -277,9 +275,7 @@ export default function Shop({ categories }) {
                           <h2 className="product-title h5 mb-0">
                             <a>{product.name}</a>
                           </h2>
-                          <span className="price">
-                            {formatCurrency(product.price)} đ
-                          </span>
+                          <span className="price">{formatCurrency(product.price)} đ</span>
                         </div>
                       </div>
                     </div>
@@ -334,6 +330,7 @@ export default function Shop({ categories }) {
 
   window.addEventListener("scroll", toggleVisible);
 
+  const handleChangeSortByPrice = async (e) => {};
   return (
     <section className="products-shop section">
       <button
@@ -389,24 +386,27 @@ export default function Shop({ categories }) {
           <div className="col-md-10">
             <div className="row align-items-center">
               <div className="col-lg-12 mb-4 mb-lg-0">
+         
                 <div
                   className="section-title mb-5 rounded-pill"
                   style={{
                     textAlign: "center",
                     marginLeft: "auto",
                     marginRight: "auto",
-                    backgroundColor: "#fb5c42",
                     width: "200px",
                   }}
                 >
-                  {/*  */}
-                  <h2
-                    className="d-block text-left-sm"
-                    style={{ color: "white" }}
-                  >
-                    ALL
-                  </h2>
-                  {/*  */}
+                   <table>
+          <tr>
+            <td rowSpan={2}>
+              <img  className="ml-0" src={state.storeImg} style={{  borderRadius: "50%", width:"100%" }}></img>
+            </td>
+            <td style={{ textAlign: "center" }} colSpan={2}>
+              <h3>{state.storeName}</h3>
+            </td>
+          </tr>
+        </table>
+                
                 </div>
               </div>
             </div>
@@ -465,40 +465,20 @@ export default function Shop({ categories }) {
                       </a> */}
                     </div>
                     <div className="product-info">
-                      {product.name !== "" ? (
-                        <h2
-                          className="product-title h5 mb-0"
-                          style={{
-                            height: 80,
-                            textAlign: "left",
-                            fontSize: "15px",
-                          }}
-                        >
-                          <a>{product.name}</a>
-                        </h2>
-                      ) : (
-                        <h2
-                          className="product-title h5 mb-0"
-                          style={{
-                            height: 80,
-                            textAlign: "left",
-                            fontSize: "15px",
-                          }}
-                        >
-                          <a>No name </a>
-                        </h2>
-                      )}
-
+                      <h2
+                        className="product-title h5 mb-0"
+                        style={{
+                          height: 80,
+                          textAlign: "left",
+                          fontSize: "15px",
+                        }}
+                      >
+                        <a>{product.name}</a>
+                      </h2>
                       <span className="price">
-                        {product.priceListDtos.length !== 0 ? (
-                          <h4 style={{ color: "red", textAlign: "left" }}>
-                            {formatCurrency(product.priceListDtos[0].price)} đ
-                          </h4>
-                        ) : (
-                          <h4 style={{ color: "red", textAlign: "left" }}>
-                            0 đ
-                          </h4>
-                        )}
+                        <h4 style={{ color: "red", textAlign: "left" }}>
+                          {formatCurrency(product.priceListDtos[0].price) } đ
+                        </h4>
                       </span>
                     </div>
                   </div>
