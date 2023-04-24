@@ -18,14 +18,12 @@ export default function Shop({ categories }) {
     setFormSearch(e.target.value);
   }
 
-  
-  const formatCurrency = (currency) => {
-    let intCurrency = currency;
-    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return format;
-  };
-
   useEffect(() => {
+    localStorage.removeItem("have_error");
+    localStorage.removeItem("sort_price");
+    localStorage.removeItem("sort_name");
+    localStorage.removeItem("min_price");
+    localStorage.removeItem("max_price");
     window.scrollTo({ top: 0, left: 0 });
     if (localStorage.getItem("token") !== null) {
       if (!isStop) {
@@ -38,6 +36,12 @@ export default function Shop({ categories }) {
       isStop = true;
     };
   }, [offset]);
+
+  const formatCurrency = (currency) => {
+    let intCurrency = currency;
+    const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return format;
+  };
 
   const getData = async (e) => {
     await axios({
@@ -54,7 +58,8 @@ export default function Shop({ categories }) {
         setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
-        throw err;
+        localStorage.setItem("have_error", err);
+        navigate("/error");
       });
   };
 
@@ -272,7 +277,9 @@ export default function Shop({ categories }) {
                           <h2 className="product-title h5 mb-0">
                             <a>{product.name}</a>
                           </h2>
-                          <span className="price">{formatCurrency(product.price)} đ</span>
+                          <span className="price">
+                            {formatCurrency(product.price)} đ
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -327,7 +334,6 @@ export default function Shop({ categories }) {
 
   window.addEventListener("scroll", toggleVisible);
 
-  const handleChangeSortByPrice = async (e) => {};
   return (
     <section className="products-shop section">
       <button
@@ -459,20 +465,40 @@ export default function Shop({ categories }) {
                       </a> */}
                     </div>
                     <div className="product-info">
-                      <h2
-                        className="product-title h5 mb-0"
-                        style={{
-                          height: 80,
-                          textAlign: "left",
-                          fontSize: "15px",
-                        }}
-                      >
-                        <a>{product.name}</a>
-                      </h2>
+                      {product.name !== "" ? (
+                        <h2
+                          className="product-title h5 mb-0"
+                          style={{
+                            height: 80,
+                            textAlign: "left",
+                            fontSize: "15px",
+                          }}
+                        >
+                          <a>{product.name}</a>
+                        </h2>
+                      ) : (
+                        <h2
+                          className="product-title h5 mb-0"
+                          style={{
+                            height: 80,
+                            textAlign: "left",
+                            fontSize: "15px",
+                          }}
+                        >
+                          <a>No name </a>
+                        </h2>
+                      )}
+
                       <span className="price">
-                        <h4 style={{ color: "red", textAlign: "left" }}>
-                          {formatCurrency(product.priceListDtos[0].price) } đ
-                        </h4>
+                        {product.priceListDtos.length !== 0 ? (
+                          <h4 style={{ color: "red", textAlign: "left" }}>
+                            {formatCurrency(product.priceListDtos[0].price)} đ
+                          </h4>
+                        ) : (
+                          <h4 style={{ color: "red", textAlign: "left" }}>
+                            0 đ
+                          </h4>
+                        )}
                       </span>
                     </div>
                   </div>

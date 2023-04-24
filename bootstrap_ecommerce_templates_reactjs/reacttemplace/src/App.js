@@ -17,13 +17,12 @@ import Profile from "./components/Profile";
 import Password from "./components/Password";
 import OrderDetails from "./components/OrderDetail";
 import MyOrder from "./components/MyOrder";
+import ErrorPage from "./components/pages/ErrorPage";
 import ShopStore from "./components/ShopStore";
-
-
 function App() {
   const [categories, setCategorise] = useState([]);
-  const[provinces,setProvinces] = useState([]);
-  
+  const [provinces, setProvinces] = useState([]);
+
   const cart_url = CART_URL;
   let isStop = false;
   let isStop1 = false;
@@ -59,20 +58,24 @@ function App() {
             element={<Product categories={categories} />}
           />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout provinces={provinces} />} />
+          <Route
+            path="/checkout"
+            element={<Checkout provinces={provinces} />}
+          />
           <Route
             path="/single-product/:product_name"
             element={<SingleProduct />}
           />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp provinces = {provinces} />} />
-          <Route path="/profile" element={<Profile/>}/>
-          <Route path="/password" element={<Password/>}/>
+          <Route path="/signup" element={<SignUp provinces={provinces} />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/password" element={<Password />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/orderdetails" element={<OrderDetails />} />
           <Route path="/myorder" element={<MyOrder />} />
           <Route path="/shopstore" element={<ShopStore categories={categories} />} />
           <Route path="/" element={<Home />} />
+          <Route path="/error" element={<ErrorPage />} />
         </Routes>
         <Footer></Footer>
       </BrowserRouter>
