@@ -58,7 +58,7 @@ function Home(props) {
     localStorage.removeItem("max_price");
     if (!isStop) {
       axios
-        .get(`${product_url}/get_home?offset=${offset}`)
+        .get(`${product_url}/rand?offset=${offset}`)
         .then((res) => {
           setProducts(res.data.content);
 

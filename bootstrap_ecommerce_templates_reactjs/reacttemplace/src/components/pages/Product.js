@@ -55,7 +55,7 @@ export default function Product({ categories }) {
               "Access-Control-Allow-Origin": "*",
               "Content-Type": "application/json",
             },
-            url: `${url}/getName/${name}?offset=${offset}&name=${formSeacrh}`,
+            url: `${url}/name/${name}?offset=${offset}&name=${formSeacrh}`,
             method: "GET",
           })
             .then((res) => {
@@ -430,13 +430,12 @@ export default function Product({ categories }) {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
         },
-        url: `${url}/getName/${name}?offset=${offset}&name=${formSeacrh}`,
+        url: `${url}/name/${name}?offset=${offset}&name=${formSeacrh}`,
         method: "GET",
       })
         .then((res) => {
           setProducts(res.data.content);
           setTotalPages(res.data.totalPages);
-          e.preventDefault();
         })
         .catch((err) => {
           localStorage.setItem("have_error", err);
@@ -522,7 +521,7 @@ export default function Product({ categories }) {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
           },
-          url: `${url}/getName/${name}?offset=${offset}&name=${formSeacrh}`,
+          url: `${url}/name/${name}?offset=${offset}&name=${formSeacrh}`,
           method: "GET",
         })
           .then((res) => {

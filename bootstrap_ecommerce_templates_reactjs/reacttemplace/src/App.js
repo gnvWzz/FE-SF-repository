@@ -31,7 +31,7 @@ function App() {
     // localStorage.removeItem("token");
     if (!isStop) {
       axios
-        .get("http://localhost:8080/api/categories/find-all")
+        .get("http://localhost:8080/api/categories/")
         .then((res) => {
           setCategorise(res.data.categories);
           setProvinces(res.data.provinces);

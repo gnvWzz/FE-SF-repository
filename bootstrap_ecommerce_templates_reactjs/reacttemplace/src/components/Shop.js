@@ -26,6 +26,7 @@ export default function Shop({ categories }) {
     localStorage.removeItem("max_price");
     window.scrollTo({ top: 0, left: 0 });
     if (localStorage.getItem("token") !== null) {
+      products.length = 0;
       if (!isStop) {
         getData();
       }
@@ -50,7 +51,7 @@ export default function Shop({ categories }) {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
       },
-      url: `${product_url}/get-home?offset=${offset}`,
+      url: `${product_url}/rand?offset=${offset}`,
       method: "GET",
     })
       .then((res) => {
@@ -284,23 +285,6 @@ export default function Shop({ categories }) {
                       </div>
                     </div>
                   ))}
-                  <div className="col-12">
-                    <div style={{ textAlign: "center" }}>
-                      <button
-                        disabled={offset + 1 <= 1}
-                        onClick={() => handlePageChange(offset - 1)}
-                      >
-                        Prev
-                      </button>
-                      <span>{offset + 1}</span> / <span>{totalPages}</span>
-                      <button
-                        disabled={offset + 1 >= totalPages}
-                        onClick={() => handlePageChange(offset + 1)}
-                      >
-                        Next
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

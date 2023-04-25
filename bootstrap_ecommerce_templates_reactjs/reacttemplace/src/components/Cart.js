@@ -80,7 +80,7 @@ function Cart() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      url: `${cart_url}/add-to-cart`,
+      url: `${cart_url}/`,
       method: "POST",
       data: temp,
     })
@@ -251,7 +251,7 @@ function Cart() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
-        url: `${cart_url}/cartItem`,
+        url: `${cart_url}/`,
         method: "DELETE",
         data: json,
       });
@@ -342,6 +342,8 @@ function Cart() {
       }
     };
 
+    console.log(cart.cartDetailModelList)
+
     return (
       <div className="checkout-container">
         <section className="cart shopping page-wrapper">
@@ -423,6 +425,11 @@ function Cart() {
                           ) : (
                             <p>No quantity</p>
                           )}
+                        </div>
+                        <div className="d-flex flex-row align-items-center">
+                          <div style={{ width: "150px" }}>
+                            x {formatCurrency(i.price)}
+                          </div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
                           <div style={{ width: "150px" }}>

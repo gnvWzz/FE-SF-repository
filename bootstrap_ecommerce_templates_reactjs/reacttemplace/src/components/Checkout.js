@@ -205,7 +205,7 @@ function Checkout({ provinces }) {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
-        url: `${Order_url}/getPromo`,
+        url: `${Order_url}/promo`,
         method: "POST",
         data: form,
       })
@@ -412,12 +412,12 @@ function Checkout({ provinces }) {
                         <div className="mb-4 border-bottom pb-4">
                           <h3>Order Summary</h3>
                           <div style={{ textAlign: "center" }}>
-                            <Link
-                              style={{ fontSize: "18px" }}
-                              to={{ pathname: "/cart" }}
+                            <button
+                              className="btn btn-main btn-small"
+                              onClick={() => navigate("/cart")}
                             >
                               Go to cart
-                            </Link>
+                            </button>
                           </div>
                         </div>
 
