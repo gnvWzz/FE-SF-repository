@@ -18,7 +18,6 @@ export default function SingleProduct() {
     "Electronics",
     "Toy",
     "Watch",
-    "HandBag",
     "Accessory"
   ]);
   const [visible, setVisible] = useState("none");
@@ -70,7 +69,7 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      url: `${url}/name-product/${productName}`,
+      url: `${url}/product-by-name/${productName}`,
       method: "GET",
     })
       .then((res) => {
@@ -230,7 +229,7 @@ export default function SingleProduct() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
-        url: `${url}/find-product-detail-by-color-and-size/${c}/${choosingSize}/${productName}`,
+        url: `${url}/product-detail-by-color-and-size/${c}/${choosingSize}/${productName}`,
         method: "GET",
       })
         .then((res) => {
@@ -249,7 +248,7 @@ export default function SingleProduct() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
-        url: `${url}/find-product-detail-by-color/${c}/${productName}`,
+        url: `${url}/product-detail-by-color/${c}/${productName}`,
         method: "GET",
       })
         .then((res) => {
@@ -272,7 +271,7 @@ export default function SingleProduct() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      url: `${url}/find-product-detail-by-color-and-size/${choosingColor}/${s}/${productName}`,
+      url: `${url}/product-detail-by-color-and-size/${choosingColor}/${s}/${productName}`,
       method: "GET",
     })
       .then((res) => {
