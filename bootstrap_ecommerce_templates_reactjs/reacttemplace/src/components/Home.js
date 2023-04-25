@@ -233,10 +233,10 @@ function Home(props) {
                         )}
                       </div>
                     </h2>
-                    {product.priceListDtos.length !== 0 ? (
+                    {product.priceDtos.length !== 0 ? (
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "center" }}>
-                          {formatCurrency(product.priceListDtos[0].price)} VND
+                          {formatCurrency(product.priceDtos[0].price)} VND
                         </h4>
                       </span>
                     ) : (

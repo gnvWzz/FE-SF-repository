@@ -66,27 +66,6 @@ export default function Product({ categories }) {
               localStorage.setItem("have_error", err);
               navigate("/error");
             });
-        } else if (
-          localStorage.getItem("min_price") !== null &&
-          localStorage.getItem("max_price") !== null
-        ) {
-          axios({
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json",
-            },
-            url: `${url}/max_min/${name}?offset=${offset}&min_price=${min_price}&max_price=${max_price}`,
-            method: "GET",
-          })
-            .then((res) => {
-              setProducts(res.data.content);
-              setTotalPages(res.data.totalPages);
-            })
-            .catch((err) => {
-              localStorage.setItem("have_error", err);
-              navigate("/error");
-            });
         } else {
           axios({
             headers: {
@@ -794,9 +773,9 @@ export default function Product({ categories }) {
                         <a>{product.name}</a>
                       </h2>
                       <span className="price">
-                        {product.priceListDtos.length !== 0 ? (
+                        {product.priceDtos.length !== 0 ? (
                           <h4 style={{ color: "red", textAlign: "left" }}>
-                            {formatCurrency(product.priceListDtos[0].price)} đ
+                            {formatCurrency(product.priceDtos[0].price)} đ
                           </h4>
                         ) : (
                           <h4 style={{ color: "red", textAlign: "left" }}>

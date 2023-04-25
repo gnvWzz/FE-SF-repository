@@ -39,7 +39,6 @@ export default function SingleProduct() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 });
     // Long xoa localStorage cua Long
     localStorage.removeItem("sort_price");
     localStorage.removeItem("sort_name");
@@ -86,10 +85,10 @@ export default function SingleProduct() {
           JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity)
             .quantity
         );
-        setPrice(res.data.priceListDtos[0].price);
+        setPrice(res.data.priceDtos[0].price);
         setSerialNumber(res.data.productSFDetailDtos[0].serialNumber);
         setQuantity(1);
-        setPriceList(res.data.priceListDtos);
+        setPriceList(res.data.priceDtos);
         setChoosingColor(
           JSON.parse(res.data.productSFDetailDtos[0].size_color_img_quantity)
             .color
@@ -796,7 +795,7 @@ export default function SingleProduct() {
               <h2 className=" h5 mb-0">
                 <button class="product-you-like-this mb-0" onClick={handleYouLikeThis} value={product.name}>{product.name}</button>
               </h2>
-              <span className="price">{formatCurrency(product.priceListDtos[0].price)}</span>
+              <span className="price">{formatCurrency(product.priceDtos[0].price)}</span>
             </div>
           </div>
         </div>

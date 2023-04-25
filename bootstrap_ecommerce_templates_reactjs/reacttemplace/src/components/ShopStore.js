@@ -477,7 +477,7 @@ export default function ShopStore({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {formatCurrency(product.priceListDtos[0].price) } đ
+                          {formatCurrency(product.priceDtos[0].price) } đ
                         </h4>
                       </span>
                     </div>
