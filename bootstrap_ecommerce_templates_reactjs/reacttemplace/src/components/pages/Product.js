@@ -66,27 +66,6 @@ export default function Product({ categories }) {
               localStorage.setItem("have_error", err);
               navigate("/error");
             });
-        } else if (
-          localStorage.getItem("min_price") !== null &&
-          localStorage.getItem("max_price") !== null
-        ) {
-          axios({
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json",
-            },
-            url: `${url}/max_min/${name}?offset=${offset}&min_price=${min_price}&max_price=${max_price}`,
-            method: "GET",
-          })
-            .then((res) => {
-              setProducts(res.data.content);
-              setTotalPages(res.data.totalPages);
-            })
-            .catch((err) => {
-              localStorage.setItem("have_error", err);
-              navigate("/error");
-            });
         } else {
           axios({
             headers: {
