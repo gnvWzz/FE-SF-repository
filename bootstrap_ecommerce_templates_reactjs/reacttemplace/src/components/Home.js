@@ -182,7 +182,7 @@ function Home(props) {
                         product.productSFDetailDtos[0].size_color_img_quantity
                       ).img.length !== 0 ? (
                         <img
-                          className="img-fluid w-100 mb-3 img-first"
+                          className="product-preview img-fluid w-100 mb-3 img-first"
                           src={
                             JSON.parse(
                               product.productSFDetailDtos[0]
@@ -194,7 +194,7 @@ function Home(props) {
                         />
                       ) : (
                         <img
-                          className="img-fluid w-100 mb-3 img-first"
+                          className="product-preview img-fluid w-100 mb-3 img-first"
                           src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
                           style={{ height: "250px" }}
                           alt="product-img"

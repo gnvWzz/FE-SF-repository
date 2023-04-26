@@ -5,7 +5,7 @@ import { PRODUCT_URL } from "./URLS/url";
 
 export default function ShopStore({ categories }) {
   let navigate = useNavigate();
-  let {state} = useLocation();
+  let { state } = useLocation();
 
   const [formSeacrh, setFormSearch] = useState();
   const [products, setProducts] = useState([]);
@@ -20,7 +20,7 @@ export default function ShopStore({ categories }) {
     setFormSearch(e.target.value);
   }
 
-  
+
   const formatCurrency = (currency) => {
     let intCurrency = currency;
     const format = intCurrency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -61,7 +61,7 @@ export default function ShopStore({ categories }) {
       });
   };
 
-  function handleSubmit() {}
+  function handleSubmit() { }
 
   const handleGotoTop = (e) => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -254,7 +254,7 @@ export default function ShopStore({ categories }) {
                         <div className="product-wrap">
                           <a>
                             <img
-                              className="img-fluid w-100 mb-3 img-first"
+                              className="product-preview img-fluid w-100 mb-3 img-first"
                               src={
                                 product.productSFDetailDtos[0].imageList[0].url
                               }
@@ -330,7 +330,7 @@ export default function ShopStore({ categories }) {
 
   window.addEventListener("scroll", toggleVisible);
 
-  const handleChangeSortByPrice = async (e) => {};
+  const handleChangeSortByPrice = async (e) => { };
   return (
     <section className="products-shop section">
       <button
@@ -386,7 +386,7 @@ export default function ShopStore({ categories }) {
           <div className="col-md-10">
             <div className="row align-items-center">
               <div className="col-lg-12 mb-4 mb-lg-0">
-         
+
                 <div
                   className="section-title mb-5 rounded-pill"
                   style={{
@@ -396,17 +396,17 @@ export default function ShopStore({ categories }) {
                     width: "200px",
                   }}
                 >
-                   <table>
-          <tr>
-            <td rowSpan={2}>
-              <img  className="ml-0" src={state.storeImg} style={{  borderRadius: "50%", width:"100%" }}></img>
-            </td>
-            <td style={{ textAlign: "center" }} colSpan={2}>
-              <h3>{state.storeName}</h3>
-            </td>
-          </tr>
-        </table>
-                
+                  <table>
+                    <tr>
+                      <td rowSpan={2}>
+                        <img className="ml-0" src={state.storeImg} style={{ borderRadius: "50%", width: "100%" }}></img>
+                      </td>
+                      <td style={{ textAlign: "center" }} colSpan={2}>
+                        <h3>{state.storeName}</h3>
+                      </td>
+                    </tr>
+                  </table>
+
                 </div>
               </div>
             </div>
@@ -433,7 +433,7 @@ export default function ShopStore({ categories }) {
                           product.productSFDetailDtos[0].size_color_img_quantity
                         ).img.length !== 0 ? (
                           <img
-                            className="img-fluid w-100 mb-3 img-first"
+                            className="product-preview img-fluid w-100 mb-3 img-first"
                             src={
                               JSON.parse(
                                 product.productSFDetailDtos[0]
@@ -445,7 +445,7 @@ export default function ShopStore({ categories }) {
                           />
                         ) : (
                           <img
-                            className="img-fluid w-100 mb-3 img-first"
+                            className="product-preview img-fluid w-100 mb-3 img-first"
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
                             style={{ height: "250px" }}
                             alt="product-img"
@@ -477,7 +477,7 @@ export default function ShopStore({ categories }) {
                       </h2>
                       <span className="price">
                         <h4 style={{ color: "red", textAlign: "left" }}>
-                          {formatCurrency(product.priceDtos[0].price) } đ
+                          {formatCurrency(product.priceDtos[0].price)} đ
                         </h4>
                       </span>
                     </div>

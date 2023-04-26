@@ -332,7 +332,7 @@ export default function Product({ categories }) {
                         <div className="product-wrap">
                           <a>
                             <img
-                              className="img-fluid w-100 mb-3 img-first"
+                              className="product-preview img-fluid w-100 mb-3 img-first"
                               src={
                                 product.productSFDetailDtos[0].imageList[0].url
                               }
@@ -736,7 +736,7 @@ export default function Product({ categories }) {
                         product.productSFDetailDtos[0].size_color_img_quantity
                       ).img.length !== 0 ? (
                         <img
-                          className="img-fluid w-100 mb-3 img-first"
+                          className="product-preview img-fluid w-100 mb-3 img-first"
                           src={
                             JSON.parse(
                               product.productSFDetailDtos[0]
@@ -748,7 +748,7 @@ export default function Product({ categories }) {
                         />
                       ) : (
                         <img
-                          className="img-fluid w-100 mb-3 img-first"
+                          className="product-preview img-fluid w-100 mb-3 img-first"
                           src="https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
                           alt="product-img"
                           style={{ height: 200 }}
